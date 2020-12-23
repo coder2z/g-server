@@ -7,8 +7,8 @@ package database
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
 	invoker "github.com/myxy99/component"
+	"gorm.io/gorm"
 	"sync"
 )
 
@@ -51,7 +51,8 @@ func (i *dbInvoker) Reload(opts ...invoker.Option) error {
 
 func (i *dbInvoker) Close(opts ...invoker.Option) error {
 	i.instances.Range(func(key, value interface{}) bool {
-		_ = value.(*gorm.DB).Close()
+		db, _ := value.(*gorm.DB).DB()
+		_ = db.Close()
 		i.instances.Delete(key)
 		return true
 	})
