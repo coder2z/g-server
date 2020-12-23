@@ -26,7 +26,7 @@ type ValidationError struct {
 }
 
 func (r *ValidationError) Error() string {
-	return ""
+	return strings.Join(r.ErrMsg, ",")
 }
 
 type Register struct {
