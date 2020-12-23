@@ -15,24 +15,24 @@ type Server struct {
 }
 
 type options struct {
-	Level string `json:"level" yaml:"level"`
+	Level string `json:"level" mapStructure:"level"`
 
-	Development bool `json:"development" yaml:"development"`
+	Development bool `json:"development" mapStructure:"development"`
 
-	DisableCaller bool `json:"disableCaller" yaml:"disableCaller"`
+	DisableCaller bool `json:"disableCaller" mapStructure:"disableCaller"`
 
-	DisableStacktrace bool `json:"disableStacktrace" yaml:"disableStacktrace"`
+	DisableStacktrace bool `json:"disableStacktrace" mapStructure:"disableStacktrace"`
 
-	Sampling *zap.SamplingConfig `json:"sampling" yaml:"sampling"`
+	Sampling *zap.SamplingConfig `json:"sampling" mapStructure:"sampling"`
 
-	Encoding string `json:"encoding" yaml:"encoding"`
+	Encoding string `json:"encoding" mapStructure:"encoding"`
 
-	EncoderConfig zapcore.EncoderConfig `json:"encoderConfig" yaml:"encoderConfig"`
+	EncoderConfig zapcore.EncoderConfig `json:"encoderConfig" mapStructure:"encoderConfig"`
 
-	OutputPaths []string `json:"outputPaths" yaml:"outputPaths"`
+	OutputPaths []string `json:"outputPaths" mapStructure:"outputPaths"`
 
-	ErrorOutputPaths []string               `json:"errorOutputPaths" yaml:"errorOutputPaths"`
-	InitialFields    map[string]interface{} `json:"initialFields" yaml:"initialFields"`
+	ErrorOutputPaths []string               `json:"errorOutputPaths" mapStructure:"errorOutputPaths"`
+	InitialFields    map[string]interface{} `json:"initialFields" mapStructure:"initialFields"`
 }
 
 func newLogOptions() *options {

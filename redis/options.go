@@ -9,24 +9,24 @@ import (
 )
 
 type options struct {
-	Network            string        `yaml:"network"`
-	Addr               string        `yaml:"addr"`
-	Username           string        `yaml:"username"`
-	Password           string        `yaml:"password"`
-	DB                 int           `yaml:"db"`
-	MaxRetries         int           `yaml:"maxRetries"`
-	MinRetryBackoff    time.Duration `yaml:"minRetryBackoff"`
-	MaxRetryBackoff    time.Duration `yaml:"maxRetryBackoff"`
-	DialTimeout        time.Duration `yaml:"dialTimeout"`
-	ReadTimeout        time.Duration `yaml:"readTimeout"`
-	WriteTimeout       time.Duration `yaml:"writeTimeout"`
-	PoolSize           int           `yaml:"poolSize"`
-	MinIdleConns       int           `yaml:"minIdleConn"`
-	MaxConnAge         time.Duration `yaml:"maxConnAge"`
-	PoolTimeout        time.Duration `yaml:"poolTimeout"`
-	IdleTimeout        time.Duration `yaml:"idleTimeout"`
-	IdleCheckFrequency time.Duration `yaml:"idleCheckFrequency"`
-	readOnly           bool          `yaml:"readOnly"`
+	Network            string        `mapStructure:"network"`
+	Addr               string        `mapStructure:"addr"`
+	Username           string        `mapStructure:"username"`
+	Password           string        `mapStructure:"password"`
+	DB                 int           `mapStructure:"db"`
+	MaxRetries         int           `mapStructure:"maxRetries"`
+	MinRetryBackoff    time.Duration `mapStructure:"minRetryBackoff"`
+	MaxRetryBackoff    time.Duration `mapStructure:"maxRetryBackoff"`
+	DialTimeout        time.Duration `mapStructure:"dialTimeout"`
+	ReadTimeout        time.Duration `mapStructure:"readTimeout"`
+	WriteTimeout       time.Duration `mapStructure:"writeTimeout"`
+	PoolSize           int           `mapStructure:"poolSize"`
+	MinIdleConns       int           `mapStructure:"minIdleConn"`
+	MaxConnAge         time.Duration `mapStructure:"maxConnAge"`
+	PoolTimeout        time.Duration `mapStructure:"poolTimeout"`
+	IdleTimeout        time.Duration `mapStructure:"idleTimeout"`
+	IdleCheckFrequency time.Duration `mapStructure:"idleCheckFrequency"`
+	readOnly           bool          `mapStructure:"readOnly"`
 }
 
 func newRedisOptions() *options {

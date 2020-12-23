@@ -5,10 +5,10 @@
 package email
 
 type options struct {
-	Host     string `json:"host,omitempty" yaml:"host"`
-	Port     int    `json:"port" yaml:"port"`
-	Username string `json:"username,omitempty" yaml:"username"`
-	Password string `json:"-" yaml:"password"`
+	Host     string `json:"host,omitempty" mapStructure:"host"`
+	Port     int    `json:"port" mapStructure:"port"`
+	Username string `json:"username,omitempty" mapStructure:"username"`
+	Password string `json:"-" mapStructure:"password"`
 }
 
 func newEmailOptions() *options {

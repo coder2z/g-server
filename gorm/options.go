@@ -16,18 +16,18 @@ import (
 const defaultTablePrefix = ""
 
 type options struct {
-	TablePrefix           string        `json:"tablePrefix" yaml:"tablePrefix"`
-	Host                  string        `json:"host,omitempty" yaml:"host" description:"db service host address"`
-	Username              string        `json:"username,omitempty" yaml:"username"`
-	Password              string        `json:"-" yaml:"password"`
-	Type                  string        `json:"type" yaml:"type"`
-	DBName                string        `json:"dbName" yaml:"dbName"`
-	Debug                 bool          `json:"debug" yaml:"debug"`
-	Port                  string        `json:"port" yaml:"port"`
-	MaxConnMaxIdleTime    time.Duration `json:"maxConnMaxIdleTime,omitempty" yaml:"maxConnMaxIdleTime"`
-	MaxOpenConnections    int           `json:"maxOpenConnections,omitempty" yaml:"maxOpenConnections"`
-	MaxIdleConn           int           `json:"maxIdleConn,omitempty" yaml:"maxIdleConn"`
-	MaxConnectionLifeTime time.Duration `json:"maxConnectionLifeTime,omitempty" yaml:"maxConnectionLifeTime"`
+	TablePrefix           string        `json:"tablePrefix" mapStructure:"tablePrefix"`
+	Host                  string        `json:"host,omitempty" mapStructure:"host" description:"db service host address"`
+	Username              string        `json:"username,omitempty" mapStructure:"username"`
+	Password              string        `json:"-" mapStructure:"password"`
+	Type                  string        `json:"type" mapStructure:"type"`
+	DBName                string        `json:"dbName" mapStructure:"dbName"`
+	Debug                 bool          `json:"debug" mapStructure:"debug"`
+	Port                  string        `json:"port" mapStructure:"port"`
+	MaxConnMaxIdleTime    time.Duration `json:"maxConnMaxIdleTime,omitempty" mapStructure:"maxConnMaxIdleTime"`
+	MaxOpenConnections    int           `json:"maxOpenConnections,omitempty" mapStructure:"maxOpenConnections"`
+	MaxIdleConn           int           `json:"maxIdleConn,omitempty" mapStructure:"maxIdleConn"`
+	MaxConnectionLifeTime time.Duration `json:"maxConnectionLifeTime,omitempty" mapStructure:"maxConnectionLifeTime"`
 }
 
 func newDatabaseOptions() *options {

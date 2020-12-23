@@ -9,7 +9,7 @@ type (
 )
 
 var defaultGetOptions = GetOptions{
-	TagName: "mapstructure",
+	TagName: "mapStructure",
 }
 
 // 设置Tag

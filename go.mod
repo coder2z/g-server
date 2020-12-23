@@ -4,6 +4,8 @@ go 1.15
 
 require (
 	github.com/BurntSushi/toml v0.3.1
+	github.com/aliyun/aliyun-oss-go-sdk v2.1.5+incompatible
+	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/coreos/bbolt v1.3.5 // indirect
 	github.com/coreos/etcd v3.3.25+incompatible
 	github.com/coreos/go-semver v0.3.0 // indirect
@@ -19,7 +21,6 @@ require (
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
-	github.com/jinzhu/gorm v1.9.16
 	github.com/jonboulle/clockwork v0.2.2 // indirect
 	github.com/lib/pq v1.9.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.0
