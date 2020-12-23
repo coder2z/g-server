@@ -39,7 +39,7 @@ vendor/
 ._*
 
 # test
-test/
+test
 
 # VSCode
 .vscode
