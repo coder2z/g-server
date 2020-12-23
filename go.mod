@@ -3,7 +3,6 @@ module github.com/myxy99/component
 go 1.15
 
 require (
-	github.com/BurntSushi/toml v0.3.1
 	github.com/aliyun/aliyun-oss-go-sdk v2.1.5+incompatible
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/coreos/bbolt v1.3.5 // indirect
