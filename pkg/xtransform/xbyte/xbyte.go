@@ -1,4 +1,4 @@
-package byte_plus
+package xbyte
 
 import (
 	"bytes"

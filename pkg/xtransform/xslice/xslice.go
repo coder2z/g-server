@@ -1,4 +1,4 @@
-package slice_plus
+package xslice
 
 import (
 	"reflect"

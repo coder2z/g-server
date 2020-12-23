@@ -1,4 +1,4 @@
-package gp
+package xgp
 
 import (
 	"fmt"
