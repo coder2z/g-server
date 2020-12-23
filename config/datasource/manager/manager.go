@@ -2,10 +2,12 @@ package manager
 
 import (
 	"errors"
+	"fmt"
 	"github.com/myxy99/component/config"
 	"github.com/myxy99/component/config/datasource/apollo"
 	"github.com/myxy99/component/config/datasource/etcdv3"
 	"github.com/myxy99/component/config/datasource/file"
+	"github.com/myxy99/component/pkg/xcolor"
 	"net/url"
 )
 
@@ -47,6 +49,7 @@ func NewDataSource(configAddr string) (config.DataSource, error) {
 	if !exist {
 		return nil, ErrInvalidDataSource
 	}
+	fmt.Println(xcolor.Greenf("Get config from ", configAddr))
 	source := creatorFunc()
 	if source == nil {
 		return nil, ErrInvalidDataSource
