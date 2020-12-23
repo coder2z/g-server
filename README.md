@@ -27,6 +27,8 @@
 
 ## Example
 
+配置文件
+
 ```toml
 [db]
 [db.dev]
@@ -36,6 +38,8 @@ dbName = "ndisk"
 [redis]
 [redis.dev]
 ```
+
+使用
 
 ```go
 package main
