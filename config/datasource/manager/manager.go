@@ -3,6 +3,9 @@ package manager
 import (
 	"errors"
 	"github.com/myxy99/component/config"
+	"github.com/myxy99/component/config/datasource/apollo"
+	"github.com/myxy99/component/config/datasource/etcdv3"
+	"github.com/myxy99/component/config/datasource/file"
 	"net/url"
 )
 
@@ -13,7 +16,7 @@ var (
 	ErrInvalidDataSource = errors.New("invalid data source, please make sure the scheme has been registered")
 	registry             map[string]DataSourceCreatorFunc
 	//DefaultScheme ..
-	DefaultScheme string
+	DefaultScheme = `file`
 )
 
 // DataSourceCreatorFunc represents a dataSource creator function
@@ -21,21 +24,15 @@ type DataSourceCreatorFunc func() config.DataSource
 
 func init() {
 	registry = make(map[string]DataSourceCreatorFunc)
+	Register(file.Register())
+	Register(etcdv3.Register())
+	Register(apollo.Register())
 }
 
 // Register registers a dataSource creator function to the registry
 func Register(scheme string, creator DataSourceCreatorFunc) {
 	registry[scheme] = creator
 }
-
-// CreateDataSource creates a dataSource witch has been registered
-// func CreateDataSource(scheme string) (conf.DataSource, error) {
-// 	creatorFunc, exist := registry[scheme]
-// 	if !exist {
-// 		return nil, ErrInvalidDataSource
-// 	}
-// 	return creatorFunc(), nil
-// }
 
 //NewDataSource ..
 func NewDataSource(configAddr string) (config.DataSource, error) {
@@ -46,10 +43,13 @@ func NewDataSource(configAddr string) (config.DataSource, error) {
 	if err == nil && len(urlObj.Scheme) > 1 {
 		DefaultScheme = urlObj.Scheme
 	}
-
 	creatorFunc, exist := registry[DefaultScheme]
 	if !exist {
 		return nil, ErrInvalidDataSource
 	}
-	return creatorFunc(), nil
+	source := creatorFunc()
+	if source == nil {
+		return nil, ErrInvalidDataSource
+	}
+	return source, nil
 }

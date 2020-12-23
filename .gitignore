@@ -38,6 +38,8 @@ vendor/
 # Thumbnails
 ._*
 
+# test
+test/
 
 # VSCode
 .vscode

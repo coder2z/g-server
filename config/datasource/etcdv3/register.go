@@ -3,7 +3,6 @@ package etcdv3
 import (
 	"flag"
 	"github.com/myxy99/component/config"
-	"github.com/myxy99/component/config/datasource/manager"
 	"net/url"
 	"time"
 
@@ -13,8 +12,8 @@ import (
 // DataSourceEtcd defines etcd scheme
 const DataSourceEtcd = "etcd"
 
-func init() {
-	manager.Register(DataSourceEtcd, func() config.DataSource {
+func Register() (string, func() config.DataSource) {
+	return DataSourceEtcd, func() config.DataSource {
 		var (
 			configAddr = flag.String("config", "", "")
 		)
@@ -40,5 +39,5 @@ func init() {
 			return nil
 		}
 		return NewDataSource(client, urlObj.Query().Get("key"))
-	})
+	}
 }

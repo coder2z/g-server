@@ -3,7 +3,6 @@ package apollo
 import (
 	"flag"
 	"github.com/myxy99/component/config"
-	"github.com/myxy99/component/config/datasource/manager"
 	"github.com/philchia/agollo/v4"
 	"net/url"
 )
@@ -11,8 +10,8 @@ import (
 // DataSourceApollo defines apollo scheme
 const DataSourceApollo = "apollo"
 
-func init() {
-	manager.Register(DataSourceApollo, func() config.DataSource {
+func Register() (string, func() config.DataSource) {
+	return DataSourceApollo, func() config.DataSource {
 		var (
 			configAddr = flag.String("config", "", "")
 		)
@@ -41,5 +40,5 @@ func init() {
 			apolloConf.CacheDir = urlObj.Query().Get("cacheDir")
 		}
 		return NewDataSource(&apolloConf, urlObj.Query().Get("namespaceName"), urlObj.Query().Get("key"))
-	})
+	}
 }
