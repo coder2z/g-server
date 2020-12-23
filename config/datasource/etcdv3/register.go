@@ -1,8 +1,8 @@
 package etcdv3
 
 import (
-	"flag"
 	"github.com/myxy99/component/config"
+	"github.com/myxy99/component/pkg/xflag"
 	"net/url"
 	"time"
 
@@ -15,15 +15,15 @@ const DataSourceEtcd = "etcd"
 func Register() (string, func() config.DataSource) {
 	return DataSourceEtcd, func() config.DataSource {
 		var (
-			configAddr = flag.String("config", "", "")
+			configAddr = xflag.String("config")
 		)
-		if *configAddr == "" {
+		if configAddr == "" {
 			return nil
 		}
 		// configAddr is a string in this format:
 		// etcd://ip:port?username=XXX&password=XXX&key=key
 
-		urlObj, err := url.Parse(*configAddr)
+		urlObj, err := url.Parse(configAddr)
 		if err != nil {
 			return nil
 		}

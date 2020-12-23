@@ -3,6 +3,7 @@ package file
 import (
 	"flag"
 	"github.com/myxy99/component/config"
+	"github.com/myxy99/component/pkg/xflag"
 )
 
 // DataSourceFile defines file scheme
@@ -11,13 +12,13 @@ const DataSourceFile = "file"
 func Register() (string, func() config.DataSource) {
 	return DataSourceFile, func() config.DataSource {
 		var (
-			watchConfig = flag.Bool("watch", false, "")
-			configAddr  = flag.String("config", "", "")
+			configAddr  = xflag.String("config")
+			watchConfig = xflag.Bool("watch")
 		)
 		flag.Parse()
-		if *configAddr == "" {
+		if configAddr == "" {
 			return nil
 		}
-		return NewDataSource(*configAddr, *watchConfig)
+		return NewDataSource(configAddr, watchConfig)
 	}
 }

@@ -1,8 +1,8 @@
 package apollo
 
 import (
-	"flag"
 	"github.com/myxy99/component/config"
+	"github.com/myxy99/component/pkg/xflag"
 	"github.com/philchia/agollo/v4"
 	"net/url"
 )
@@ -13,14 +13,14 @@ const DataSourceApollo = "apollo"
 func Register() (string, func() config.DataSource) {
 	return DataSourceApollo, func() config.DataSource {
 		var (
-			configAddr = flag.String("config", "", "")
+			configAddr = xflag.String("config")
 		)
-		if *configAddr == "" {
+		if configAddr == "" {
 			return nil
 		}
 		// configAddr is a string in this format:
 		// apollo://ip:port?appId=XXX&cluster=XXX&namespaceName=XXX&key=XXX&accesskeySecret=XXX&insecureSkipVerify=XXX&cacheDir=XXX
-		urlObj, err := url.Parse(*configAddr)
+		urlObj, err := url.Parse(configAddr)
 		if err != nil {
 			return nil
 		}
