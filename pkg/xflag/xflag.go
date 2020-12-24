@@ -2,7 +2,7 @@
 * @Author: myxy99 <myxy99@foxmail.com>
 * @Date: 2020/12/23 23:24
  */
-package xfalg
+package xflag
 
 import (
 	"fmt"
