@@ -22,6 +22,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
 	github.com/jonboulle/clockwork v0.2.2 // indirect
+	github.com/json-iterator/go v1.1.10
 	github.com/lib/pq v1.9.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.0
 	github.com/philchia/agollo/v4 v4.1.1

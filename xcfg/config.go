@@ -137,8 +137,6 @@ func (c *Configuration) notifyChanges(changes map[string]interface{}) {
 
 	for watchPrefix := range c.watchers {
 		for key := range changes {
-			// 前缀匹配即可
-			// todo 可能产生错误匹配
 			if strings.HasPrefix(key, watchPrefix) {
 				changedWatchPrefixMap[watchPrefix] = struct{}{}
 			}
@@ -159,7 +157,6 @@ func (c *Configuration) Set(key string, val interface{}) error {
 	m := deepSearch(c.override, paths[:len(paths)-1])
 	m[lastKey] = val
 	return c.apply(m)
-	// c.keyMap.Store(key, val)
 }
 
 func deepSearch(m map[string]interface{}, path []string) map[string]interface{} {

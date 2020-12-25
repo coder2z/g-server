@@ -6,23 +6,24 @@
 package xmonitor
 
 import (
+	xapp "github.com/myxy99/component"
 	cfg "github.com/myxy99/component/xcfg"
+	"github.com/myxy99/component/xgovern"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
-	"runtime"
 	"time"
 )
 
 func init() {
 	BuildInfoGauge.WithLabelValues(
-		cfg.GetString("app.name"),
+		xapp.Name(),
 		cfg.GetString("app.mode"),
-		cfg.GetString("app.version"),
-		runtime.Version(),
-		time.Now().String(),
+		xapp.AppVersion(),
+		xapp.GoVersion(),
+		xapp.StartTime(),
 	).Set(float64(time.Now().UnixNano() / 1e6))
 
-	http.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
+	xgovern.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
 		promhttp.Handler().ServeHTTP(w, r)
 	})
 }
