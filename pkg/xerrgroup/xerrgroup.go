@@ -5,7 +5,6 @@
  **/
 package xerrgroup
 
-
 import (
 	"context"
 	"sync"
@@ -22,6 +21,10 @@ type Group struct {
 
 	errOnce sync.Once
 	err     error
+}
+
+func NewErrGroup() *Group {
+	return &Group{}
 }
 
 // WithContext returns a new Group and an associated Context derived from ctx.
