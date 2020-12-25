@@ -26,7 +26,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.0
 	github.com/philchia/agollo/v4 v4.1.1
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/client_golang v1.9.0 // indirect
+	github.com/prometheus/client_golang v1.9.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/cast v1.3.1
 	github.com/spf13/cobra v0.0.3
