@@ -94,7 +94,8 @@ func GetServer() *http.ServeMux {
 }
 
 func Run(opts ...Option) {
-	c := DefaultConfig()
+	c := xcfg.UnmarshalWithExpect("app.govern", DefaultConfig()).(*Config)
+
 	for _, opt := range opts {
 		opt(c)
 	}
