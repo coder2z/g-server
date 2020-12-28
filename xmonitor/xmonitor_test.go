@@ -6,6 +6,7 @@
 package xmonitor
 
 import (
+	"github.com/myxy99/component/xcfg"
 	"github.com/myxy99/component/xgovern"
 	"io"
 	"math/rand"
@@ -38,7 +39,10 @@ func Query(w http.ResponseWriter, r *http.Request) {
 }
 
 func TestName(t *testing.T) {
-
+	xcfg.Set("app.govern", map[string]interface{}{
+		"host": "172.16.3.221",
+		"port": 6789,
+	})
 	go xgovern.Run()
 
 	http.HandleFunc("/query", Monitor(Query))

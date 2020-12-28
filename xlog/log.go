@@ -2,9 +2,9 @@ package xlog
 
 import (
 	"fmt"
-	"github.com/myxy99/component/xcfg"
 	"github.com/myxy99/component/pkg/xcolor"
 	"github.com/myxy99/component/pkg/xdefer"
+	"github.com/myxy99/component/xcfg"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
