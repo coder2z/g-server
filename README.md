@@ -60,12 +60,12 @@ import (
 	"context"
 	"fmt"
 	"github.com/BurntSushi/toml"
-	invoker "github.com/myxy99/component"
-	"github.com/myxy99/component/xconfig"
-	"github.com/myxy99/component/xconfig/datasource/manager"
-	database "github.com/myxy99/component/xgorm"
 	"github.com/myxy99/component/pkg/xflag"
-	"github.com/myxy99/component/xredis"
+	"github.com/myxy99/component/xcfg"
+	"github.com/myxy99/component/xcfg/datasource/manager"
+	"github.com/myxy99/component/xinvoker"
+	xgorm "github.com/myxy99/component/xinvoker/gorm"
+	xredis "github.com/myxy99/component/xinvoker/redis"
 )
 
 func main() {
@@ -80,8 +80,8 @@ func main() {
 				},
 			},
 			Flags: func(c *xflag.Command) {
-				c.Flags().StringP("xcfg", "c", "", "配置文件")
-				_ = c.MarkFlagRequired("xcfg")
+				c.Flags().StringP("config", "c", "", "配置文件")
+				_ = c.MarkFlagRequired("config")
 			},
 		},
 	)
@@ -91,25 +91,26 @@ func main() {
 }
 
 func RunApp() {
-	data, err := xmanager.NewDataSource(xflag.NString("run", "xcfg"))
+	data, err := manager.NewDataSource(xflag.NString("run", "config"))
 	if err != nil {
 		panic(err)
 	}
-	err = xconfig.LoadFromDataSource(data, toml.Unmarshal)
+	err = xcfg.LoadFromDataSource(data, toml.Unmarshal)
 	if err != nil {
 		panic(err)
 	}
 
-	invoker.Register(
+	xinvoker.Register(
 		xgorm.Register("db"),
 		xredis.Register("redis"))
-	_ = invoker.Init()
+	_ = xinvoker.Init()
 
 	db := xgorm.Invoker("dev")
 	rc := xredis.Invoker("dev")
 	d, _ := db.DB()
 	fmt.Println(d.Ping(), rc.Ping(context.Background()))
 }
+
 
 ```
 
