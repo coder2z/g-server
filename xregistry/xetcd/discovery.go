@@ -17,7 +17,7 @@ type etcdDiscovery struct {
 	client *clientv3.Client
 }
 
-func NewDiscovery(conf clientv3.Config) (xregistry.Discovery, error) {
+func NewDiscovery(conf EtcdV3Cfg) (xregistry.Discovery, error) {
 	d := &etcdDiscovery{}
 	c, err := clientv3.New(conf)
 	if err != nil {
@@ -37,30 +37,30 @@ func (d *etcdDiscovery) Discover(target string) (<-chan []xregistry.Instance, er
 func (d *etcdDiscovery) watch(ch chan<- []xregistry.Instance, serviceName string) {
 	prefix := fmt.Sprintf("/%s/%s/", etcdPrefix, serviceName)
 
-	get := func() []xregistry.Instance {
+	update := func() []xregistry.Instance {
 		resp, err := d.client.Get(context.Background(), prefix, clientv3.WithPrefix())
 		if err != nil {
 			xlog.Warnw("etcd discovery watch err:%v, servicename:%s", err, serviceName)
 			return nil
 		}
-		var insss []xregistry.Instance
+		var i []xregistry.Instance
 		for _, kv := range resp.Kvs {
 			ins := xregistry.Instance{}
 			if err = json.Unmarshal(kv.Value, &ins); err == nil {
-				insss = append(insss, ins)
+				i = append(i, ins)
 			} else {
 				xlog.Warnw("etcd discovery watch unmarshal err:%v, servicename:%s", err, serviceName)
 			}
 		}
-		return insss
+		return i
 	}
-	if inss := get(); len(inss) > 0 {
-		ch <- inss
+	if i := update(); len(i) > 0 {
+		ch <- i
 	}
 
-		eventch := d.client.Watch(context.Background(), prefix, clientv3.WithPrefix())
-	for range eventch {
-		ch <- get()
+	eventCh := d.client.Watch(context.Background(), prefix, clientv3.WithPrefix())
+	for range eventCh {
+		ch <- update()
 	}
 	return
 }
@@ -68,4 +68,3 @@ func (d *etcdDiscovery) watch(ch chan<- []xregistry.Instance, serviceName string
 func (d *etcdDiscovery) Close() {
 	_ = d.client.Close()
 }
-

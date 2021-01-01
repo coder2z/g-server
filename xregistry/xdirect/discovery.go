@@ -22,15 +22,15 @@ func (d *directDiscovery) Discover(target string) (<-chan []xregistry.Instance, 
 	if len(endpoints) == 0 {
 		return nil, fmt.Errorf("no endpoint")
 	}
-	var inss []xregistry.Instance
+	var i []xregistry.Instance
 	for _, addr := range endpoints {
 		ins := xregistry.Instance{Address: addr}
-		inss = append(inss, ins)
+		i = append(i, ins)
 	}
 
 	ch := make(chan []xregistry.Instance)
 	go func() {
-		ch <- inss
+		ch <- i
 	}()
 	return ch, nil
 }

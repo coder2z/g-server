@@ -17,7 +17,11 @@ type etcdBuilder struct {
 	discovery xregistry.Discovery
 }
 
-func RegisterBuilder(conf clientv3.Config) error {
+type (
+	EtcdV3Cfg = clientv3.Config
+)
+
+func RegisterBuilder(conf EtcdV3Cfg) error {
 	d, err := NewDiscovery(conf)
 	if err != nil {
 		return err
@@ -37,14 +41,14 @@ func (b *etcdBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts
 	}
 
 	select {
-	case inss := <-ch:
-		xregistry.UpdateAddress(inss, cc)
+	case x := <-ch:
+		xregistry.UpdateAddress(x, cc)
 	case <-time.After(time.Minute):
 		log.Printf("not resolve succuss in one minute, target:%v", target)
 	}
 	go func() {
-		for inss := range ch {
-			xregistry.UpdateAddress(inss, cc)
+		for i := range ch {
+			xregistry.UpdateAddress(i, cc)
 		}
 	}()
 	return &xregistry.NoopResolver{}, nil

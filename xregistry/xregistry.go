@@ -13,6 +13,7 @@ import (
 // Registry Options
 type Options struct {
 	ServiceName string            `json:"servicename"`
+	Namespaces  string            `json:"namespaces"`
 	Address     string            `json:"address"`
 	Metadata    map[string]string `json:"metadata"`
 	// 服务有效时长
@@ -30,6 +31,12 @@ type Registry interface {
 func ServiceName(name string) Option {
 	return func(o *Options) {
 		o.ServiceName = name
+	}
+}
+
+func ServiceNamespaces(namespaces string) Option {
+	return func(o *Options) {
+		o.Namespaces = namespaces
 	}
 }
 

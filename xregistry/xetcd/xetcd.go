@@ -13,6 +13,7 @@ import (
 	"github.com/myxy99/component/xregistry"
 	"go.etcd.io/etcd/clientv3"
 	"log"
+	"strings"
 	"sync"
 	"time"
 )
@@ -32,12 +33,12 @@ type etcdReg struct {
 	leaseId   clientv3.LeaseID
 }
 
-func NewRegistry(conf clientv3.Config) (xregistry.Registry, error) {
+func NewRegistry(conf EtcdV3Cfg) (xregistry.Registry, error) {
 	r := &etcdReg{
 		conf:    conf,
 		options: &xregistry.Options{},
 		closeCh: make(chan struct{}),
-		uid:     uuid.New().String(),
+		uid:     strings.ReplaceAll(uuid.New().String(), "-", ""),
 	}
 	c, err := clientv3.New(conf)
 	if err != nil {
@@ -53,6 +54,9 @@ func (r *etcdReg) Register(ops ...xregistry.Option) {
 	}
 	if r.options.ServiceName == "" {
 		panic("service name required")
+	}
+	if r.options.Namespaces == "" {
+		panic("service namespaces required")
 	}
 	if r.options.Address == "" {
 		panic("service address required")
@@ -126,7 +130,7 @@ func (r *etcdReg) Close() {
 }
 
 func (r *etcdReg) getKey() string {
-	key := fmt.Sprintf("/%s/%s/%s", etcdPrefix, r.options.ServiceName, r.uid)
+	key := fmt.Sprintf("/%s/%s/%s", etcdPrefix, fmt.Sprintf("%v.%v", r.options.Namespaces, r.options.ServiceName), r.uid)
 	return key
 }
 

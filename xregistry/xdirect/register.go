@@ -21,7 +21,7 @@ func RegisterBuilder() error {
 	return nil
 }
 
-// grpc.Dial("direct://default/127.0.0.1:8000,127.0.0.1:8001")
+// grpc.Dial("direct://namespaces/127.0.0.1:8000,127.0.0.1:8001")
 type directBuilder struct {
 	discovery xregistry.Discovery
 }
@@ -33,8 +33,8 @@ func (b *directBuilder) Build(target resolver.Target, cc resolver.ClientConn, op
 	}
 
 	select {
-	case inss := <-ch:
-		xregistry.UpdateAddress(inss, cc)
+	case i := <-ch:
+		xregistry.UpdateAddress(i, cc)
 	case <-time.After(time.Minute):
 		xlog.Warnw("not resolve succuss in one minute, target:%v", target)
 	}
