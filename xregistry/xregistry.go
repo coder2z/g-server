@@ -5,6 +5,7 @@
 package xregistry
 
 import (
+	"fmt"
 	"google.golang.org/grpc/resolver"
 	"time"
 )
@@ -77,6 +78,10 @@ func UpdateAddress(inss []Instance, conn resolver.ClientConn) {
 	conn.UpdateState(resolver.State{
 		Addresses: address,
 	})
+}
+
+func KeyFormat(target resolver.Target) string {
+	return fmt.Sprintf("%v.%v", target.Authority, target.Endpoint)
 }
 
 type NoopResolver struct{}

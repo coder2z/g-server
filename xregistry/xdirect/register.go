@@ -27,7 +27,7 @@ type directBuilder struct {
 }
 
 func (b *directBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
-	ch, err := b.discovery.Discover(target.Endpoint)
+	ch, err := b.discovery.Discover(xregistry.KeyFormat(target))
 	if err != nil {
 		return nil, err
 	}
