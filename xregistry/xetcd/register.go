@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-// grpc.Dial("etcd://default/servicename")
+// grpc.Dial("etcd://namespaces/servicename")
 type etcdBuilder struct {
 	discovery xregistry.Discovery
 }

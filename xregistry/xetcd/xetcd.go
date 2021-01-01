@@ -12,7 +12,6 @@ import (
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xregistry"
 	"go.etcd.io/etcd/clientv3"
-	"log"
 	"strings"
 	"sync"
 	"time"
@@ -137,9 +136,9 @@ func (r *etcdReg) getKey() string {
 func (r *etcdReg) unregister() {
 	key := r.getKey()
 	if _, err := r.client.Delete(context.Background(), key); err != nil {
-		log.Printf("unregister err:%v, uid:%s, options:%v", err, r.uid, r.options)
+		xlog.Warnw("unregister err:%v, uid:%s, options:%v", err, r.uid, r.options)
 	}
 	_, _ = r.client.Revoke(context.Background(), r.leaseId) // 回收租约
-	log.Printf("unregister uid:%s, options:%v", r.uid, r.options)
+	xlog.Infow("unregister uid:%s, options:%v", r.uid, r.options)
 	//_ = r.client.Close()
 }
