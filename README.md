@@ -11,6 +11,9 @@
         -redis        redis
     xlog              日志
     xmoniter          普罗米修斯
+    xregistry         服务注册发现
+    xtrace            链路追踪
+    xgrpc             grpc 拦截器
     pkg
         -xcast        spf13/cast不足的函数封装
         -xcolor       颜色输出
