@@ -84,11 +84,11 @@ func GoVersion() string {
 
 func PrintVersion() {
 	xconsole.Blue(fmt.Sprintf("%-40v", "——————————————————"))
-	xconsole.Greenf("AppName", Name())
-	xconsole.Greenf("HostName", HostName())
-	xconsole.Greenf("AppVersion", AppVersion())
-	xconsole.Greenf("BuildHost", BuildHost())
-	xconsole.Greenf("StartTime", StartTime())
-	xconsole.Greenf("GoVersion", GoVersion())
+	xconsole.Greenf("app name:", Name())
+	xconsole.Greenf("host name:", HostName())
+	xconsole.Greenf("app version:", AppVersion())
+	xconsole.Greenf("build host:", BuildHost())
+	xconsole.Greenf("start time:", StartTime())
+	xconsole.Greenf("go version:", GoVersion())
 	xconsole.Blue(fmt.Sprintf("%-40v", "——————————————————"))
 }
