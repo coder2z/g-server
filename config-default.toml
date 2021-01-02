@@ -1,0 +1,36 @@
+[app]
+    name = "demo"
+    version="v0.1.0"
+    mode="dev"
+
+[trace.jaeger]
+    agent_addr="127.0.0.1:6831"
+    [trace.jaeger.sampler]
+        type="const"
+        param=0.001
+
+[xlog]
+    name="log.log"
+    dir="."
+    level="info"
+    max_size=500
+
+[app.govern]
+    host="127.0.0.1"
+    port="4568"
+
+
+[email.main]
+    host="smtp.yeah.net"
+
+[gorm.main]
+    host="127.0.0.1"
+
+[mongo.main]
+    url="127.0.0.1"
+
+[oss.main]
+    mode="file"
+
+[redis.main]
+    addr="127.0.0.1"

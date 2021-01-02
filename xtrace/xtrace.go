@@ -16,9 +16,9 @@ import (
 )
 
 func init() {
-	if xcfg.Get("jupiter.trace.jaeger") != nil {
+	if xcfg.Get("trace.jaeger") != nil {
 		SetGlobalTracer(
-			jaeger.RawConfig("jupiter.trace.jaeger").Build(),
+			jaeger.RawConfig("trace.jaeger").Build(),
 		)
 	}
 }

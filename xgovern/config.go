@@ -11,9 +11,9 @@ import (
 )
 
 type Config struct {
-	Host    string
-	Port    int
-	Network string
+	Host    string `mapStructure:"host"`
+	Port    int    `mapStructure:"port"`
+	Network string `mapStructure:"network"`
 }
 
 type Option func(c *Config)

@@ -6,8 +6,8 @@ package xlog
 
 import (
 	"fmt"
-	cfg "github.com/myxy99/component/xcfg"
 	"github.com/myxy99/component/pkg/xcolor"
+	cfg "github.com/myxy99/component/xcfg"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"time"
@@ -15,31 +15,31 @@ import (
 
 type options struct {
 	// Dir 日志输出目录
-	Dir string
+	Dir string `mapStructure:"dir"`
 	// Name 日志文件名称
-	Name string
+	Name string `mapStructure:"name"`
 	// Level 日志初始等级
-	Level string
+	Level string `mapStructure:"level"`
 	// 日志初始化字段
-	Fields []zap.Field
+	Fields []zap.Field `mapStructure:"fields"`
 	// 是否添加调用者信息
-	AddCaller bool
+	AddCaller bool `mapStructure:"add_caller"`
 	// 日志前缀
-	Prefix string
+	Prefix string `mapStructure:"prefix"`
 	// 日志输出文件最大长度，超过改值则截断
-	MaxSize   int
-	MaxAge    int
-	MaxBackup int
+	MaxSize   int `mapStructure:"max_size"`
+	MaxAge    int `mapStructure:"max_age"`
+	MaxBackup int `mapStructure:"max_backup"`
 	// 日志磁盘刷盘间隔
-	Interval      time.Duration
-	CallerSkip    int
-	Async         bool
-	Queue         bool
-	QueueSleep    time.Duration
-	Core          zapcore.Core
-	Debug         bool
-	EncoderConfig *zapcore.EncoderConfig
-	configKey     string
+	Interval      time.Duration          `mapStructure:"interval"`
+	CallerSkip    int                    `mapStructure:"caller_skip"`
+	Async         bool                   `mapStructure:"async"`
+	Queue         bool                   `mapStructure:"queue"`
+	QueueSleep    time.Duration          `mapStructure:"queue_sleep"`
+	Core          zapcore.Core           `mapStructure:"core"`
+	Debug         bool                   `mapStructure:"debug"`
+	EncoderConfig *zapcore.EncoderConfig `mapStructure:"encoder_config"`
+	ConfigKey     string                 `mapStructure:"config_key"`
 }
 
 // Filename ...
@@ -53,7 +53,7 @@ func RawConfig(key string) *options {
 	if err := cfg.UnmarshalKey(key, &config); err != nil {
 		panic(err)
 	}
-	config.configKey = key
+	config.ConfigKey = key
 	return config
 }
 
@@ -90,8 +90,8 @@ func (o options) Build() *Logger {
 		o.EncoderConfig.EncodeLevel = DebugEncodeLevel
 	}
 	logger := newLogger(&o)
-	if o.configKey != "" {
-		logger.AutoLevel(o.configKey + ".level")
+	if o.ConfigKey != "" {
+		logger.AutoLevel(o.ConfigKey + ".level")
 	}
 	return logger
 }

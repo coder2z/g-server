@@ -17,14 +17,14 @@ import (
 )
 
 type Config struct {
-	ServiceName      string
-	Sampler          *jCfg.SamplerConfig
-	Reporter         *jCfg.ReporterConfig
-	Headers          *jaeger.HeadersConfig
-	EnableRPCMetrics bool
-	tags             []opentracing.Tag
-	options          []jCfg.Option
-	PanicOnError     bool
+	ServiceName      string                `mapStructure:"service_name"`
+	Sampler          *jCfg.SamplerConfig   `mapStructure:"sampler"`
+	Reporter         *jCfg.ReporterConfig  `mapStructure:"reporter"`
+	Headers          *jaeger.HeadersConfig `mapStructure:"headers"`
+	EnableRPCMetrics bool                  `mapStructure:"enable_rpc_metrics"`
+	Tags             []opentracing.Tag     `mapStructure:"tags"`
+	Options          []jCfg.Option         `mapStructure:"options"`
+	PanicOnError     bool                  `mapStructure:"panic_on_error"`
 }
 
 func DefaultConfig() *Config {
@@ -49,7 +49,7 @@ func DefaultConfig() *Config {
 			TraceBaggageHeaderPrefix: "ctx-",
 			TraceContextHeaderName:   headerName,
 		},
-		tags: []opentracing.Tag{
+		Tags: []opentracing.Tag{
 			{Key: "hostname", Value: xapp.HostName()},
 		},
 		PanicOnError: true,
@@ -65,18 +65,18 @@ func RawConfig(key string) *Config {
 }
 
 func (config *Config) WithTag(tags ...opentracing.Tag) *Config {
-	if config.tags == nil {
-		config.tags = make([]opentracing.Tag, 0)
+	if config.Tags == nil {
+		config.Tags = make([]opentracing.Tag, 0)
 	}
-	config.tags = append(config.tags, tags...)
+	config.Tags = append(config.Tags, tags...)
 	return config
 }
 
 func (config *Config) WithOption(options ...jCfg.Option) *Config {
-	if config.options == nil {
-		config.options = make([]jCfg.Option, 0)
+	if config.Options == nil {
+		config.Options = make([]jCfg.Option, 0)
 	}
-	config.options = append(config.options, options...)
+	config.Options = append(config.Options, options...)
 	return config
 }
 
@@ -87,9 +87,9 @@ func (config *Config) Build() opentracing.Tracer {
 		Reporter:    config.Reporter,
 		RPCMetrics:  config.EnableRPCMetrics,
 		Headers:     config.Headers,
-		Tags:        config.tags,
+		Tags:        config.Tags,
 	}
-	tracer, closer, err := configuration.NewTracer(config.options...)
+	tracer, closer, err := configuration.NewTracer(config.Options...)
 	if err != nil {
 		if config.PanicOnError {
 			xlog.Panic("new jaeger", xlog.String("mod", "jaeger"), xlog.FieldErr(err))
