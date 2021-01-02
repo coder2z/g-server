@@ -5,7 +5,7 @@
 
 [trace.jaeger]
     agent_addr="127.0.0.1:6831"
-    [trace.jaeger.sampler]
+[trace.jaeger.sampler]
         type="const"
         param=0.001
 
@@ -25,12 +25,20 @@
 
 [gorm.main]
     host="127.0.0.1"
+[gorm.follow]
+    host="127.0.0.1"
 
 [mongo.main]
+    url="127.0.0.1"
+[mongo.follow]
     url="127.0.0.1"
 
 [oss.main]
     mode="file"
+[oss.follow]
+    mode="file"
 
 [redis.main]
+    addr="127.0.0.1"
+[redis.follow]
     addr="127.0.0.1"
