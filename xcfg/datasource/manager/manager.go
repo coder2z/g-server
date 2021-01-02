@@ -2,12 +2,11 @@ package manager
 
 import (
 	"errors"
-	"fmt"
+	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/xcfg"
 	"github.com/myxy99/component/xcfg/datasource/apollo"
 	"github.com/myxy99/component/xcfg/datasource/etcdv3"
 	"github.com/myxy99/component/xcfg/datasource/file"
-	"github.com/myxy99/component/pkg/xcolor"
 	"net/url"
 )
 
@@ -49,7 +48,7 @@ func NewDataSource(configAddr string) (xcfg.DataSource, error) {
 	if !exist {
 		return nil, ErrInvalidDataSource
 	}
-	fmt.Println(xcolor.Greenf("Get xcfg from ", configAddr))
+	xconsole.Greenf("Get xcfg from:", configAddr)
 	source := creatorFunc()
 	if source == nil {
 		return nil, ErrInvalidDataSource

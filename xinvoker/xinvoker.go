@@ -7,7 +7,9 @@ package xinvoker
 
 import (
 	"errors"
+	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/xcfg"
+	"reflect"
 )
 
 func init() {
@@ -48,6 +50,8 @@ func Register(ivk ...Invoker) {
 // Init invoker执行初始化具体实现
 func Init(opts ...Option) error {
 	for _, invoker := range invokers {
+		key := reflect.ValueOf(invoker).Elem().FieldByName("key").String()
+		xconsole.Bluef("invoker running start init:", key)
 		_ = invoker.Init(opts...)
 	}
 
@@ -57,6 +61,8 @@ func Init(opts ...Option) error {
 // Reload invoker执行热更新具体实现
 func Reload(opts ...Option) error {
 	for _, invoker := range invokers {
+		key := reflect.ValueOf(invoker).Elem().FieldByName("key").String()
+		xconsole.Redf("invoker running start Reload:", key)
 		_ = invoker.Reload(opts...)
 	}
 
@@ -66,6 +72,8 @@ func Reload(opts ...Option) error {
 // Close invoker执行退出具体实现
 func Close(opts ...Option) error {
 	for i := len(invokers) - 1; i >= 0; i-- {
+		key := reflect.ValueOf(invokers[i]).Elem().FieldByName("key").String()
+		xconsole.Redf("invoker running start close:", key)
 		_ = invokers[i].Close(opts...)
 	}
 

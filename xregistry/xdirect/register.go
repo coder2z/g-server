@@ -5,6 +5,7 @@
 package xdirect
 
 import (
+	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xregistry"
 	"google.golang.org/grpc/resolver"
@@ -15,6 +16,7 @@ func init() {
 	resolver.Register(&directBuilder{
 		discovery: newDiscovery(),
 	})
+	xconsole.Greenf("Service registration discovery init:", "direct")
 }
 
 func RegisterBuilder() error {

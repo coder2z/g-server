@@ -5,6 +5,7 @@
 package xk8s
 
 import (
+	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xregistry"
 	"google.golang.org/grpc/resolver"
@@ -26,6 +27,7 @@ func RegisterBuilder() error {
 		rs: map[string]xregistry.Discovery{},
 	}
 	resolver.Register(b)
+	xconsole.Greenf("Service registration discovery init:", "k8s")
 	return nil
 }
 

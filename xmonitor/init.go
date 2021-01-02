@@ -7,6 +7,7 @@ package xmonitor
 
 import (
 	xapp "github.com/myxy99/component"
+	"github.com/myxy99/component/pkg/xconsole"
 	cfg "github.com/myxy99/component/xcfg"
 	"github.com/myxy99/component/xgovern"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -26,4 +27,6 @@ func init() {
 	xgovern.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
 		promhttp.Handler().ServeHTTP(w, r)
 	})
+
+	xconsole.Greenf("prometheus monitor init:", "&{govern.host}/metrics")
 }

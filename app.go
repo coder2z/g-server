@@ -6,8 +6,7 @@
 package xapp
 
 import (
-	"fmt"
-	"github.com/myxy99/component/pkg/xcolor"
+	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/pkg/xnet"
 	"github.com/myxy99/component/xcfg"
 	"os"
@@ -83,10 +82,10 @@ func GoVersion() string {
 }
 
 func PrintVersion() {
-	fmt.Printf("%-20s : %s\n", xcolor.Green("AppName"), xcolor.Blue(Name()))
-	fmt.Printf("%-20s : %s\n", xcolor.Green("HostName"), xcolor.Blue(HostName()))
-	fmt.Printf("%-20s : %s\n", xcolor.Green("AppVersion"), xcolor.Blue(AppVersion()))
-	fmt.Printf("%-20s : %s\n", xcolor.Green("BuildHost"), xcolor.Blue(BuildHost()))
-	fmt.Printf("%-20s : %s\n", xcolor.Green("StartTime"), xcolor.Blue(StartTime()))
-	fmt.Printf("%-20s : %s\n", xcolor.Green("GoVersion"), xcolor.Blue(GoVersion()))
+	xconsole.Greenf("AppName", Name())
+	xconsole.Greenf("HostName", HostName())
+	xconsole.Greenf("AppVersion", AppVersion())
+	xconsole.Greenf("BuildHost", BuildHost())
+	xconsole.Greenf("StartTime", StartTime())
+	xconsole.Greenf("GoVersion", GoVersion())
 }

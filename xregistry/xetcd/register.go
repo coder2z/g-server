@@ -5,6 +5,8 @@
 package xetcd
 
 import (
+	"fmt"
+	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/xregistry"
 	"go.etcd.io/etcd/clientv3"
 	"google.golang.org/grpc/resolver"
@@ -29,8 +31,8 @@ func RegisterBuilder(conf EtcdV3Cfg) error {
 	b := &etcdBuilder{
 		discovery: d,
 	}
-
 	resolver.Register(b)
+	xconsole.Greenf("Service registration discovery init:", fmt.Sprintf("etcd:%v", conf.Endpoints))
 	return nil
 }
 

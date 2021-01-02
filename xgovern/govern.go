@@ -11,7 +11,7 @@ import (
 	"fmt"
 	iJson "github.com/json-iterator/go"
 	xapp "github.com/myxy99/component"
-	"github.com/myxy99/component/pkg/xcolor"
+	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/pkg/xdefer"
 	"github.com/myxy99/component/pkg/xnet"
 	"github.com/myxy99/component/xcfg"
@@ -109,12 +109,12 @@ func Run(opts ...Option) {
 		Handler: handle,
 	}
 
-	fmt.Println(xcolor.Greenf("govern serve running ", c.Address()))
-	
+	xconsole.Greenf("govern serve init:", fmt.Sprintf("%v/debug/list", c.Address()))
+
 	xdefer.Register(func() error {
 		return Shutdown()
 	})
-	
+
 	if err := server.ListenAndServe(); err != nil {
 		xlog.Errorw("govern serve", xlog.String("error", err.Error()), c.Address())
 	}
@@ -130,5 +130,6 @@ func Shutdown() error {
 		xlog.Errorw("shutdown govern server", xlog.String("error", err.Error()))
 		return err
 	}
+	xconsole.Red("govern server shutdown !!!")
 	return nil
 }

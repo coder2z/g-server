@@ -6,6 +6,7 @@ package xtrace
 
 import (
 	"context"
+	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/xcfg"
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xtrace/jaeger"
@@ -17,9 +18,11 @@ import (
 
 func init() {
 	if xcfg.Get("trace.jaeger") != nil {
+		cfg := jaeger.RawConfig("trace.jaeger")
 		SetGlobalTracer(
-			jaeger.RawConfig("trace.jaeger").Build(),
+			cfg.Build(),
 		)
+		xconsole.Greenf("trace init:", cfg.Reporter.LocalAgentHostPort)
 	}
 }
 
