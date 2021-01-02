@@ -6,6 +6,7 @@
 package xapp
 
 import (
+	"fmt"
 	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/pkg/xnet"
 	"github.com/myxy99/component/xcfg"
@@ -82,10 +83,12 @@ func GoVersion() string {
 }
 
 func PrintVersion() {
+	xconsole.Blue(fmt.Sprintf("%-40v", "——————————————————"))
 	xconsole.Greenf("AppName", Name())
 	xconsole.Greenf("HostName", HostName())
 	xconsole.Greenf("AppVersion", AppVersion())
 	xconsole.Greenf("BuildHost", BuildHost())
 	xconsole.Greenf("StartTime", StartTime())
 	xconsole.Greenf("GoVersion", GoVersion())
+	xconsole.Blue(fmt.Sprintf("%-40v", "——————————————————"))
 }
