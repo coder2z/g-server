@@ -7,10 +7,12 @@ package xgovern
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	iJson "github.com/json-iterator/go"
 	xapp "github.com/myxy99/component"
 	"github.com/myxy99/component/pkg/xcolor"
+	"github.com/myxy99/component/pkg/xdefer"
 	"github.com/myxy99/component/pkg/xnet"
 	"github.com/myxy99/component/xcfg"
 	"github.com/myxy99/component/xlog"
@@ -112,16 +114,20 @@ func Run(opts ...Option) {
 	if err := server.ListenAndServe(); err != nil {
 		xlog.Errorw("govern serve", xlog.String("error", err.Error()), c.Address())
 	}
-
+	xdefer.Register(func() error {
+		return Shutdown()
+	})
 }
 
-func Shutdown() {
+func Shutdown() error {
 	if server == nil {
-		return
+		return errors.New("shutdown govern server")
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
 		xlog.Errorw("shutdown govern server", xlog.String("error", err.Error()))
+		return err
 	}
+	return nil
 }
