@@ -7,6 +7,7 @@ package xgrpc
 import (
 	"context"
 	"errors"
+	xapp "github.com/myxy99/component"
 	"github.com/myxy99/component/pkg/xcode"
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xmonitor"
@@ -153,5 +154,20 @@ func XLoggerUnaryClientInterceptor(name string) grpc.UnaryClientInterceptor {
 			return err
 		}
 		return nil
+	}
+}
+
+func XAidUnaryClientInterceptor() grpc.UnaryClientInterceptor {
+	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+		md, ok := metadata.FromOutgoingContext(ctx)
+		clientAidMD := metadata.Pairs("aid", xapp.Name())
+		if ok {
+			md = metadata.Join(md, clientAidMD)
+		} else {
+			md = clientAidMD
+		}
+		ctx = metadata.NewOutgoingContext(ctx, md)
+
+		return invoker(ctx, method, req, reply, cc, opts...)
 	}
 }
