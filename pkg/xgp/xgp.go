@@ -2,7 +2,7 @@ package xgp
 
 import (
 	"fmt"
-	"github.com/myxy99/component/pkg/xcolor"
+	"github.com/myxy99/component/pkg/xconsole"
 	"runtime"
 	"sync"
 	"sync/atomic"
@@ -128,7 +128,7 @@ func panicRecover(ef func(err error)) {
 		if ef != nil {
 			ef(err)
 		} else {
-			fmt.Println(xcolor.Red(err.Error()))
+			xconsole.Red(err.Error())
 		}
 	}
 }

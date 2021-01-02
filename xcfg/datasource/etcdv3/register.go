@@ -1,8 +1,8 @@
 package etcdv3
 
 import (
-	"github.com/myxy99/component/xcfg"
 	"github.com/myxy99/component/pkg/xflag"
+	"github.com/myxy99/component/xcfg"
 	"net/url"
 	"time"
 

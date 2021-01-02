@@ -6,6 +6,7 @@ package xgrpc
 
 import (
 	"context"
+	"fmt"
 	"github.com/myxy99/component/pkg/xcode"
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xmonitor"
@@ -35,7 +36,7 @@ func handleCrash(handler func(interface{})) {
 }
 
 func toPanicError(r interface{}) error {
-	xlog.Errorf("%+v %s", r, debug.Stack())
+	xlog.Errorf(fmt.Sprintf("%+v", r), xlog.Any("Stack", debug.Stack()))
 	return status.Errorf(codes.Internal, "panic: %v", r)
 }
 

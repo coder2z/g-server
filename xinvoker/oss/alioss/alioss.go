@@ -10,7 +10,7 @@ import (
 	"github.com/myxy99/component/xinvoker/oss/standard"
 	"io"
 	"io/ioutil"
-	os "os"
+	"os"
 )
 
 type Client struct {

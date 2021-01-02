@@ -52,7 +52,7 @@ func (b *k8sBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts 
 	case i := <-ch:
 		xregistry.UpdateAddress(i, cc)
 	case <-time.After(time.Minute):
-		xlog.Infof("not resolve succuss in one minute, target:%v", target)
+		xlog.Infof("not resolve succuss in one minute", xlog.Any("target", target))
 	}
 
 	go func() {

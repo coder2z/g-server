@@ -65,16 +65,16 @@ func StdConfig(name string) *options {
 // DefaultConfig ...
 func defaultConfig() *options {
 	return &options{
-		Name:          "xlog.xlog",
+		Name:          "log.log",
 		Dir:           ".",
-		Level:         "info",
+		Level:         "",
 		MaxSize:       500, // 500M
 		MaxAge:        1,   // 1 day
 		MaxBackup:     10,  // 10 backup
 		Interval:      24 * time.Hour,
-		CallerSkip:    1,
-		AddCaller:     false,
-		Async:         true,
+		CallerSkip:    2,
+		AddCaller:     true,
+		Async:         false,
 		Queue:         false,
 		QueueSleep:    100 * time.Millisecond,
 		EncoderConfig: DefaultZapConfig(),

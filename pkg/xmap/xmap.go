@@ -2,7 +2,6 @@ package xmap
 
 import (
 	"fmt"
-	"github.com/myxy99/component/pkg/xcolor"
 	"reflect"
 	"strings"
 
@@ -22,7 +21,6 @@ func MergeStringMap(dest, src map[string]interface{}) {
 		svType := reflect.TypeOf(sv)
 		tvType := reflect.TypeOf(tv)
 		if svType != tvType {
-			fmt.Println(xcolor.Blue("continue, type is different"))
 			continue
 		}
 
