@@ -80,7 +80,7 @@ func (d *k8sDiscovery) watch(ch chan<- []xregistry.Instance, service, port strin
 				continue
 			}
 
-			var inss []xregistry.Instance
+			var i []xregistry.Instance
 			for _, endpoint := range endpoints.Items {
 				for _, subset := range endpoint.Subsets {
 					realPort := port
@@ -92,11 +92,11 @@ func (d *k8sDiscovery) watch(ch chan<- []xregistry.Instance, service, port strin
 					}
 					for _, addr := range subset.Addresses {
 						ins := xregistry.Instance{Address: fmt.Sprintf("%s:%s", addr.IP, realPort)}
-						inss = append(inss, ins)
+						i = append(i, ins)
 					}
 				}
 			}
-			ch <- inss
+			ch <- i
 		}
 	}()
 	return nil
