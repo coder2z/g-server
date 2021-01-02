@@ -27,7 +27,7 @@ func (i *dbInvoker) newDatabaseClient(o *options) (db *gorm.DB) {
 	d.SetMaxOpenConns(o.MaxOpenConnections)
 	d.SetMaxIdleConns(o.MaxIdleConn)
 	d.SetConnMaxLifetime(o.MaxConnectionLifeTime)
-	d.SetConnMaxIdleTime(o.MaxConnMaxIdleTime)
+	//d.SetConnMaxIdleTime(o.MaxConnMaxIdleTime)
 	return db
 }
 
