@@ -107,18 +107,18 @@ func (s *spbStatus) WithDetails(details ...interface{}) (*spbStatus, error) {
 	}
 	p := s.Proto()
 	for _, detail := range details {
-		if pmsg, ok := detail.(proto.Message); ok {
-			any, err := marshalAnyProtoMessage(pmsg)
+		if pms, ok := detail.(proto.Message); ok {
+			message, err := marshalAnyProtoMessage(pms)
 			if err != nil {
 				return nil, err
 			}
-			p.Details = append(p.Details, any)
+			p.Details = append(p.Details, message)
 		} else {
-			any, err := marshalAny(detail)
+			a, err := marshalAny(detail)
 			if err != nil {
 				return nil, err
 			}
-			p.Details = append(p.Details, any)
+			p.Details = append(p.Details, a)
 		}
 	}
 	return &spbStatus{Status: p}, nil
@@ -136,5 +136,5 @@ func marshalAnyProtoMessage(pb proto.Message) (*any.Any, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &any.Any{TypeUrl: proto.MessageName(pb), Value: value}, nil
+	return &any.Any{TypeUrl: proto.MarshalTextString(pb), Value: value}, nil
 }

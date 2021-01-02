@@ -31,14 +31,13 @@ var (
 
 func init() {
 	xgovern.HandleFunc("/status/code/list", func(w http.ResponseWriter, r *http.Request) {
-		var rets = make(map[int]*spbStatus)
+		var res = make(map[int]*spbStatus)
 		_codes.Range(func(key, val interface{}) bool {
 			code := key.(int)
-			status := val.(*spbStatus)
-			rets[code] = status
+			res[code] = val.(*spbStatus)
 			return true
 		})
-		_ = json.NewEncoder(w).Encode(rets)
+		_ = json.NewEncoder(w).Encode(res)
 	})
 }
 
