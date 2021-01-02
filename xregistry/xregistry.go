@@ -77,9 +77,9 @@ type Discovery interface {
 	Close()
 }
 
-func UpdateAddress(inss []Instance, conn resolver.ClientConn) {
+func UpdateAddress(i []Instance, conn resolver.ClientConn) {
 	var address []resolver.Address
-	for _, ins := range inss {
+	for _, ins := range i {
 		address = append(address, resolver.Address{Addr: ins.Address})
 	}
 	conn.UpdateState(resolver.State{
