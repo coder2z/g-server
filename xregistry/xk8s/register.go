@@ -67,7 +67,7 @@ func (b *k8sBuilder) getDiscovery(namespace string) (r xregistry.Discovery, err 
 	if r = b.rs[namespace]; r != nil {
 		return
 	}
-	if r, err = NewDiscovery(namespace); err != nil {
+	if r, err = newDiscovery(namespace); err != nil {
 		return
 	}
 	b.rs[namespace] = r

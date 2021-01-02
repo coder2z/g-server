@@ -17,7 +17,7 @@ type etcdDiscovery struct {
 	client *clientv3.Client
 }
 
-func NewDiscovery(conf EtcdV3Cfg) (xregistry.Discovery, error) {
+func newDiscovery(conf EtcdV3Cfg) (xregistry.Discovery, error) {
 	d := &etcdDiscovery{}
 	c, err := clientv3.New(conf)
 	if err != nil {

@@ -13,7 +13,7 @@ import (
 
 func init() {
 	resolver.Register(&directBuilder{
-		discovery: NewDiscovery(),
+		discovery: newDiscovery(),
 	})
 }
 

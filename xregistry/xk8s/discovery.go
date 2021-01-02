@@ -22,7 +22,7 @@ type k8sDiscovery struct {
 	closeCh   chan struct{}
 }
 
-func NewDiscovery(namespace string) (xregistry.Discovery, error) {
+func newDiscovery(namespace string) (xregistry.Discovery, error) {
 	if namespace == "" {
 		namespace = "default"
 	}

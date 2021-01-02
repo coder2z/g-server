@@ -12,7 +12,7 @@ import (
 
 type directDiscovery struct{}
 
-func NewDiscovery() xregistry.Discovery {
+func newDiscovery() xregistry.Discovery {
 	return &directDiscovery{}
 }
 

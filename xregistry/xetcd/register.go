@@ -22,7 +22,7 @@ type (
 )
 
 func RegisterBuilder(conf EtcdV3Cfg) error {
-	d, err := NewDiscovery(conf)
+	d, err := newDiscovery(conf)
 	if err != nil {
 		return err
 	}
