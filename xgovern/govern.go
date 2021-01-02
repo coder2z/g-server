@@ -110,13 +110,14 @@ func Run(opts ...Option) {
 	}
 
 	fmt.Println(xcolor.Greenf("govern serve running ", c.Address()))
-
-	if err := server.ListenAndServe(); err != nil {
-		xlog.Errorw("govern serve", xlog.String("error", err.Error()), c.Address())
-	}
+	
 	xdefer.Register(func() error {
 		return Shutdown()
 	})
+	
+	if err := server.ListenAndServe(); err != nil {
+		xlog.Errorw("govern serve", xlog.String("error", err.Error()), c.Address())
+	}
 }
 
 func Shutdown() error {
