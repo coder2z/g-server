@@ -130,6 +130,6 @@ func Shutdown() error {
 		xlog.Errorw("shutdown govern server", xlog.String("error", err.Error()))
 		return err
 	}
-	xconsole.Red("govern server shutdown !!!")
+	xconsole.Red("govern server shutdown ~")
 	return nil
 }
