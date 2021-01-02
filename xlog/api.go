@@ -5,10 +5,14 @@ import (
 	"go.uber.org/zap"
 )
 
-func init() {
-	prefix := `xlog`
-	cfg := xcfg.UnmarshalWithExpect(prefix, defaultConfig()).(*options)
-	DefaultLogger = newLogger(cfg)
+func GetDefaultLogger() *Logger {
+	if DefaultLogger == nil {
+		prefix := `xlog`
+		cfg := xcfg.UnmarshalWithExpect(prefix, defaultConfig()).(*options)
+		DefaultLogger = newLogger(cfg)
+
+	}
+	return DefaultLogger
 }
 
 var DefaultLogger *Logger
@@ -16,115 +20,115 @@ var DefaultLogger *Logger
 // Auto ...
 func Auto(err error) Func {
 	if err != nil {
-		return DefaultLogger.With(zap.Any("err", err.Error())).Error
+		return GetDefaultLogger().With(zap.Any("err", err.Error())).Error
 	}
 
-	return DefaultLogger.Info
+	return GetDefaultLogger().Info
 }
 
 // Info ...
 func Info(msg string, fields ...Field) {
-	DefaultLogger.Info(msg, fields...)
+	GetDefaultLogger().Info(msg, fields...)
 }
 
 // Debug ...
 func Debug(msg string, fields ...Field) {
-	DefaultLogger.Debug(msg, fields...)
+	GetDefaultLogger().Debug(msg, fields...)
 }
 
 // Warn ...
 func Warn(msg string, fields ...Field) {
-	DefaultLogger.Warn(msg, fields...)
+	GetDefaultLogger().Warn(msg, fields...)
 }
 
 // Error ...
 func Error(msg string, fields ...Field) {
-	DefaultLogger.Error(msg, fields...)
+	GetDefaultLogger().Error(msg, fields...)
 }
 
 // Panic ...
 func Panic(msg string, fields ...Field) {
-	DefaultLogger.Panic(msg, fields...)
+	GetDefaultLogger().Panic(msg, fields...)
 }
 
 // DPanic ...
 func DPanic(msg string, fields ...Field) {
-	DefaultLogger.DPanic(msg, fields...)
+	GetDefaultLogger().DPanic(msg, fields...)
 }
 
 // Fatal ...
 func Fatal(msg string, fields ...Field) {
-	DefaultLogger.Fatal(msg, fields...)
+	GetDefaultLogger().Fatal(msg, fields...)
 }
 
 // Debugw ...
 func Debugw(msg string, keysAndValues ...interface{}) {
-	DefaultLogger.Debugw(msg, keysAndValues...)
+	GetDefaultLogger().Debugw(msg, keysAndValues...)
 }
 
 // Infow ...
 func Infow(msg string, keysAndValues ...interface{}) {
-	DefaultLogger.Infow(msg, keysAndValues...)
+	GetDefaultLogger().Infow(msg, keysAndValues...)
 }
 
 // Warnw ...
 func Warnw(msg string, keysAndValues ...interface{}) {
-	DefaultLogger.Warnw(msg, keysAndValues...)
+	GetDefaultLogger().Warnw(msg, keysAndValues...)
 }
 
 // Errorw ...
 func Errorw(msg string, keysAndValues ...interface{}) {
-	DefaultLogger.Errorw(msg, keysAndValues...)
+	GetDefaultLogger().Errorw(msg, keysAndValues...)
 }
 
 // Panicw ...
 func Panicw(msg string, keysAndValues ...interface{}) {
-	DefaultLogger.Panicw(msg, keysAndValues...)
+	GetDefaultLogger().Panicw(msg, keysAndValues...)
 }
 
 // DPanicw ...
 func DPanicw(msg string, keysAndValues ...interface{}) {
-	DefaultLogger.DPanicw(msg, keysAndValues...)
+	GetDefaultLogger().DPanicw(msg, keysAndValues...)
 }
 
 // Fatalw ...
 func Fatalw(msg string, keysAndValues ...interface{}) {
-	DefaultLogger.Fatalw(msg, keysAndValues...)
+	GetDefaultLogger().Fatalw(msg, keysAndValues...)
 }
 
 // Debugf ...
 func Debugf(msg string, args ...interface{}) {
-	DefaultLogger.Debugf(msg, args...)
+	GetDefaultLogger().Debugf(msg, args...)
 }
 
 // Infof ...
 func Infof(msg string, args ...interface{}) {
-	DefaultLogger.Infof(msg, args...)
+	GetDefaultLogger().Infof(msg, args...)
 }
 
 // Warnf ...
 func Warnf(msg string, args ...interface{}) {
-	DefaultLogger.Warnf(msg, args...)
+	GetDefaultLogger().Warnf(msg, args...)
 }
 
 // Errorf ...
 func Errorf(msg string, args ...interface{}) {
-	DefaultLogger.Errorf(msg, args...)
+	GetDefaultLogger().Errorf(msg, args...)
 }
 
 // Panicf ...
 func Panicf(msg string, args ...interface{}) {
-	DefaultLogger.Panicf(msg, args...)
+	GetDefaultLogger().Panicf(msg, args...)
 }
 
 // DPanicf ...
 func DPanicf(msg string, args ...interface{}) {
-	DefaultLogger.DPanicf(msg, args...)
+	GetDefaultLogger().DPanicf(msg, args...)
 }
 
 // Fatalf ...
 func Fatalf(msg string, args ...interface{}) {
-	DefaultLogger.Fatalf(msg, args...)
+	GetDefaultLogger().Fatalf(msg, args...)
 }
 
 // Log ...
@@ -134,5 +138,5 @@ func (fn Func) Log(msg string, fields ...Field) {
 
 // With ...
 func With(fields ...Field) *Logger {
-	return DefaultLogger.With(fields...)
+	return GetDefaultLogger().With(fields...)
 }
