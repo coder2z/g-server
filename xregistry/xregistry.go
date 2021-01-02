@@ -71,7 +71,6 @@ type Instance struct {
 }
 
 // 服务发现接口
-// target的具体格式由其实现决定
 type Discovery interface {
 	Discover(target string) (<-chan []Instance, error)
 	Close()
