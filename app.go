@@ -21,6 +21,8 @@ const (
 	dAppVersion = "v0.1.0"
 )
 
+var is bool
+
 var (
 	startTime       string
 	goVersion       string
@@ -31,66 +33,73 @@ var (
 	debug           = true
 )
 
-func init() {
-	var err error
-
-	appName = xcfg.GetString("app.name")
-	if appName == "" {
-		appName = dAppName
-	}
-
-	if data := xcfg.GetString("app.debug"); data == "false" {
-		debug = false
-	}
-	_ = os.Setenv("app.debug", xcast.ToString(debug))
-
-	buildAppVersion = xcfg.GetString("app.version")
-	if buildAppVersion == "" {
-		buildAppVersion = dAppVersion
-	}
-
-	hostName, err = os.Hostname()
-	if err != nil {
-		hostName = "unknown"
-	}
-
-	startTime = time.Now().Format("2006-01-02 15:04:05")
-	buildHost, _ = xnet.GetLocalIP()
-	goVersion = runtime.Version()
-}
-
 // Name gets application name.
 func Name() string {
+	if appName == "" {
+		if appName = xcfg.GetString("app.name"); appName == "" {
+			appName = dAppName
+		}
+	}
 	return appName
 }
 
 // Debug gets application debug.
 func Debug() bool {
+	if !is {
+		if data := xcfg.GetString("app.debug"); data == "false" {
+			debug = false
+		}
+		_ = os.Setenv("app.debug", xcast.ToString(debug))
+		is = true
+	}
 	return debug
 }
 
 //AppVersion get buildAppVersion
 func AppVersion() string {
+	if buildAppVersion == "" {
+		if buildAppVersion = xcfg.GetString("app.version"); buildAppVersion == "" {
+			buildAppVersion = dAppVersion
+		}
+	}
 	return buildAppVersion
 }
 
 //BuildHost get buildHost
 func BuildHost() string {
+	if buildHost == "" {
+		var err error
+		if buildHost, err = xnet.GetLocalIP(); err != nil {
+			hostName = "0.0.0.0"
+		}
+	}
 	return buildHost
 }
 
 // HostName get host name
 func HostName() string {
+	if hostName == "" {
+		var err error
+		if hostName, err = os.Hostname(); err != nil {
+			hostName = "unknown"
+		}
+	}
 	return hostName
 }
 
 //StartTime get start time
 func StartTime() string {
+	if startTime == "" {
+		startTime = time.Now().Format("2006-01-02 15:04:05")
+	}
 	return startTime
 }
 
 //GoVersion get go version
 func GoVersion() string {
+	if goVersion == "" {
+		goVersion = runtime.Version()
+	}
 	return goVersion
 }
 
