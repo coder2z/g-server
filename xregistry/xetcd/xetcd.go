@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/pkg/xjson"
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xregistry"
@@ -67,6 +68,8 @@ func (r *etcdReg) Register(ops ...xregistry.Option) {
 		r.options.RegisterInterval = r.options.RegisterTTL / 3
 	}
 
+	xconsole.Greenf("Service registration to:", fmt.Sprintf("etcd:%v", r.conf.Endpoints))
+
 	go func() {
 		var err error
 		err = r.register() // 先注册一次
@@ -101,15 +104,16 @@ func (r *etcdReg) register() error {
 			xlog.Infow("etcd register", xlog.Any("uid", r.uid), xlog.Any("options", r.options))
 		}
 	}()
-
-	ttl, err := r.client.Grant(context.Background(), int64(r.options.RegisterTTL/time.Second))
+	timeout, cancelFunc := context.WithTimeout(context.Background(), time.Minute)
+	defer cancelFunc()
+	ttl, err := r.client.Grant(timeout, int64(r.options.RegisterTTL/time.Second))
 	if err != nil {
 		return err
 	}
 
 	step += 1
 	data, _ := xjson.Marshal(r.options)
-	_, err = r.client.Put(context.Background(), r.getKey(), string(data), clientv3.WithLease(ttl.ID))
+	_, err = r.client.Put(timeout, r.getKey(), string(data), clientv3.WithLease(ttl.ID))
 	if err == nil {
 		r.leaseId = ttl.ID
 	}

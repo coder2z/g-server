@@ -7,10 +7,10 @@ package xetcd
 import (
 	"fmt"
 	"github.com/myxy99/component/pkg/xconsole"
+	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xregistry"
 	"go.etcd.io/etcd/clientv3"
 	"google.golang.org/grpc/resolver"
-	"log"
 	"time"
 )
 
@@ -46,7 +46,7 @@ func (b *etcdBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts
 	case x := <-ch:
 		xregistry.UpdateAddress(x, cc)
 	case <-time.After(time.Minute):
-		log.Printf("not resolve succuss in one minute, target:%v", target)
+		xlog.Warnw("not resolve succuss in one minute", "target", target)
 	}
 	go func() {
 		for i := range ch {
