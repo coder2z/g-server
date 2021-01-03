@@ -18,8 +18,6 @@ require (
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/go-redis/redis/v8 v8.4.4
-	github.com/gogo/protobuf v1.3.1 // indirect
-	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.4.3
 	github.com/google/uuid v1.1.2
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2 // indirect
@@ -38,7 +36,6 @@ require (
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20200427203606-3cfed13b9966 // indirect
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
-	github.com/zzonee/registry v0.0.0-20201111100154-1817f3964230 // indirect
 	go.etcd.io/etcd v0.0.0-20200402134248-51bdeb39e698
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
@@ -52,12 +49,9 @@ require (
 	gorm.io/driver/postgres v1.0.5
 	gorm.io/driver/sqlite v1.1.4
 	gorm.io/gorm v1.20.9
-	k8s.io/api v0.20.1 // indirect
 	k8s.io/apimachinery v0.20.1
-	k8s.io/client-go v11.0.0+incompatible
-	k8s.io/klog v1.0.0 // indirect
+	k8s.io/client-go v0.19.0
 	k8s.io/utils v0.0.0-20201110183641-67b214c5f920 // indirect
-	sigs.k8s.io/yaml v1.2.0 // indirect
 )
 
 replace (

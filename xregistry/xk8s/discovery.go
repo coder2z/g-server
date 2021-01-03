@@ -5,6 +5,7 @@
 package xk8s
 
 import (
+	"context"
 	"fmt"
 	"github.com/myxy99/component/xregistry"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -61,7 +62,7 @@ func parse(target string) (service, port string) {
 
 func (d *k8sDiscovery) watch(ch chan<- []xregistry.Instance, service, port string) error {
 	watcher, err := d.clients.CoreV1().Endpoints(d.namespace).
-		Watch(metaV1.ListOptions{FieldSelector: fmt.Sprintf("%s=%s", "metadata.name", service)})
+		Watch(context.Background(), metaV1.ListOptions{FieldSelector: fmt.Sprintf("%s=%s", "metadata.name", service)})
 	if err != nil {
 		return err
 	}
@@ -75,7 +76,7 @@ func (d *k8sDiscovery) watch(ch chan<- []xregistry.Instance, service, port strin
 			}
 
 			endpoints, err := d.clients.CoreV1().Endpoints(d.namespace).
-				List(metaV1.ListOptions{FieldSelector: fmt.Sprintf("%s=%s", "metadata.name", service)})
+				List(context.Background(), metaV1.ListOptions{FieldSelector: fmt.Sprintf("%s=%s", "metadata.name", service)})
 			if err != nil {
 				continue
 			}
