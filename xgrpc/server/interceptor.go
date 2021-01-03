@@ -2,7 +2,7 @@
 * @Author: myxy99 <myxy99@foxmail.com>
 * @Date: 2021/1/2 12:50
  */
-package xgrpc
+package serverinterceptors
 
 import (
 	"context"
