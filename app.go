@@ -44,11 +44,10 @@ func Name() string {
 
 // Debug gets application debug.
 func Debug() bool {
-	if data := xcfg.GetString("app.debug"); data == "false" {
-		debug = false
-	}
 	one.Do(func() {
-		xconsole.ResetDebug(debug)
+		if data := xcfg.GetString("app.debug"); data == "false" {
+			debug = false
+		}
 	})
 	return debug
 }
