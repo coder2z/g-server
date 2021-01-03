@@ -27,6 +27,7 @@ type etcdReg struct {
 	client  *clientv3.Client
 	options *xregistry.Options
 
+	*sync.WaitGroup
 	closeCh   chan struct{}
 	closeOnce sync.Once
 	uid       string
@@ -35,10 +36,11 @@ type etcdReg struct {
 
 func NewRegistry(conf EtcdV3Cfg) (xregistry.Registry, error) {
 	r := &etcdReg{
-		conf:    conf,
-		options: &xregistry.Options{},
-		closeCh: make(chan struct{}),
-		uid:     strings.ReplaceAll(uuid.New().String(), "-", ""),
+		conf:      conf,
+		options:   &xregistry.Options{},
+		closeCh:   make(chan struct{}),
+		uid:       strings.ReplaceAll(uuid.New().String(), "-", ""),
+		WaitGroup: new(sync.WaitGroup),
 	}
 	c, err := clientv3.New(conf)
 	if err != nil {
@@ -129,7 +131,9 @@ func (r *etcdReg) keepAliveOnce() error {
 func (r *etcdReg) Close() {
 	r.closeOnce.Do(func() {
 		xconsole.Red("Service registration shutdown")
+		r.Add(1)
 		close(r.closeCh)
+		r.Wait()
 	})
 }
 
@@ -139,11 +143,12 @@ func (r *etcdReg) getKey() string {
 }
 
 func (r *etcdReg) unregister() {
+	defer r.Done()
 	key := r.getKey()
 	if _, err := r.client.Delete(context.Background(), key); err != nil {
 		xlog.Warnf("unregister error", xlog.FieldErr(err), xlog.Any("uid", r.uid), xlog.Any("options", r.options))
 	}
 	_, _ = r.client.Revoke(context.Background(), r.leaseId) // 回收租约
-	xlog.Infow("unregister", xlog.Any("uid", r.uid), xlog.Any("options", r.options))
+	xconsole.Redf("unregister success", r.options)
 	//_ = r.client.Close()
 }

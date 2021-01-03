@@ -61,16 +61,16 @@ func (pool *Pool) Go(f func(), ef func(err error)) {
 
 func (pool *Pool) get() *goroutine {
 	pool.Lock()
-	defer pool.Unlock()
 	head := &pool.head
 	if head.next == nil {
 		if pool.maxNum <= 0 {
+			pool.Unlock()
 			return &pool.head
 		} else {
+			pool.Unlock()
 			return pool.alloc()
 		}
 	}
-
 	ret := head.next
 	head.next = ret.next
 	if ret == pool.tail {
@@ -78,6 +78,7 @@ func (pool *Pool) get() *goroutine {
 	}
 	pool.count--
 	ret.next = nil
+	pool.Unlock()
 	return ret
 }
 
@@ -89,6 +90,7 @@ func (pool *Pool) alloc() *goroutine {
 	pool.Lock()
 	pool.maxNum--
 	pool.Unlock()
+
 	return g
 }
 
