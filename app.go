@@ -6,7 +6,9 @@
 package xapp
 
 import (
+	"fmt"
 	"github.com/myxy99/component/pkg/xcast"
+	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/pkg/xnet"
 	"github.com/myxy99/component/xcfg"
 	"os"
@@ -90,4 +92,15 @@ func StartTime() string {
 //GoVersion get go version
 func GoVersion() string {
 	return goVersion
+}
+
+func PrintVersion() {
+	xconsole.Blue(fmt.Sprintf("%-40v", "——————————————————"))
+	xconsole.Greenf("app name:", Name())
+	xconsole.Greenf("host name:", HostName())
+	xconsole.Greenf("app version:", AppVersion())
+	xconsole.Greenf("build host:", BuildHost())
+	xconsole.Greenf("start time:", StartTime())
+	xconsole.Greenf("go version:", GoVersion())
+	xconsole.Blue(fmt.Sprintf("%-40v", "——————————————————"))
 }
