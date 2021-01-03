@@ -21,8 +21,6 @@ const (
 	dAppVersion = "v0.1.0"
 )
 
-var is bool
-
 var (
 	startTime       string
 	goVersion       string
@@ -32,6 +30,13 @@ var (
 	buildHost       string
 	debug           = true
 )
+
+func init() {
+	if data := xcfg.GetString("app.debug"); data == "false" {
+		debug = false
+	}
+	_ = os.Setenv("app.debug", xcast.ToString(debug))
+}
 
 // Name gets application name.
 func Name() string {
@@ -45,13 +50,6 @@ func Name() string {
 
 // Debug gets application debug.
 func Debug() bool {
-	if !is {
-		if data := xcfg.GetString("app.debug"); data == "false" {
-			debug = false
-		}
-		_ = os.Setenv("app.debug", xcast.ToString(debug))
-		is = true
-	}
 	return debug
 }
 
@@ -107,6 +105,7 @@ func PrintVersion() {
 	xconsole.Blue(fmt.Sprintf("%-40v", "——————————————————"))
 	xconsole.Greenf("app name:", Name())
 	xconsole.Greenf("host name:", HostName())
+	xconsole.Greenf("app debug:", Debug())
 	xconsole.Greenf("app version:", AppVersion())
 	xconsole.Greenf("build host:", BuildHost())
 	xconsole.Greenf("start time:", StartTime())
