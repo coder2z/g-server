@@ -9,15 +9,20 @@ import (
 
 var (
 	debug bool
+	is    bool
 )
 
-func init() {
-	debug = xcast.ToBool(os.Getenv("app.debug"))
+func getDebug() bool {
+	if !is {
+		debug = xcast.ToBool(os.Getenv("app.debug"))
+		is = true
+	}
+	return debug
 }
 
 // Yellow ...
 func Yellow(msg string) {
-	if !debug {
+	if !getDebug() {
 		return
 	}
 	fmt.Println(xcolor.Yellow(fmt.Sprintf("%v\n", msg)))
@@ -25,7 +30,7 @@ func Yellow(msg string) {
 
 // Redf ...
 func Yellowf(msg string, arg interface{}) {
-	if !debug {
+	if !getDebug() {
 		return
 	}
 	fmt.Println(xcolor.Yellowf(fmt.Sprintf("%-40v", msg), arg))
@@ -33,7 +38,7 @@ func Yellowf(msg string, arg interface{}) {
 
 // Red ...
 func Red(msg string) {
-	if !debug {
+	if !getDebug() {
 		return
 	}
 	fmt.Println(xcolor.Red(fmt.Sprintf("%v\n", msg)))
@@ -41,7 +46,7 @@ func Red(msg string) {
 
 // Redf ...
 func Redf(msg string, arg interface{}) {
-	if !debug {
+	if !getDebug() {
 		return
 	}
 	fmt.Println(xcolor.Redf(fmt.Sprintf("%-40v", msg), arg))
@@ -49,7 +54,7 @@ func Redf(msg string, arg interface{}) {
 
 // Blue ...
 func Blue(msg string) {
-	if !debug {
+	if !getDebug() {
 		return
 	}
 	fmt.Println(xcolor.Blue(fmt.Sprintf("%v\n", msg)))
@@ -57,7 +62,7 @@ func Blue(msg string) {
 
 // Greenf ...
 func Bluef(msg string, arg interface{}) {
-	if !debug {
+	if !getDebug() {
 		return
 	}
 	fmt.Println(xcolor.Bluef(fmt.Sprintf("%-40v", msg), arg))
@@ -65,7 +70,7 @@ func Bluef(msg string, arg interface{}) {
 
 // Green ...
 func Green(msg string) {
-	if !debug {
+	if !getDebug() {
 		return
 	}
 	fmt.Println(xcolor.Green(fmt.Sprintf("%v\n", msg)))
@@ -73,7 +78,7 @@ func Green(msg string) {
 
 // Greenf ...
 func Greenf(msg string, arg interface{}) {
-	if !debug {
+	if !getDebug() {
 		return
 	}
 	fmt.Println(xcolor.Greenf(fmt.Sprintf("%-40v", msg), arg))
