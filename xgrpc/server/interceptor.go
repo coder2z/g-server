@@ -104,7 +104,7 @@ func TraceUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 	}
 }
 
-func TimeoutUnaryServerInterceptor(timeout time.Duration) grpc.UnaryServerInterceptor {
+func XTimeoutUnaryServerInterceptor(timeout time.Duration) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo,
 		handler grpc.UnaryHandler) (resp interface{}, err error) {
 		if deadline, ok := ctx.Deadline(); ok {
