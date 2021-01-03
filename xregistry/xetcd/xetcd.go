@@ -128,6 +128,7 @@ func (r *etcdReg) keepAliveOnce() error {
 
 func (r *etcdReg) Close() {
 	r.closeOnce.Do(func() {
+		xconsole.Red("Service registration shutdown")
 		close(r.closeCh)
 	})
 }
