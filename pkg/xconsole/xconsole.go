@@ -25,7 +25,7 @@ func Yellow(msg string) {
 	if !getDebug() {
 		return
 	}
-	fmt.Println(xcolor.Yellow(fmt.Sprintf("%v\n", msg)))
+	fmt.Print(xcolor.Yellow(fmt.Sprintf("%v\n", msg)))
 }
 
 // Redf ...
@@ -33,7 +33,7 @@ func Yellowf(msg string, arg interface{}) {
 	if !getDebug() {
 		return
 	}
-	fmt.Println(xcolor.Yellowf(fmt.Sprintf("%-40v", msg), arg))
+	fmt.Print(xcolor.Yellowf(fmt.Sprintf("%-40v", msg), arg))
 }
 
 // Red ...
@@ -41,7 +41,7 @@ func Red(msg string) {
 	if !getDebug() {
 		return
 	}
-	fmt.Println(xcolor.Red(fmt.Sprintf("%v\n", msg)))
+	fmt.Print(xcolor.Red(fmt.Sprintf("%v\n", msg)))
 }
 
 // Redf ...
@@ -49,7 +49,7 @@ func Redf(msg string, arg interface{}) {
 	if !getDebug() {
 		return
 	}
-	fmt.Println(xcolor.Redf(fmt.Sprintf("%-40v", msg), arg))
+	fmt.Print(xcolor.Redf(fmt.Sprintf("%-40v", msg), arg))
 }
 
 // Blue ...
@@ -57,7 +57,7 @@ func Blue(msg string) {
 	if !getDebug() {
 		return
 	}
-	fmt.Println(xcolor.Blue(fmt.Sprintf("%v\n", msg)))
+	fmt.Print(xcolor.Blue(fmt.Sprintf("%v\n", msg)))
 }
 
 // Greenf ...
@@ -65,7 +65,7 @@ func Bluef(msg string, arg interface{}) {
 	if !getDebug() {
 		return
 	}
-	fmt.Println(xcolor.Bluef(fmt.Sprintf("%-40v", msg), arg))
+	fmt.Print(xcolor.Bluef(fmt.Sprintf("%-40v", msg), arg))
 }
 
 // Green ...
@@ -73,7 +73,7 @@ func Green(msg string) {
 	if !getDebug() {
 		return
 	}
-	fmt.Println(xcolor.Green(fmt.Sprintf("%v\n", msg)))
+	fmt.Print(xcolor.Green(fmt.Sprintf("%v\n", msg)))
 }
 
 // Greenf ...
@@ -81,5 +81,5 @@ func Greenf(msg string, arg interface{}) {
 	if !getDebug() {
 		return
 	}
-	fmt.Println(xcolor.Greenf(fmt.Sprintf("%-40v", msg), arg))
+	fmt.Print(xcolor.Greenf(fmt.Sprintf("%-40v", msg), arg))
 }
