@@ -42,3 +42,5 @@ require (
 	k8s.io/client-go v0.19.0
 	k8s.io/utils v0.0.0-20201110183641-67b214c5f920 // indirect
 )
+
+replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
