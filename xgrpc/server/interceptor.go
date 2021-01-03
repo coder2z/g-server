@@ -7,6 +7,7 @@ package xgrpc
 import (
 	"context"
 	"fmt"
+	"github.com/myxy99/component/pkg/xcast"
 	"github.com/myxy99/component/pkg/xcode"
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xmonitor"
@@ -36,7 +37,7 @@ func handleCrash(handler func(interface{})) {
 }
 
 func toPanicError(r interface{}) error {
-	xlog.Errorf(fmt.Sprintf("%+v", r), xlog.Any("Stack", debug.Stack()))
+	xlog.Errorf(fmt.Sprintf("%+v", r), xlog.FieldStack(debug.Stack()))
 	return status.Errorf(codes.Internal, "panic: %v", r)
 }
 
@@ -66,7 +67,7 @@ func PrometheusUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		resp, err := handler(ctx, req)
 		code := xcode.ExtractCodes(err)
 		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, extractAID(ctx)).Observe(time.Since(startTime).Seconds())
-		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, extractAID(ctx), code.GetMessage()).Inc()
+		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, extractAID(ctx), xcast.ToString(code.GetCode())).Inc()
 		return resp, err
 	}
 }
@@ -77,7 +78,7 @@ func PrometheusStreamServerInterceptor() grpc.StreamServerInterceptor {
 		err := handler(srv, ss)
 		code := xcode.ExtractCodes(err)
 		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCStream, info.FullMethod, extractAID(ss.Context())).Observe(time.Since(startTime).Seconds())
-		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCStream, info.FullMethod, extractAID(ss.Context()), code.GetMessage()).Inc()
+		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCStream, info.FullMethod, extractAID(ss.Context()), xcast.ToString(code.GetCode())).Inc()
 		return err
 	}
 }
@@ -94,11 +95,8 @@ func TraceUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		defer span.Finish()
 		resp, err := handler(ctx, req)
 		if err != nil {
-			code := codes.Unknown
-			if s, ok := status.FromError(err); ok {
-				code = s.Code()
-			}
-			span.SetTag("code", code)
+			spbStatus := xcode.ExtractCodes(err)
+			span.SetTag("code", spbStatus.GetCode())
 			ext.Error.Set(span, true)
 			span.LogFields(log.String("event", "error"), log.String("message", err.Error()))
 		}

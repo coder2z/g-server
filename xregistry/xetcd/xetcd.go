@@ -6,9 +6,9 @@ package xetcd
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/myxy99/component/pkg/xjson"
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xregistry"
 	"go.etcd.io/etcd/clientv3"
@@ -108,7 +108,7 @@ func (r *etcdReg) register() error {
 	}
 
 	step += 1
-	data, _ := json.Marshal(r.options)
+	data, _ := xjson.Marshal(r.options)
 	_, err = r.client.Put(context.Background(), r.getKey(), string(data), clientv3.WithLease(ttl.ID))
 	if err == nil {
 		r.leaseId = ttl.ID

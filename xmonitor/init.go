@@ -6,6 +6,7 @@
 package xmonitor
 
 import (
+	"fmt"
 	xapp "github.com/myxy99/component"
 	"github.com/myxy99/component/pkg/xconsole"
 	cfg "github.com/myxy99/component/xcfg"
@@ -28,5 +29,5 @@ func init() {
 		promhttp.Handler().ServeHTTP(w, r)
 	})
 
-	xconsole.Greenf("prometheus monitor init:", "&{govern.host}/metrics")
+	xconsole.Greenf("prometheus monitor init:", fmt.Sprintf("%v/metrics", xgovern.GovernConfig().Address()))
 }

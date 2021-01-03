@@ -9,16 +9,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	iJson "github.com/json-iterator/go"
 	xapp "github.com/myxy99/component"
 	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/pkg/xdefer"
+	"github.com/myxy99/component/pkg/xjson"
 	"github.com/myxy99/component/pkg/xnet"
 	"github.com/myxy99/component/xcfg"
 	"github.com/myxy99/component/xlog"
 	"net/http"
 	"net/http/pprof"
 	"os"
+	"sync"
 	"time"
 )
 
@@ -33,9 +34,11 @@ type healthStats struct {
 type h map[string]func(w http.ResponseWriter, r *http.Request)
 
 var (
-	handle      *http.ServeMux
-	server      *http.Server
-	HandleFuncs = make(h)
+	handle       *http.ServeMux
+	server       *http.Server
+	HandleFuncs  = make(h)
+	governConfig *Config
+	once         = sync.Once{}
 )
 
 func (hm h) Run(hs *http.ServeMux) {
@@ -49,6 +52,12 @@ func HandleFunc(p string, h func(w http.ResponseWriter, r *http.Request)) {
 }
 
 func init() {
+	xcfg.OnChange(func(*xcfg.Configuration) {
+		GovernReload()
+	})
+}
+
+func init() {
 	HandleFunc("/debug/pprof", pprof.Index)
 	HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
 	HandleFunc("/debug/pprof/profile", pprof.Profile)
@@ -57,7 +66,7 @@ func init() {
 
 	HandleFunc("/debug/env", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
-		_ = iJson.NewEncoder(w).Encode(os.Environ())
+		_ = xjson.NewEncoder(w).Encode(os.Environ())
 	})
 
 	HandleFunc("/debug/list", func(w http.ResponseWriter, r *http.Request) {
@@ -66,13 +75,13 @@ func init() {
 		for s, _ := range HandleFuncs {
 			list = append(list, s)
 		}
-		_ = iJson.NewEncoder(w).Encode(list)
+		_ = xjson.NewEncoder(w).Encode(list)
 	})
 
 	HandleFunc("/debug/config", func(w http.ResponseWriter, r *http.Request) {
 		mm := xcfg.Traverse(".")
 		w.WriteHeader(200)
-		_ = iJson.NewEncoder(w).Encode(mm)
+		_ = xjson.NewEncoder(w).Encode(mm)
 	})
 
 	HandleFunc("/debug/health", func(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +93,7 @@ func init() {
 			Status:   "SUCCESS",
 		}
 		w.WriteHeader(200)
-		_ = iJson.NewEncoder(w).Encode(serverStats)
+		_ = xjson.NewEncoder(w).Encode(serverStats)
 	})
 }
 
@@ -96,28 +105,30 @@ func GetServer() *http.ServeMux {
 }
 
 func Run(opts ...Option) {
-	c := xcfg.UnmarshalWithExpect("app.govern", DefaultConfig()).(*Config)
+	once.Do(func() {
+		c := GovernConfig()
 
-	for _, opt := range opts {
-		opt(c)
-	}
+		for _, opt := range opts {
+			opt(c)
+		}
 
-	HandleFuncs.Run(GetServer())
+		HandleFuncs.Run(GetServer())
 
-	server = &http.Server{
-		Addr:    c.Address(),
-		Handler: handle,
-	}
+		server = &http.Server{
+			Addr:    c.Address(),
+			Handler: handle,
+		}
 
-	xconsole.Greenf("govern serve init:", fmt.Sprintf("%v/debug/list", c.Address()))
+		xconsole.Greenf("govern serve init:", fmt.Sprintf("%v/debug/list", c.Address()))
 
-	xdefer.Register(func() error {
-		return Shutdown()
+		xdefer.Register(func() error {
+			return Shutdown()
+		})
+
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			xlog.Errorw("govern serve", xlog.String("error", err.Error()), xlog.FieldAddr(c.Address()))
+		}
 	})
-
-	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		xlog.Errorw("govern serve", xlog.String("error", err.Error()), xlog.FieldAddr(c.Address()))
-	}
 }
 
 func Shutdown() error {
@@ -130,6 +141,19 @@ func Shutdown() error {
 		xlog.Errorw("shutdown govern server", xlog.FieldErr(err))
 		return err
 	}
-	xconsole.Red("govern server shutdown ~")
+	xconsole.Red("govern server shutdown")
 	return nil
+}
+
+func GovernConfig() *Config {
+	if governConfig == nil {
+		governConfig = xcfg.UnmarshalWithExpect("app.govern", DefaultConfig()).(*Config)
+	}
+	return governConfig
+}
+
+func GovernReload(opts ...Option) {
+	once = sync.Once{}
+	xconsole.Green("govern serve reload")
+	Run(opts...)
 }

@@ -5,7 +5,7 @@
 package xcode
 
 import (
-	"encoding/json"
+	"github.com/myxy99/component/pkg/xjson"
 	"github.com/myxy99/component/xgovern"
 	"github.com/myxy99/component/xlog"
 	"net/http"
@@ -37,7 +37,7 @@ func init() {
 			res[code] = val.(*spbStatus)
 			return true
 		})
-		_ = json.NewEncoder(w).Encode(res)
+		_ = xjson.NewEncoder(w).Encode(res)
 	})
 }
 

@@ -7,7 +7,9 @@ package xgrpc
 import (
 	"context"
 	"errors"
+	"fmt"
 	xapp "github.com/myxy99/component"
+	"github.com/myxy99/component/pkg/xcast"
 	"github.com/myxy99/component/pkg/xcode"
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xmonitor"
@@ -15,10 +17,8 @@ import (
 	"github.com/opentracing/opentracing-go/ext"
 	"github.com/opentracing/opentracing-go/log"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
-	"google.golang.org/grpc/status"
 	"time"
 )
 
@@ -29,7 +29,7 @@ func XMonitorUnaryClientInterceptor(name string) func(ctx context.Context, metho
 		spbStatus := xcode.ExtractCodes(err)
 		if spbStatus.Code < xcode.EcodeNum {
 			//系统错误
-			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), spbStatus.GetMessage()).Inc()
+			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), xcast.ToString(spbStatus.GetCode())).Inc()
 			xmonitor.ClientHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target()).Observe(time.Since(t).Seconds())
 		} else {
 			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), "biz error").Inc()
@@ -46,7 +46,7 @@ func XMonitorStreamClientInterceptor(name string) func(ctx context.Context, desc
 		spbStatus := xcode.ExtractCodes(err)
 		if spbStatus.Code < xcode.EcodeNum {
 			//系统错误
-			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), spbStatus.GetMessage()).Inc()
+			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), xcast.ToString(spbStatus.GetCode())).Inc()
 			xmonitor.ClientHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target()).Observe(time.Since(t).Seconds())
 		} else {
 			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), "biz error").Inc()
@@ -75,13 +75,9 @@ func XTraceUnaryClientInterceptor() grpc.UnaryClientInterceptor {
 
 		err := invoker(xtrace.MetadataInjector(ctx, md), method, req, reply, cc, opts...)
 		if err != nil {
-			code := codes.Unknown
-			if s, ok := status.FromError(err); ok {
-				code = s.Code()
-			}
-			span.SetTag("response_code", code)
+			spbStatus := xcode.ExtractCodes(err)
+			span.SetTag("response_code", spbStatus.GetCode())
 			ext.Error.Set(span, true)
-
 			span.LogFields(log.String("event", "error"), log.String("message", err.Error()))
 		}
 		return err
@@ -160,7 +156,7 @@ func XLoggerUnaryClientInterceptor(name string) grpc.UnaryClientInterceptor {
 func XAidUnaryClientInterceptor() grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		md, ok := metadata.FromOutgoingContext(ctx)
-		clientAidMD := metadata.Pairs("aid", xapp.Name())
+		clientAidMD := metadata.Pairs("aid", fmt.Sprintf("%v_%v", xapp.Name(), xapp.HostName()))
 		if ok {
 			md = metadata.Join(md, clientAidMD)
 		} else {

@@ -6,9 +6,9 @@ package xcode
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/myxy99/component/pkg/xjson"
 	"reflect"
 
 	"github.com/golang/protobuf/proto"
@@ -73,7 +73,7 @@ func (s *spbStatus) GetDetailMessage(exts ...interface{}) string {
 
 // String ...
 func (s *spbStatus) String() string {
-	bs, _ := json.Marshal(s)
+	bs, _ := xjson.Marshal(s)
 	return string(bs)
 }
 

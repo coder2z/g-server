@@ -6,9 +6,9 @@
 package xcast
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/myxy99/component/pkg/xjson"
 	"html/template"
 	"reflect"
 	"strconv"
@@ -1247,7 +1247,7 @@ func parseDateWith(s string, dates []string) (d time.Time, e error) {
 // the object passed as pointer.
 func jsonStringToObject(s string, v interface{}) error {
 	data := []byte(s)
-	return json.Unmarshal(data, v)
+	return xjson.Unmarshal(data, v)
 }
 
 // ToBool casts an interface to a bool type.

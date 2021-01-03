@@ -6,8 +6,7 @@
 package xapp
 
 import (
-	"fmt"
-	"github.com/myxy99/component/pkg/xconsole"
+	"github.com/myxy99/component/pkg/xcast"
 	"github.com/myxy99/component/pkg/xnet"
 	"github.com/myxy99/component/xcfg"
 	"os"
@@ -27,26 +26,32 @@ var (
 	hostName        string
 	buildAppVersion string
 	buildHost       string
+	debug           = true
 )
 
 func init() {
-	if appName == xcfg.GetString("app.name") {
-		if appName == "" {
-			appName = dAppName
-		}
+	var err error
+
+	appName = xcfg.GetString("app.name")
+	if appName == "" {
+		appName = dAppName
 	}
 
-	if buildAppVersion == xcfg.GetString("app.version") {
-		if buildAppVersion == "" {
-			buildAppVersion = dAppVersion
-		}
+	if data := xcfg.GetString("app.debug"); data == "false" {
+		debug = false
+	}
+	_ = os.Setenv("app.debug", xcast.ToString(debug))
+
+	buildAppVersion = xcfg.GetString("app.version")
+	if buildAppVersion == "" {
+		buildAppVersion = dAppVersion
 	}
 
-	name, err := os.Hostname()
+	hostName, err = os.Hostname()
 	if err != nil {
-		name = "unknown"
+		hostName = "unknown"
 	}
-	hostName = name
+
 	startTime = time.Now().Format("2006-01-02 15:04:05")
 	buildHost, _ = xnet.GetLocalIP()
 	goVersion = runtime.Version()
@@ -55,6 +60,11 @@ func init() {
 // Name gets application name.
 func Name() string {
 	return appName
+}
+
+// Debug gets application debug.
+func Debug() bool {
+	return debug
 }
 
 //AppVersion get buildAppVersion
@@ -80,15 +90,4 @@ func StartTime() string {
 //GoVersion get go version
 func GoVersion() string {
 	return goVersion
-}
-
-func PrintVersion() {
-	xconsole.Blue(fmt.Sprintf("%-40v", "——————————————————"))
-	xconsole.Greenf("app name:", Name())
-	xconsole.Greenf("host name:", HostName())
-	xconsole.Greenf("app version:", AppVersion())
-	xconsole.Greenf("build host:", BuildHost())
-	xconsole.Greenf("start time:", StartTime())
-	xconsole.Greenf("go version:", GoVersion())
-	xconsole.Blue(fmt.Sprintf("%-40v", "——————————————————"))
 }

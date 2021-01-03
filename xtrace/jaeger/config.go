@@ -6,6 +6,7 @@ package jaeger
 
 import (
 	xapp "github.com/myxy99/component"
+	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/pkg/xdefer"
 	"github.com/myxy99/component/xcfg"
 	"github.com/myxy99/component/xlog"
@@ -97,6 +98,9 @@ func (config *Config) Build() opentracing.Tracer {
 			xlog.Error("new jaeger", xlog.String("mod", "jaeger"), xlog.FieldErr(err))
 		}
 	}
-	xdefer.Register(closer.Close)
+	xdefer.Register(func() error {
+		xconsole.Red("trace server shutdown")
+		return closer.Close()
+	})
 	return tracer
 }

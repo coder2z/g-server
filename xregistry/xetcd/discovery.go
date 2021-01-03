@@ -6,8 +6,8 @@ package xetcd
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
+	"github.com/myxy99/component/pkg/xjson"
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xregistry"
 	"go.etcd.io/etcd/clientv3"
@@ -46,7 +46,7 @@ func (d *etcdDiscovery) watch(ch chan<- []xregistry.Instance, serviceName string
 		var i []xregistry.Instance
 		for _, kv := range resp.Kvs {
 			ins := xregistry.Instance{}
-			if err = json.Unmarshal(kv.Value, &ins); err == nil {
+			if err = xjson.Unmarshal(kv.Value, &ins); err == nil {
 				i = append(i, ins)
 			} else {
 				xlog.Warnw("etcd discovery watch unmarshal servicename", xlog.FieldErr(err), xlog.Any("servicename", serviceName))
