@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func init() {
+func Run() {
 	BuildInfoGauge.WithLabelValues(
 		xapp.Name(),
 		cfg.GetString("app.mode"),
