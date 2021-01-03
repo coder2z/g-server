@@ -2,27 +2,20 @@ package xconsole
 
 import (
 	"fmt"
-	"github.com/myxy99/component/pkg/xcast"
 	"github.com/myxy99/component/pkg/xcolor"
-	"os"
 )
 
 var (
-	debug bool
-	is    bool
+	debug = true
 )
 
-func getDebug() bool {
-	if !is {
-		debug = xcast.ToBool(os.Getenv("app.debug"))
-		is = true
-	}
-	return debug
+func ResetDebug(ok bool) {
+	debug = ok
 }
 
 // Yellow ...
 func Yellow(msg string) {
-	if !getDebug() {
+	if !debug {
 		return
 	}
 	fmt.Print(xcolor.Yellow(fmt.Sprintf("%v\n", msg)))
@@ -30,7 +23,7 @@ func Yellow(msg string) {
 
 // Redf ...
 func Yellowf(msg string, arg interface{}) {
-	if !getDebug() {
+	if !debug {
 		return
 	}
 	fmt.Print(xcolor.Yellowf(fmt.Sprintf("%-40v", msg), arg))
@@ -38,7 +31,7 @@ func Yellowf(msg string, arg interface{}) {
 
 // Red ...
 func Red(msg string) {
-	if !getDebug() {
+	if !debug {
 		return
 	}
 	fmt.Print(xcolor.Red(fmt.Sprintf("%v\n", msg)))
@@ -46,7 +39,7 @@ func Red(msg string) {
 
 // Redf ...
 func Redf(msg string, arg interface{}) {
-	if !getDebug() {
+	if !debug {
 		return
 	}
 	fmt.Print(xcolor.Redf(fmt.Sprintf("%-40v", msg), arg))
@@ -54,7 +47,7 @@ func Redf(msg string, arg interface{}) {
 
 // Blue ...
 func Blue(msg string) {
-	if !getDebug() {
+	if !debug {
 		return
 	}
 	fmt.Print(xcolor.Blue(fmt.Sprintf("%v\n", msg)))
@@ -62,7 +55,7 @@ func Blue(msg string) {
 
 // Greenf ...
 func Bluef(msg string, arg interface{}) {
-	if !getDebug() {
+	if !debug {
 		return
 	}
 	fmt.Print(xcolor.Bluef(fmt.Sprintf("%-40v", msg), arg))
@@ -70,7 +63,7 @@ func Bluef(msg string, arg interface{}) {
 
 // Green ...
 func Green(msg string) {
-	if !getDebug() {
+	if !debug {
 		return
 	}
 	fmt.Print(xcolor.Green(fmt.Sprintf("%v\n", msg)))
@@ -78,7 +71,7 @@ func Green(msg string) {
 
 // Greenf ...
 func Greenf(msg string, arg interface{}) {
-	if !getDebug() {
+	if !debug {
 		return
 	}
 	fmt.Print(xcolor.Greenf(fmt.Sprintf("%-40v", msg), arg))

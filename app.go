@@ -7,12 +7,12 @@ package xapp
 
 import (
 	"fmt"
-	"github.com/myxy99/component/pkg/xcast"
 	"github.com/myxy99/component/pkg/xconsole"
 	"github.com/myxy99/component/pkg/xnet"
 	"github.com/myxy99/component/xcfg"
 	"os"
 	"runtime"
+	"sync"
 	"time"
 )
 
@@ -29,14 +29,8 @@ var (
 	buildAppVersion string
 	buildHost       string
 	debug           = true
+	one             = sync.Once{}
 )
-
-func init() {
-	if data := xcfg.GetString("app.debug"); data == "false" {
-		debug = false
-	}
-	_ = os.Setenv("app.debug", xcast.ToString(debug))
-}
 
 // Name gets application name.
 func Name() string {
@@ -50,6 +44,12 @@ func Name() string {
 
 // Debug gets application debug.
 func Debug() bool {
+	if data := xcfg.GetString("app.debug"); data == "false" {
+		debug = false
+	}
+	one.Do(func() {
+		xconsole.ResetDebug(debug)
+	})
 	return debug
 }
 
