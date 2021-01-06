@@ -34,10 +34,6 @@ func (s *spbStatus) Error() string {
 	return fmt.Sprintf("rpc error: code = %s desc = %s", codes.Code(s.GetCode()), s.GetMessage())
 }
 
-func (s *spbStatus) Err() error {
-	return s
-}
-
 // GetCodeAsBool ...
 func (s *spbStatus) IsOk() bool {
 	return s.CauseCode() == 0
@@ -64,12 +60,12 @@ func (s *spbStatus) GetMessage(exts ...interface{}) string {
 	return buf.String()
 }
 
-func (s *spbStatus) SetMessage(msg string) *spbStatus {
+func (s *spbStatus) SetMsg(msg string) *spbStatus {
 	s.Message = msg
 	return s
 }
 
-func (s *spbStatus) SetMessageF(format string, age ...interface{}) *spbStatus {
+func (s *spbStatus) SetMsgf(format string, age ...interface{}) *spbStatus {
 	s.Message = fmt.Sprintf(format, age)
 	return s
 }
