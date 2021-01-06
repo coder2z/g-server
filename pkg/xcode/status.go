@@ -66,7 +66,7 @@ func (s *spbStatus) SetMsg(msg string) *spbStatus {
 }
 
 func (s *spbStatus) SetMsgf(format string, age ...interface{}) *spbStatus {
-	s.Message = fmt.Sprintf(format, age)
+	s.Message = fmt.Sprintf(format, age...)
 	return s
 }
 
