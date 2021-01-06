@@ -64,6 +64,16 @@ func (s *spbStatus) GetMessage(exts ...interface{}) string {
 	return buf.String()
 }
 
+func (s *spbStatus) SetMessage(msg string) *spbStatus {
+	s.Message = msg
+	return s
+}
+
+func (s *spbStatus) SetMessageF(format string, age ...interface{}) *spbStatus {
+	s.Message = fmt.Sprintf(format, age)
+	return s
+}
+
 // GetDetailMessage ...
 func (s *spbStatus) GetDetailMessage(exts ...interface{}) string {
 	var buf bytes.Buffer
