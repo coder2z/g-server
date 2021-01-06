@@ -7,21 +7,20 @@ package xsms
 
 import (
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"github.com/myxy99/component/xinvoker"
 	"sync"
 )
 
-var redisI *smsInvoker
+var smsI *smsInvoker
 
 func Register(k string) xinvoker.Invoker {
-	redisI = &smsInvoker{key: k}
-	return redisI
+	smsI = &smsInvoker{key: k}
+	return smsI
 }
 
-func Invoker(key string) *redis.Client {
-	if val, ok := redisI.instances.Load(key); ok {
-		return val.(*redis.Client)
+func Invoker(key string) *client {
+	if val, ok := smsI.instances.Load(key); ok {
+		return val.(*client)
 	}
 	panic(fmt.Sprintf("no redis(%s) invoker found", key))
 }
@@ -49,7 +48,6 @@ func (i *smsInvoker) Reload(opts ...xinvoker.Option) error {
 
 func (i *smsInvoker) Close(opts ...xinvoker.Option) error {
 	i.instances.Range(func(key, value interface{}) bool {
-		_ = value.(*redis.Client).Close()
 		i.instances.Delete(key)
 		return true
 	})

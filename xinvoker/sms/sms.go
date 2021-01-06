@@ -15,7 +15,7 @@ type (
 	SmsResponse = dysmsapi.SendSmsResponse
 	SmsRequest  = dysmsapi.SendSmsRequest
 	client      struct {
-		*dysmsapi.Client
+		SMS *dysmsapi.Client
 	}
 )
 
@@ -42,7 +42,7 @@ func (ali *client) Send(req *SmsRequest) (*SmsResponse, error) {
 		req.RpcRequest = new(requests.RpcRequest)
 	}
 	req.InitWithApiInfo("Dysmsapi", "2017-05-25", "SendSms", "dysms", "openAPI")
-	rep, err := ali.Client.SendSms(req)
+	rep, err := ali.SMS.SendSms(req)
 	if err != nil {
 		return nil, err
 	}
