@@ -21,8 +21,8 @@ import (
 // CodeBreakUp 低于10000均为系统错误码，业务错误码请使用10000以上
 const (
 	CodeBreakUp uint32 = 9999
-	systemType         = iota
-	businessType
+	SystemType         = iota
+	BusinessType
 )
 
 var (
@@ -30,8 +30,8 @@ var (
 	_codesSystem   sync.Map
 	_codesBusiness sync.Map
 	// OK ...
-	OK      = add(systemType, uint32(codes.OK), "OK")
-	Unknown = add(systemType, uint32(codes.Unknown), "UNKNOWN")
+	OK      = add(SystemType, uint32(codes.OK), "OK")
+	Unknown = add(SystemType, uint32(codes.Unknown), "UNKNOWN")
 )
 
 type CodeInfo struct {
@@ -95,14 +95,14 @@ func SystemCodeAdd(code uint32, message string) *spbStatus {
 		xlog.Panic("customize code must less than 9999", xlog.Any("code", code))
 	}
 
-	return add(systemType, aid*10000+code, message)
+	return add(SystemType, aid*10000+code, message)
 }
 
 func BusinessCodeAdd(code uint32, message string) *spbStatus {
 	if code < CodeBreakUp {
 		xlog.Panic("customize code must less than 9999", xlog.Any("code", code))
 	}
-	return add(businessType, code, message)
+	return add(BusinessType, code, message)
 }
 
 func CodeAdds(data []CodeInfo) {
@@ -119,10 +119,10 @@ func add(codeT uint, code uint32, message string) *spbStatus {
 			Details: make([]*any.Any, 0),
 		},
 	}
-	if codeT == systemType {
+	if codeT == SystemType {
 		_codesSystem.Store(code, s)
 	}
-	if codeT == businessType {
+	if codeT == BusinessType {
 		_codesBusiness.Store(code, s)
 	}
 	return s
