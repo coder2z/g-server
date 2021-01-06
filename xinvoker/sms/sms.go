@@ -15,7 +15,9 @@ type (
 	SmsResponse = dysmsapi.SendSmsResponse
 	SmsRequest  = dysmsapi.SendSmsRequest
 	client      struct {
-		SMS *dysmsapi.Client
+		SMS          *dysmsapi.Client
+		signName     string
+		templateCode string
 	}
 )
 
@@ -24,7 +26,7 @@ func (i *smsInvoker) newSMSClient(o *options) *client {
 	if err != nil {
 		panic(err)
 	}
-	return &client{c}
+	return &client{SMS: c, signName: o.SignName, templateCode: o.TemplateCode}
 }
 
 func (i *smsInvoker) loadConfig() map[string]*options {
@@ -40,6 +42,12 @@ func (i *smsInvoker) loadConfig() map[string]*options {
 func (ali *client) Send(req *SmsRequest) (*SmsResponse, error) {
 	if req.RpcRequest == nil {
 		req.RpcRequest = new(requests.RpcRequest)
+	}
+	if req.TemplateCode == "" {
+		req.TemplateCode = ali.templateCode
+	}
+	if req.SignName == "" {
+		req.SignName = ali.signName
 	}
 	req.InitWithApiInfo("Dysmsapi", "2017-05-25", "SendSms", "dysms", "openAPI")
 	rep, err := ali.SMS.SendSms(req)
