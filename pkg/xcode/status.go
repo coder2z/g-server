@@ -8,17 +8,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/myxy99/component/pkg/xjson"
-	"reflect"
-
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/myxy99/component/pkg/xjson"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/grpc/codes"
+	"reflect"
 )
-
-// Status ...
-type Status interface {
-}
 
 type spbStatus struct {
 	*spb.Status
@@ -34,8 +30,16 @@ func (s *spbStatus) GetCodeAsUint32() uint32 {
 	return uint32(s.Code)
 }
 
+func (s *spbStatus) Error() string {
+	return fmt.Sprintf("rpc error: code = %s desc = %s", codes.Code(s.GetCode()), s.GetMessage())
+}
+
+func (s *spbStatus) Err() error {
+	return s
+}
+
 // GetCodeAsBool ...
-func (s *spbStatus) GetCodeAsBool() bool {
+func (s *spbStatus) IsOk() bool {
 	return s.CauseCode() == 0
 }
 
@@ -79,7 +83,7 @@ func (s *spbStatus) String() string {
 
 // CauseCode ...
 func (s *spbStatus) CauseCode() int {
-	return int(s.Code) % 10000
+	return int(s.Code)
 }
 
 // Proto ...
