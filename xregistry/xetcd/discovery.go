@@ -40,7 +40,7 @@ func (d *etcdDiscovery) watch(ch chan<- []xregistry.Instance, serviceName string
 	update := func() []xregistry.Instance {
 		resp, err := d.client.Get(context.Background(), prefix, clientv3.WithPrefix())
 		if err != nil {
-			xlog.Warnw("etcd discovery watch", xlog.FieldErr(err), xlog.Any("servicename", serviceName))
+			xlog.Warn("etcd discovery watch", xlog.FieldErr(err), xlog.Any("servicename", serviceName))
 			return nil
 		}
 		var i []xregistry.Instance
@@ -49,7 +49,7 @@ func (d *etcdDiscovery) watch(ch chan<- []xregistry.Instance, serviceName string
 			if err = xjson.Unmarshal(kv.Value, &ins); err == nil {
 				i = append(i, ins)
 			} else {
-				xlog.Warnw("etcd discovery watch unmarshal servicename", xlog.FieldErr(err), xlog.Any("servicename", serviceName))
+				xlog.Warn("etcd discovery watch unmarshal servicename", xlog.FieldErr(err), xlog.Any("servicename", serviceName))
 			}
 		}
 		return i

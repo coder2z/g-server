@@ -46,7 +46,7 @@ func (b *etcdBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts
 	case x := <-ch:
 		xregistry.UpdateAddress(x, cc)
 	case <-time.After(time.Minute):
-		xlog.Warnw("not resolve succuss in one minute", "target", target)
+		xlog.Warn("not resolve succuss in one minute", xlog.Any("target", target))
 	}
 	go func() {
 		for i := range ch {

@@ -101,9 +101,9 @@ func (r *etcdReg) register() error {
 	)
 	defer func() {
 		if err != nil {
-			xlog.Warnf("etcd register error", xlog.FieldErr(err), xlog.Any("step", step), xlog.Any("options", r.options))
+			xlog.Warn("etcd register error", xlog.FieldErr(err), xlog.Any("step", step), xlog.Any("options", r.options))
 		} else {
-			xlog.Infow("etcd register", xlog.Any("uid", r.uid), xlog.Any("options", r.options))
+			xlog.Info("etcd register", xlog.Any("uid", r.uid), xlog.Any("options", r.options))
 		}
 	}()
 	timeout, cancelFunc := context.WithTimeout(context.Background(), time.Minute)
@@ -146,7 +146,7 @@ func (r *etcdReg) unregister() {
 	defer r.Done()
 	key := r.getKey()
 	if _, err := r.client.Delete(context.Background(), key); err != nil {
-		xlog.Warnf("unregister error", xlog.FieldErr(err), xlog.Any("uid", r.uid), xlog.Any("options", r.options))
+		xlog.Warn("unregister error", xlog.FieldErr(err), xlog.Any("uid", r.uid), xlog.Any("options", r.options))
 	}
 	_, _ = r.client.Revoke(context.Background(), r.leaseId) // 回收租约
 	xconsole.Redf("unregister success", r.options)
