@@ -18,9 +18,9 @@ func Register(k string) xinvoker.Invoker {
 	return smsI
 }
 
-func Invoker(key string) *client {
+func Invoker(key string) *Client {
 	if val, ok := smsI.instances.Load(key); ok {
-		return val.(*client)
+		return val.(*Client)
 	}
 	panic(fmt.Sprintf("no redis(%s) invoker found", key))
 }

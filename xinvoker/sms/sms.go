@@ -14,19 +14,19 @@ import (
 type (
 	SmsResponse = dysmsapi.SendSmsResponse
 	SmsRequest  = dysmsapi.SendSmsRequest
-	client      struct {
+	Client      struct {
 		SMS          *dysmsapi.Client
 		signName     string
 		templateCode string
 	}
 )
 
-func (i *smsInvoker) newSMSClient(o *options) *client {
+func (i *smsInvoker) newSMSClient(o *options) *Client {
 	c, err := dysmsapi.NewClientWithAccessKey(o.Area, o.AccessKeyId, o.AccessSecret)
 	if err != nil {
 		panic(err)
 	}
-	return &client{SMS: c, signName: o.SignName, templateCode: o.TemplateCode}
+	return &Client{SMS: c, signName: o.SignName, templateCode: o.TemplateCode}
 }
 
 func (i *smsInvoker) loadConfig() map[string]*options {
@@ -39,7 +39,7 @@ func (i *smsInvoker) loadConfig() map[string]*options {
 	return conf
 }
 
-func (ali *client) Send(req *SmsRequest) (*SmsResponse, error) {
+func (ali *Client) Send(req *SmsRequest) (*SmsResponse, error) {
 	if req.RpcRequest == nil {
 		req.RpcRequest = new(requests.RpcRequest)
 	}
