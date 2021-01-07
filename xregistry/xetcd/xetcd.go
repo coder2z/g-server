@@ -73,6 +73,8 @@ func (r *etcdReg) Register(ops ...xregistry.Option) {
 	xconsole.Greenf("Service registration to:", fmt.Sprintf("etcd:%v", r.conf.Endpoints))
 
 	go func() {
+		r.Add(1)
+		defer r.Done()
 		var err error
 		err = r.register() // 先注册一次
 		ticker := time.NewTicker(r.options.RegisterInterval)
@@ -87,7 +89,9 @@ func (r *etcdReg) Register(ops ...xregistry.Option) {
 					err = r.register()
 				}
 			case <-r.closeCh:
-				r.unregister()
+				if err == nil {
+					r.unregister()
+				}
 				return
 			}
 		}
@@ -131,10 +135,9 @@ func (r *etcdReg) keepAliveOnce() error {
 func (r *etcdReg) Close() {
 	r.closeOnce.Do(func() {
 		xconsole.Red("Service registration shutdown")
-		r.Add(1)
 		close(r.closeCh)
-		r.Wait()
 	})
+	r.Wait()
 }
 
 func (r *etcdReg) getKey() string {
@@ -143,7 +146,6 @@ func (r *etcdReg) getKey() string {
 }
 
 func (r *etcdReg) unregister() {
-	defer r.Done()
 	key := r.getKey()
 	if _, err := r.client.Delete(context.Background(), key); err != nil {
 		xlog.Warn("unregister error", xlog.FieldErr(err), xlog.Any("uid", r.uid), xlog.Any("options", r.options))
