@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/HdrHistogram/hdrhistogram-go v1.0.1 // indirect
+	github.com/aliyun/alibaba-cloud-sdk-go v1.61.828
 	github.com/aliyun/aliyun-oss-go-sdk v2.1.5+incompatible
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/coreos/etcd v3.3.25+incompatible
