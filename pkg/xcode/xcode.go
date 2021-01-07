@@ -42,20 +42,18 @@ type CodeInfo struct {
 
 func GovernRun() {
 	xgovern.HandleFunc("/status/code/system", func(w http.ResponseWriter, r *http.Request) {
-		var res = make(map[int]*spbStatus)
+		var res = make([]*spbStatus, 0)
 		_codesSystem.Range(func(key, val interface{}) bool {
-			code := key.(int)
-			res[code] = val.(*spbStatus)
+			res = append(res, val.(*spbStatus))
 			return true
 		})
 		_ = xjson.NewEncoder(w).Encode(res)
 	})
 
 	xgovern.HandleFunc("/status/code/business", func(w http.ResponseWriter, r *http.Request) {
-		var res = make(map[int]*spbStatus)
+		var res = make([]*spbStatus, 0)
 		_codesBusiness.Range(func(key, val interface{}) bool {
-			code := key.(int)
-			res[code] = val.(*spbStatus)
+			res = append(res, val.(*spbStatus))
 			return true
 		})
 		_ = xjson.NewEncoder(w).Encode(res)
