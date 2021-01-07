@@ -28,6 +28,7 @@ type etcdReg struct {
 	options *xregistry.Options
 
 	*sync.WaitGroup
+	isOk      bool
 	closeCh   chan struct{}
 	closeOnce sync.Once
 	uid       string
@@ -89,7 +90,7 @@ func (r *etcdReg) Register(ops ...xregistry.Option) {
 					err = r.register()
 				}
 			case <-r.closeCh:
-				if err == nil {
+				if r.isOk {
 					r.unregister()
 				}
 				return
@@ -110,7 +111,7 @@ func (r *etcdReg) register() error {
 			xlog.Info("etcd register", xlog.Any("uid", r.uid), xlog.Any("options", r.options))
 		}
 	}()
-	timeout, cancelFunc := context.WithTimeout(context.Background(), time.Minute)
+	timeout, cancelFunc := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelFunc()
 	ttl, err := r.client.Grant(timeout, int64(r.options.RegisterTTL/time.Second))
 	if err != nil {
@@ -122,6 +123,7 @@ func (r *etcdReg) register() error {
 	_, err = r.client.Put(timeout, r.getKey(), string(data), clientv3.WithLease(ttl.ID))
 	if err == nil {
 		r.leaseId = ttl.ID
+		r.isOk = true
 	}
 	return err
 }
