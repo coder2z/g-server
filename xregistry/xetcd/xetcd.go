@@ -108,7 +108,7 @@ func (r *etcdReg) register() error {
 		if err != nil {
 			xlog.Warn("etcd register error", xlog.FieldErr(err), xlog.Any("step", step), xlog.Any("options", r.options))
 		} else {
-			xlog.Info("etcd register", xlog.Any("uid", r.uid), xlog.Any("options", r.options))
+			xconsole.Greenf("etcd register success to:", r.options)
 		}
 	}()
 	timeout, cancelFunc := context.WithTimeout(context.Background(), 5*time.Second)

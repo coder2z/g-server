@@ -7,7 +7,6 @@ package xtrace
 import (
 	"context"
 	"github.com/myxy99/component/pkg/xconsole"
-	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xtrace/jaeger"
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
@@ -25,7 +24,6 @@ func Init(cfgKey string) {
 
 // SetGlobalTracer ...
 func SetGlobalTracer(tracer opentracing.Tracer) {
-	xlog.Info("set global tracer", xlog.String("mod", "trace"))
 	opentracing.SetGlobalTracer(tracer)
 }
 
