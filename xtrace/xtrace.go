@@ -7,7 +7,6 @@ package xtrace
 import (
 	"context"
 	"github.com/myxy99/component/pkg/xconsole"
-	"github.com/myxy99/component/xcfg"
 	"github.com/myxy99/component/xlog"
 	"github.com/myxy99/component/xtrace/jaeger"
 	"github.com/opentracing/opentracing-go"
@@ -16,14 +15,12 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-func init() {
-	if xcfg.Get("trace.jaeger") != nil {
-		cfg := jaeger.RawConfig("trace.jaeger")
-		SetGlobalTracer(
-			cfg.Build(),
-		)
-		xconsole.Greenf("trace init:", cfg.Reporter.LocalAgentHostPort)
-	}
+func Init(cfgKey string) {
+	cfg := jaeger.RawConfig(cfgKey)
+	SetGlobalTracer(
+		cfg.Build(),
+	)
+	xconsole.Greenf("trace init:", cfg.Reporter.LocalAgentHostPort)
 }
 
 // SetGlobalTracer ...
