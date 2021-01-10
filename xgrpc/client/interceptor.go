@@ -27,7 +27,7 @@ func PrometheusUnaryClientInterceptor(name string) func(ctx context.Context, met
 		t := time.Now()
 		err := invoker(ctx, method, req, reply, cc, opts...)
 		spbStatus := xcode.ExtractCodes(err)
-		if spbStatus.Code < xcode.CodeBreakUp {
+		if spbStatus.Code < xcast.ToInt32(xcode.CodeBreakUp) {
 			//系统错误
 			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), xcast.ToString(spbStatus.GetCode())).Inc()
 			xmonitor.ClientHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target()).Observe(time.Since(t).Seconds())
@@ -44,7 +44,7 @@ func PrometheusStreamClientInterceptor(name string) func(ctx context.Context, de
 		t := time.Now()
 		clientStream, err := streamer(ctx, desc, cc, method, opts...)
 		spbStatus := xcode.ExtractCodes(err)
-		if spbStatus.Code < xcode.CodeBreakUp {
+		if spbStatus.Code < xcast.ToInt32(xcode.CodeBreakUp) {
 			//系统错误
 			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), xcast.ToString(spbStatus.GetCode())).Inc()
 			xmonitor.ClientHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target()).Observe(time.Since(t).Seconds())
@@ -122,7 +122,7 @@ func XLoggerUnaryClientInterceptor(name string) grpc.UnaryClientInterceptor {
 		spbStatus := xcode.ExtractCodes(err)
 		if err != nil {
 			// 只记录系统级别错误
-			if spbStatus.Code < xcode.CodeBreakUp {
+			if spbStatus.Code < xcast.ToInt32(xcode.CodeBreakUp) {
 				xlog.Error(
 					"access",
 					xlog.FieldType("unary"),
