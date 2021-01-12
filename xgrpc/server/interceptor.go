@@ -5,6 +5,7 @@
 package serverinterceptors
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"github.com/myxy99/component/pkg/xcast"
@@ -37,8 +38,11 @@ func handleCrash(handler func(interface{})) {
 }
 
 func toPanicError(r interface{}) error {
-	xlog.Errorf(fmt.Sprintf("%+v", r), xlog.FieldStack(debug.Stack()))
-	return status.Errorf(codes.Internal, "panic: %v", r)
+	var buf bytes.Buffer
+	stack := debug.Stack()
+	buf.Write(stack)
+	xlog.Error(fmt.Sprintf("%+v", r), xlog.FieldValue(buf.String()))
+	return status.Error(codes.Internal, "server internal error")
 }
 
 func CrashUnaryServerInterceptor() grpc.UnaryServerInterceptor {
