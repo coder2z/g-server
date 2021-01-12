@@ -13,6 +13,7 @@ import (
 	"github.com/myxy99/component/pkg/xjson"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"reflect"
 )
 
@@ -32,6 +33,10 @@ func (s *spbStatus) GetCodeAsUint32() uint32 {
 
 func (s *spbStatus) Error() string {
 	return fmt.Sprintf("rpc error: code = %s desc = %s", codes.Code(s.GetCode()), s.GetMessage())
+}
+
+func (s *spbStatus) GRPCStatus() *status.Status {
+	return status.New(codes.Code(s.Status.Code), s.Message)
 }
 
 // GetCodeAsBool ...

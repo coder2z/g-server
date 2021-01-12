@@ -126,7 +126,7 @@ func Run(opts ...Option) {
 		})
 
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			xlog.Errorw("govern serve", xlog.String("error", err.Error()), xlog.FieldAddr(c.Address()))
+			xlog.Error("govern serve", xlog.FieldErr(err), xlog.FieldAddr(c.Address()))
 		}
 	})
 }
@@ -138,7 +138,7 @@ func Shutdown() error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
-		xlog.Errorw("shutdown govern server", xlog.FieldErr(err))
+		xlog.Error("shutdown govern server", xlog.FieldErr(err))
 		return err
 	}
 	xconsole.Red("govern server shutdown")

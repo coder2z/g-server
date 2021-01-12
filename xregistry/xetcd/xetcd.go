@@ -28,6 +28,7 @@ type etcdReg struct {
 	options *xregistry.Options
 
 	*sync.WaitGroup
+	isOk      bool
 	closeCh   chan struct{}
 	closeOnce sync.Once
 	uid       string
@@ -73,6 +74,8 @@ func (r *etcdReg) Register(ops ...xregistry.Option) {
 	xconsole.Greenf("Service registration to:", fmt.Sprintf("etcd:%v", r.conf.Endpoints))
 
 	go func() {
+		r.Add(1)
+		defer r.Done()
 		var err error
 		err = r.register() // 先注册一次
 		ticker := time.NewTicker(r.options.RegisterInterval)
@@ -87,7 +90,9 @@ func (r *etcdReg) Register(ops ...xregistry.Option) {
 					err = r.register()
 				}
 			case <-r.closeCh:
-				r.unregister()
+				if r.isOk {
+					r.unregister()
+				}
 				return
 			}
 		}
@@ -101,12 +106,12 @@ func (r *etcdReg) register() error {
 	)
 	defer func() {
 		if err != nil {
-			xlog.Warnf("etcd register error", xlog.FieldErr(err), xlog.Any("step", step), xlog.Any("options", r.options))
+			xlog.Warn("etcd register error", xlog.FieldErr(err), xlog.Any("step", step), xlog.Any("options", r.options))
 		} else {
-			xlog.Infow("etcd register", xlog.Any("uid", r.uid), xlog.Any("options", r.options))
+			xconsole.Greenf("etcd register success to:", r.options)
 		}
 	}()
-	timeout, cancelFunc := context.WithTimeout(context.Background(), time.Minute)
+	timeout, cancelFunc := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelFunc()
 	ttl, err := r.client.Grant(timeout, int64(r.options.RegisterTTL/time.Second))
 	if err != nil {
@@ -118,6 +123,7 @@ func (r *etcdReg) register() error {
 	_, err = r.client.Put(timeout, r.getKey(), string(data), clientv3.WithLease(ttl.ID))
 	if err == nil {
 		r.leaseId = ttl.ID
+		r.isOk = true
 	}
 	return err
 }
@@ -131,10 +137,9 @@ func (r *etcdReg) keepAliveOnce() error {
 func (r *etcdReg) Close() {
 	r.closeOnce.Do(func() {
 		xconsole.Red("Service registration shutdown")
-		r.Add(1)
 		close(r.closeCh)
-		r.Wait()
 	})
+	r.Wait()
 }
 
 func (r *etcdReg) getKey() string {
@@ -143,10 +148,9 @@ func (r *etcdReg) getKey() string {
 }
 
 func (r *etcdReg) unregister() {
-	defer r.Done()
 	key := r.getKey()
 	if _, err := r.client.Delete(context.Background(), key); err != nil {
-		xlog.Warnf("unregister error", xlog.FieldErr(err), xlog.Any("uid", r.uid), xlog.Any("options", r.options))
+		xlog.Warn("unregister error", xlog.FieldErr(err), xlog.Any("uid", r.uid), xlog.Any("options", r.options))
 	}
 	_, _ = r.client.Revoke(context.Background(), r.leaseId) // 回收租约
 	xconsole.Redf("unregister success", r.options)

@@ -104,19 +104,19 @@ func tFunc(trans ut.Translator, fe validator.FieldError) string {
 }
 
 //把数据验证错误，转为放回错误
-func GetMsg(err error) ValidationError {
+func GetMsg(err error) *ValidationError {
 	errors, _ := err.(validator.ValidationErrors)
 	return NewValidationError(errors.Translate(trans))
 }
 
-func NewValidationError(errMap map[string]string) ValidationError {
+func NewValidationError(errMap map[string]string) *ValidationError {
 	res := make([]string, 0)
 	for _, v := range errMap {
 		//fmt.Println(k)
 		//fmt.Println(field[strings.Index(field, ".")+1:])
 		res = append(res, v)
 	}
-	return ValidationError{ErrMsg: res}
+	return &ValidationError{ErrMsg: res}
 }
 
 //数据验证
