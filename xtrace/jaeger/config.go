@@ -29,7 +29,7 @@ type Config struct {
 }
 
 func DefaultConfig() *Config {
-	agentAddr := "127.0.0.1:5778"
+	agentAddr := "127.0.0.1:6831"
 	headerName := "x-trace-id"
 	if addr := os.Getenv("JAEGER_AGENT_ADDR"); addr != "" {
 		agentAddr = addr
