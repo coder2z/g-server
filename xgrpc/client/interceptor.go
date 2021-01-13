@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/afex/hystrix-go/hystrix"
 	xapp "github.com/myxy99/component"
 	"github.com/myxy99/component/pkg/xcast"
 	"github.com/myxy99/component/pkg/xcode"
@@ -165,5 +166,24 @@ func XAidUnaryClientInterceptor() grpc.UnaryClientInterceptor {
 		ctx = metadata.NewOutgoingContext(ctx, md)
 
 		return invoker(ctx, method, req, reply, cc, opts...)
+	}
+}
+
+// TODO 熔断限流？
+func BreakUnaryClientIntercept() grpc.UnaryClientInterceptor {
+	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+		return hystrix.DoC(ctx, "GUC"+method, func(ctx context.Context) error {
+			return invoker(ctx, method, req, reply, cc, opts...)
+		}, nil)
+	}
+}
+
+func BreakStreamClientInterceptor() grpc.StreamClientInterceptor {
+	return func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (cs grpc.ClientStream, err error) {
+		err = hystrix.DoC(ctx, "GSC"+method, func(ctx context.Context) error {
+			cs, err = streamer(ctx, desc, cc, method, opts...)
+			return err
+		}, nil)
+		return
 	}
 }
