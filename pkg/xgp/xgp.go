@@ -1,144 +1,195 @@
 package xgp
 
 import (
+	"bytes"
 	"fmt"
-	"github.com/myxy99/component/pkg/xconsole"
-	"runtime"
+	"runtime/debug"
 	"sync"
 	"sync/atomic"
-	"time"
 )
 
-var goPool = NewGoPool(50, 3*time.Second)
+var goPool = NewWaitPool(50)
 
-type Pool struct {
-	head        goroutine
-	tail        *goroutine
-	count       int
-	idleTimeout time.Duration
-	maxNum      int
-	sync.Mutex
-}
+const (
+	start int32 = iota
+	running
+	shutdown
+	stop
+)
 
-type goroutine struct {
-	ch     chan handle
-	next   *goroutine
+type simpleFSM struct {
 	status int32
 }
 
-type handle struct {
-	f    func()
-	errF func(err error)
-}
-
-const (
-	statusIdle  int32 = 0
-	statusInUse int32 = 1
-	statusDead  int32 = 2
-)
-
-func NewGoPool(c int, idleTimeout time.Duration) *Pool {
-	pool := &Pool{
-		idleTimeout: idleTimeout,
-		maxNum:      c,
+func newSimpleFSM() *simpleFSM {
+	return &simpleFSM{
+		status: start,
 	}
-	pool.tail = &pool.head
-	return pool
 }
 
-func (pool *Pool) Go(f func(), ef func(err error)) {
-	for {
-		g := pool.get()
-		if atomic.CompareAndSwapInt32(&g.status, statusIdle, statusInUse) {
-			g.ch <- handle{
-				f:    f,
-				errF: ef,
+func (s *simpleFSM) actEvent(stat int32) bool {
+	if s.Current() > stat {
+		return false
+	} else {
+		return atomic.CompareAndSwapInt32(&s.status, s.status, stat)
+	}
+}
+
+func (s *simpleFSM) isRunning() bool {
+	return s.Current() == running
+}
+
+func (s *simpleFSM) Current() int32 {
+	return atomic.LoadInt32(&s.status)
+}
+
+func (s *simpleFSM) Action(stat int32) bool {
+	switch stat {
+	case start:
+	case running:
+	case shutdown:
+	case stop:
+		return s.actEvent(stat)
+	default:
+		return false
+	}
+	return false
+}
+
+type basePoolExecutor struct {
+	corePoolSize chan int
+	fsm          *simpleFSM
+	oc           sync.Once
+}
+
+type poolExecutor struct {
+	basePoolExecutor
+}
+
+type waitPoolExecutor struct {
+	basePoolExecutor
+	gp *sync.WaitGroup
+}
+
+func newBasePoolExecutor(cap int) basePoolExecutor {
+	return basePoolExecutor{
+		corePoolSize: make(chan int, cap),
+		fsm:          newSimpleFSM(),
+		oc:           sync.Once{},
+	}
+}
+
+func NewPool(cap int) *poolExecutor {
+	checkCap(cap)
+	return &poolExecutor{
+		basePoolExecutor: newBasePoolExecutor(cap),
+	}
+}
+
+func NewWaitPool(cap int) *waitPoolExecutor {
+	checkCap(cap)
+	return &waitPoolExecutor{
+		basePoolExecutor: newBasePoolExecutor(cap),
+		gp:               new(sync.WaitGroup),
+	}
+}
+
+func checkCap(cap int) {
+	if cap < 0 {
+		panic("The pool cap cannot lower zero")
+	}
+}
+
+func (b *basePoolExecutor) checkSubmit(f func()) {
+	if f == nil {
+		panic("The submit func is nil")
+	}
+	b.oc.Do(func() {
+		b.fsm.actEvent(running)
+	})
+	if !b.fsm.isRunning() {
+		panic("The pool is not running")
+	}
+}
+
+func (b *basePoolExecutor) ShutDown() {
+	b.fsm.actEvent(shutdown)
+}
+
+func (b *basePoolExecutor) IsShutDown() bool {
+	return b.fsm.Current() >= shutdown
+}
+
+func (b *basePoolExecutor) IsTerminated() bool {
+	return b.fsm.Current() >= stop
+}
+
+func (t *poolExecutor) Submit(f func(), ef func(error)) {
+	t.checkSubmit(f)
+	t.corePoolSize <- 1
+	go func() {
+		defer func() {
+			if err := recover(); err != nil {
+				var buf bytes.Buffer
+				stack := debug.Stack()
+				buf.Write(stack)
+				err := fmt.Errorf("gp: panic recovered: %s \n %s", err, buf.String())
+				if ef == nil {
+					ef(err)
+				} else {
+					panic(err)
+				}
 			}
+			<-t.corePoolSize
+		}()
+		if t.IsTerminated() {
 			return
 		}
-	}
+		f()
+	}()
 }
 
-func (pool *Pool) get() *goroutine {
-	pool.Lock()
-	head := &pool.head
-	if head.next == nil {
-		if pool.maxNum <= 0 {
-			pool.Unlock()
-			return &pool.head
-		} else {
-			pool.Unlock()
-			return pool.alloc()
-		}
-	}
-	ret := head.next
-	head.next = ret.next
-	if ret == pool.tail {
-		pool.tail = head
-	}
-	pool.count--
-	ret.next = nil
-	pool.Unlock()
-	return ret
-}
-
-func (pool *Pool) alloc() *goroutine {
-	g := &goroutine{
-		ch: make(chan handle),
-	}
-	go g.workLoop(pool)
-	pool.Lock()
-	pool.maxNum--
-	pool.Unlock()
-
-	return g
-}
-
-func (g *goroutine) put(pool *Pool) {
-	g.status = statusIdle
-	pool.Lock()
-	pool.tail.next = g
-	pool.tail = g
-	pool.count++
-	pool.Unlock()
-}
-
-func (g *goroutine) workLoop(pool *Pool) {
-	timer := time.NewTimer(pool.idleTimeout)
-	for {
-		select {
-		case <-timer.C:
-			if atomic.CompareAndSwapInt32(&g.status, statusIdle, statusDead) {
-				return
+func (t *waitPoolExecutor) Submit(f func(), ef func(error)) {
+	t.checkSubmit(f)
+	t.gp.Add(1)
+	t.corePoolSize <- 1
+	go func() {
+		defer func() {
+			if err := recover(); err != nil {
+				var buf bytes.Buffer
+				stack := debug.Stack()
+				buf.Write(stack)
+				err := fmt.Errorf("gp: panic recovered: %s \n %s", err, buf.String())
+				if ef == nil {
+					ef(err)
+				} else {
+					panic(err)
+				}
 			}
-		case handle := <-g.ch:
-			func() {
-				defer panicRecover(handle.errF)
-				handle.f()
-			}()
-			g.put(pool)
+			<-t.corePoolSize
+			t.gp.Done()
+		}()
+		if t.IsTerminated() {
+			return
 		}
-		timer.Reset(pool.idleTimeout)
-	}
+		f()
+	}()
 }
 
-func panicRecover(ef func(err error)) {
-	if r := recover(); r != nil {
-		buf := make([]byte, 64<<10)
-		buf = buf[:runtime.Stack(buf, false)]
-		err := fmt.Errorf("gp: panic recovered: %s\n%s", r, buf)
-		if ef != nil {
-			ef(err)
-		} else {
-			xconsole.Red(err.Error())
-		}
-	}
+func (t *waitPoolExecutor) Wait() {
+	t.gp.Wait()
+	t.fsm.actEvent(stop)
+	close(t.corePoolSize)
 }
 
 func SafeGo(fn func(), rec func(error)) {
-	goPool.Go(fn, rec)
+	goPool.Submit(fn, rec)
 }
 
 func Go(fn func()) {
-	goPool.Go(fn, nil)
+	goPool.Submit(fn, nil)
+}
+
+func Wait() {
+	goPool.Wait()
 }
