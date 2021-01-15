@@ -135,6 +135,7 @@ func XLoggerUnaryClientInterceptor(name string) grpc.UnaryClientInterceptor {
 					xlog.Any("req", req),
 					xlog.Any("reply", reply),
 				)
+				err = spbStatus.SetMsg("server internal error") //吃掉内部错误
 			} else {
 				xlog.Warn(
 					"access",

@@ -18,7 +18,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 	"runtime/debug"
 	"strings"
 	"time"
@@ -42,7 +41,7 @@ func toPanicError(r interface{}) error {
 	stack := debug.Stack()
 	buf.Write(stack)
 	xlog.Error(fmt.Sprintf("%+v", r), xlog.FieldValue(buf.String()))
-	return status.Error(codes.Internal, "server internal error")
+	return xcode.SystemCodeAdd(xcast.ToUint32(codes.Internal), "server internal error")
 }
 
 func CrashUnaryServerInterceptor() grpc.UnaryServerInterceptor {
