@@ -40,6 +40,9 @@ var (
 	// ServerHandleCounter ...	指标: 服务类型，调用方法，客户端标识，返回的状态码
 	ServerHandleCounter = NewCounterVec("server_handle_total", []string{"type", "method", "peer", "code"})
 
+	// ServerHandleCounter ...	指标: 服务类型，调用方法，客户端标识，返回的状态码
+	ServerErrorCounter = NewCounterVec("server_error_total", []string{"type", "method", "peer", "code"})
+
 	// ServerHandleHistogram ...
 	ServerHandleHistogram = NewHistogramVec("server_handle_seconds", []string{"type", "method", "peer"})
 

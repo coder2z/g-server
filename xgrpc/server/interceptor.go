@@ -71,6 +71,9 @@ func PrometheusUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		code := xcode.ExtractCodes(err)
 		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, extractAID(ctx)).Observe(time.Since(startTime).Seconds())
 		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, extractAID(ctx), xcast.ToString(code.GetCode())).Inc()
+		if code != xcode.OK {
+			xmonitor.ServerErrorCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, extractAID(ctx), xcast.ToString(code.GetCode())).Inc()
+		}
 		return resp, err
 	}
 }
@@ -82,6 +85,9 @@ func PrometheusStreamServerInterceptor() grpc.StreamServerInterceptor {
 		code := xcode.ExtractCodes(err)
 		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCStream, info.FullMethod, extractAID(ss.Context())).Observe(time.Since(startTime).Seconds())
 		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCStream, info.FullMethod, extractAID(ss.Context()), xcast.ToString(code.GetCode())).Inc()
+		if code != xcode.OK {
+			xmonitor.ServerErrorCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, extractAID(ss.Context()), xcast.ToString(code.GetCode())).Inc()
+		}
 		return err
 	}
 }

@@ -31,11 +31,10 @@ func PrometheusUnaryClientInterceptor(name string) func(ctx context.Context, met
 		if spbStatus.Code < xcast.ToInt32(xcode.CodeBreakUp) {
 			//系统错误
 			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), xcast.ToString(spbStatus.GetCode())).Inc()
-			xmonitor.ClientHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target()).Observe(time.Since(t).Seconds())
 		} else {
 			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), "biz error").Inc()
-			xmonitor.ClientHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target()).Observe(time.Since(t).Seconds())
 		}
+		xmonitor.ClientHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target()).Observe(time.Since(t).Seconds())
 		return err
 	}
 }
@@ -48,11 +47,10 @@ func PrometheusStreamClientInterceptor(name string) func(ctx context.Context, de
 		if spbStatus.Code < xcast.ToInt32(xcode.CodeBreakUp) {
 			//系统错误
 			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), xcast.ToString(spbStatus.GetCode())).Inc()
-			xmonitor.ClientHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target()).Observe(time.Since(t).Seconds())
 		} else {
 			xmonitor.ClientHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target(), "biz error").Inc()
-			xmonitor.ClientHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target()).Observe(time.Since(t).Seconds())
 		}
+		xmonitor.ClientHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, name, method, cc.Target()).Observe(time.Since(t).Seconds())
 		return clientStream, err
 	}
 }
