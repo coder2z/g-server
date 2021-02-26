@@ -1,7 +1,7 @@
 package xgorm
 
 import (
-	"github.com/myxy99/component/xcfg"
+	"github.com/coder2m/component/xcfg"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )

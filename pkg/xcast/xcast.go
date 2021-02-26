@@ -8,7 +8,7 @@ package xcast
 import (
 	"errors"
 	"fmt"
-	"github.com/myxy99/component/pkg/xjson"
+	"github.com/coder2m/component/pkg/xjson"
 	"html/template"
 	"reflect"
 	"strconv"

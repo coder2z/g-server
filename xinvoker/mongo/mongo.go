@@ -7,7 +7,7 @@ package xmongo
 
 import (
 	"github.com/globalsign/mgo"
-	"github.com/myxy99/component/xcfg"
+	"github.com/coder2m/component/xcfg"
 )
 
 type MongoImp interface {

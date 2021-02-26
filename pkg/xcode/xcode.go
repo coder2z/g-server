@@ -5,9 +5,9 @@
 package xcode
 
 import (
-	"github.com/myxy99/component/pkg/xjson"
-	"github.com/myxy99/component/xgovern"
-	"github.com/myxy99/component/xlog"
+	"github.com/coder2m/component/pkg/xjson"
+	"github.com/coder2m/component/xgovern"
+	"github.com/coder2m/component/xlog"
 	"net/http"
 	"sync"
 

@@ -1,7 +1,7 @@
 package xlog
 
 import (
-	"github.com/myxy99/component/xcfg"
+	"github.com/coder2m/component/xcfg"
 	"go.uber.org/zap"
 )
 

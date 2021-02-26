@@ -7,7 +7,7 @@ package xgovern
 
 import (
 	"fmt"
-	"github.com/myxy99/component/pkg/xnet"
+	"github.com/coder2m/component/pkg/xnet"
 )
 
 type Config struct {

@@ -7,7 +7,7 @@ package xk8s
 import (
 	"context"
 	"fmt"
-	"github.com/myxy99/component/xregistry"
+	"github.com/coder2m/component/xregistry"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"

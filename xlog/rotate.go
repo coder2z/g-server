@@ -1,7 +1,7 @@
 package xlog
 
 import (
-	"github.com/myxy99/component/xlog/rotate"
+	"github.com/coder2m/component/xlog/rotate"
 	"io"
 )
 

@@ -2,7 +2,7 @@ package etcdv3
 
 import (
 	"context"
-	"github.com/myxy99/component/xcfg"
+	"github.com/coder2m/component/xcfg"
 	"time"
 
 	"github.com/coreos/etcd/clientv3"

@@ -7,7 +7,7 @@ package file
 
 import (
 	"errors"
-	"github.com/myxy99/component/xinvoker/oss/standard"
+	"github.com/coder2m/component/xinvoker/oss/standard"
 	"io"
 	"io/ioutil"
 	"os"

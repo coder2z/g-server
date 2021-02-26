@@ -6,8 +6,8 @@
 package xmonitor
 
 import (
-	"github.com/myxy99/component/xcfg"
-	"github.com/myxy99/component/xgovern"
+	"github.com/coder2m/component/xcfg"
+	"github.com/coder2m/component/xgovern"
 	"io"
 	"math/rand"
 	"net/http"

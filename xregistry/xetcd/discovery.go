@@ -7,9 +7,9 @@ package xetcd
 import (
 	"context"
 	"fmt"
-	"github.com/myxy99/component/pkg/xjson"
-	"github.com/myxy99/component/xlog"
-	"github.com/myxy99/component/xregistry"
+	"github.com/coder2m/component/pkg/xjson"
+	"github.com/coder2m/component/xlog"
+	"github.com/coder2m/component/xregistry"
 	"go.etcd.io/etcd/clientv3"
 )
 

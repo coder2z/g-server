@@ -2,11 +2,11 @@ package manager
 
 import (
 	"errors"
-	"github.com/myxy99/component/pkg/xconsole"
-	"github.com/myxy99/component/xcfg"
-	"github.com/myxy99/component/xcfg/datasource/apollo"
-	"github.com/myxy99/component/xcfg/datasource/etcdv3"
-	"github.com/myxy99/component/xcfg/datasource/file"
+	"github.com/coder2m/component/pkg/xconsole"
+	"github.com/coder2m/component/xcfg"
+	"github.com/coder2m/component/xcfg/datasource/apollo"
+	"github.com/coder2m/component/xcfg/datasource/etcdv3"
+	"github.com/coder2m/component/xcfg/datasource/file"
 	"net/url"
 )
 

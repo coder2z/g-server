@@ -1,8 +1,8 @@
 package file
 
 import (
-	"github.com/myxy99/component/pkg/xflag"
-	"github.com/myxy99/component/xcfg"
+	"github.com/coder2m/component/pkg/xflag"
+	"github.com/coder2m/component/xcfg"
 )
 
 // DataSourceFile defines file scheme

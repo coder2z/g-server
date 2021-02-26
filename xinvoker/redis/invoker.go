@@ -8,7 +8,7 @@ package xredis
 import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
-	"github.com/myxy99/component/xinvoker"
+	"github.com/coder2m/component/xinvoker"
 	"sync"
 )
 

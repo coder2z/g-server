@@ -7,10 +7,10 @@ package xmonitor
 
 import (
 	"fmt"
-	xapp "github.com/myxy99/component"
-	"github.com/myxy99/component/pkg/xconsole"
-	cfg "github.com/myxy99/component/xcfg"
-	"github.com/myxy99/component/xgovern"
+	xapp "github.com/coder2m/component"
+	"github.com/coder2m/component/pkg/xconsole"
+	cfg "github.com/coder2m/component/xcfg"
+	"github.com/coder2m/component/xgovern"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 	"time"

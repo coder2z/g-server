@@ -63,12 +63,12 @@ import (
 	"context"
 	"fmt"
 	"github.com/BurntSushi/toml"
-	"github.com/myxy99/component/pkg/xflag"
-	"github.com/myxy99/component/xcfg"
-	"github.com/myxy99/component/xcfg/datasource/manager"
-	"github.com/myxy99/component/xinvoker"
-	xgorm "github.com/myxy99/component/xinvoker/gorm"
-	xredis "github.com/myxy99/component/xinvoker/redis"
+	"github.com/coder2m/component/pkg/xflag"
+	"github.com/coder2m/component/xcfg"
+	"github.com/coder2m/component/xcfg/datasource/manager"
+	"github.com/coder2m/component/xinvoker"
+	xgorm "github.com/coder2m/component/xinvoker/gorm"
+	xredis "github.com/coder2m/component/xinvoker/redis"
 )
 
 func main() {

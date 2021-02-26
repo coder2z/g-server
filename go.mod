@@ -1,4 +1,4 @@
-module github.com/myxy99/component
+module github.com/coder2m/component
 
 go 1.15
 

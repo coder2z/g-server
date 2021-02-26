@@ -7,7 +7,7 @@ package alioss
 
 import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"github.com/myxy99/component/xinvoker/oss/standard"
+	"github.com/coder2m/component/xinvoker/oss/standard"
 	"io"
 	"io/ioutil"
 	"os"

@@ -6,8 +6,8 @@ package xlog
 
 import (
 	"fmt"
-	"github.com/myxy99/component/pkg/xcolor"
-	cfg "github.com/myxy99/component/xcfg"
+	"github.com/coder2m/component/pkg/xcolor"
+	cfg "github.com/coder2m/component/xcfg"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"time"

@@ -2,7 +2,7 @@ package xconsole
 
 import (
 	"fmt"
-	"github.com/myxy99/component/pkg/xcolor"
+	"github.com/coder2m/component/pkg/xcolor"
 )
 
 var (

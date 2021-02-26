@@ -2,7 +2,7 @@ package xcfg
 
 import (
 	"fmt"
-	"github.com/myxy99/component/pkg/xcast"
+	"github.com/coder2m/component/pkg/xcast"
 	"io"
 	"io/ioutil"
 	"reflect"
@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/myxy99/component/pkg/xmap"
+	"github.com/coder2m/component/pkg/xmap"
 	"github.com/pkg/errors"
 )
 

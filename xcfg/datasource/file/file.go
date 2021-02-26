@@ -1,7 +1,7 @@
 package file
 
 import (
-	"github.com/myxy99/component/pkg/xfile"
+	"github.com/coder2m/component/pkg/xfile"
 	"io/ioutil"
 	"path/filepath"
 )

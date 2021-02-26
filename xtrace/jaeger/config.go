@@ -5,11 +5,11 @@
 package jaeger
 
 import (
-	xapp "github.com/myxy99/component"
-	"github.com/myxy99/component/pkg/xconsole"
-	"github.com/myxy99/component/pkg/xdefer"
-	"github.com/myxy99/component/xcfg"
-	"github.com/myxy99/component/xlog"
+	xapp "github.com/coder2m/component"
+	"github.com/coder2m/component/pkg/xconsole"
+	"github.com/coder2m/component/pkg/xdefer"
+	"github.com/coder2m/component/xcfg"
+	"github.com/coder2m/component/xlog"
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	jCfg "github.com/uber/jaeger-client-go/config"

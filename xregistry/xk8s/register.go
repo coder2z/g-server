@@ -5,9 +5,9 @@
 package xk8s
 
 import (
-	"github.com/myxy99/component/pkg/xconsole"
-	"github.com/myxy99/component/xlog"
-	"github.com/myxy99/component/xregistry"
+	"github.com/coder2m/component/pkg/xconsole"
+	"github.com/coder2m/component/xlog"
+	"github.com/coder2m/component/xregistry"
 	"google.golang.org/grpc/resolver"
 	"sync"
 	"time"

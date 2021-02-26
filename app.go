@@ -7,9 +7,9 @@ package xapp
 
 import (
 	"fmt"
-	"github.com/myxy99/component/pkg/xconsole"
-	"github.com/myxy99/component/pkg/xnet"
-	"github.com/myxy99/component/xcfg"
+	"github.com/coder2m/component/pkg/xconsole"
+	"github.com/coder2m/component/pkg/xnet"
+	"github.com/coder2m/component/xcfg"
 	"os"
 	"runtime"
 	"sync"

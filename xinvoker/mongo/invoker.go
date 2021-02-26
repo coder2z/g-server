@@ -7,7 +7,7 @@ package xmongo
 
 import (
 	"fmt"
-	"github.com/myxy99/component/xinvoker"
+	"github.com/coder2m/component/xinvoker"
 	"sync"
 )
 

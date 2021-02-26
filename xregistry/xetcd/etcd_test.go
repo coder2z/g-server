@@ -1,7 +1,7 @@
 package xetcd
 
 import (
-	"github.com/myxy99/component/xregistry"
+	"github.com/coder2m/component/xregistry"
 	"google.golang.org/grpc"
 	"testing"
 	"time"

@@ -1,7 +1,7 @@
 package xgp
 
 import (
-	"github.com/myxy99/component/pkg/xconsole"
+	"github.com/coder2m/component/pkg/xconsole"
 	"testing"
 	"time"
 )
