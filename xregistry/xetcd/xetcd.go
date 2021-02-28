@@ -7,11 +7,11 @@ package xetcd
 import (
 	"context"
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/coder2m/component/pkg/xconsole"
 	"github.com/coder2m/component/pkg/xjson"
 	"github.com/coder2m/component/xlog"
 	"github.com/coder2m/component/xregistry"
+	"github.com/google/uuid"
 	"go.etcd.io/etcd/clientv3"
 	"strings"
 	"sync"
@@ -103,12 +103,15 @@ func (r *etcdReg) register() error {
 	var (
 		err  error
 		step int
+		one  = sync.Once{}
 	)
 	defer func() {
 		if err != nil {
 			xlog.Warn("etcd register error", xlog.FieldErr(err), xlog.Any("step", step), xlog.Any("options", r.options))
 		} else {
-			xconsole.Greenf("etcd register success to:", r.options)
+			one.Do(func() {
+				xconsole.Greenf("etcd register success to:", r.options)
+			})
 		}
 	}()
 	timeout, cancelFunc := context.WithTimeout(context.Background(), 5*time.Second)
