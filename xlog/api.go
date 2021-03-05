@@ -1,16 +1,14 @@
 package xlog
 
 import (
-	"github.com/coder2m/component/xcfg"
 	"go.uber.org/zap"
 )
 
 func GetDefaultLogger() *Logger {
 	if DefaultLogger == nil {
-		prefix := `xlog`
-		cfg := xcfg.UnmarshalWithExpect(prefix, defaultConfig()).(*options)
-		DefaultLogger = newLogger(cfg)
-
+		cfg := defaultConfig()
+		cfg.ConfigKey = "xlog"
+		DefaultLogger = cfg.Build()
 	}
 	return DefaultLogger
 }
@@ -22,7 +20,6 @@ func Auto(err error) Func {
 	if err != nil {
 		return GetDefaultLogger().With(zap.Any("err", err.Error())).Error
 	}
-
 	return GetDefaultLogger().Info
 }
 

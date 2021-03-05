@@ -57,9 +57,9 @@ func RawConfig(key string) *options {
 	return config
 }
 
-// StdConfig Jupiter Standard logger xcfg
+// StdConfig xlog
 func StdConfig(name string) *options {
-	return RawConfig("jupiter.logger." + name)
+	return RawConfig("xlog." + name)
 }
 
 // DefaultConfig ...
@@ -74,6 +74,7 @@ func defaultConfig() *options {
 		Interval:      24 * time.Hour,
 		CallerSkip:    2,
 		AddCaller:     true,
+		Debug:         true,
 		Async:         false,
 		Queue:         false,
 		QueueSleep:    100 * time.Millisecond,
