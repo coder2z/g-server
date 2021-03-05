@@ -16,6 +16,7 @@ func Register() (string, func() xcfg.DataSource) {
 	return DataSourceEtcd, func() xcfg.DataSource {
 		var (
 			configAddr = xflag.String("xcfg")
+			watch      = xflag.Bool("watch")
 		)
 		if configAddr == "" {
 			return nil
@@ -38,6 +39,6 @@ func Register() (string, func() xcfg.DataSource) {
 		if err != nil {
 			return nil
 		}
-		return NewDataSource(client, urlObj.Query().Get("key"))
+		return NewDataSource(client, urlObj.Query().Get("key"), watch)
 	}
 }

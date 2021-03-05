@@ -24,12 +24,14 @@ type etcdDataSource struct {
 
 // NewDataSource new a etcdDataSource instance.
 // client is the etcd client, it must be useful and should be release by User.
-func NewDataSource(client *clientv3.Client, key string) xcfg.DataSource {
+func NewDataSource(client *clientv3.Client, key string,watch bool) xcfg.DataSource {
 	ds := &etcdDataSource{
 		client:      client,
 		propertyKey: key,
 	}
-	go ds.watch()
+	if watch {
+		go ds.watch()
+	}
 	return ds
 }
 

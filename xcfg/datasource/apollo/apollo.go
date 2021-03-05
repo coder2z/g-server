@@ -13,7 +13,7 @@ type apolloDataSource struct {
 }
 
 // NewDataSource creates an apolloDataSource
-func NewDataSource(conf *agollo.Conf, namespace string, key string) xcfg.DataSource {
+func NewDataSource(conf *agollo.Conf, namespace string, key string, watch bool) xcfg.DataSource {
 	client := agollo.NewClient(conf, agollo.WithLogger(&agolloLogger{}))
 	ap := &apolloDataSource{
 		client:      client,
@@ -22,10 +22,12 @@ func NewDataSource(conf *agollo.Conf, namespace string, key string) xcfg.DataSou
 		changed:     make(chan struct{}, 1),
 	}
 	_ = ap.client.Start()
-	ap.client.OnUpdate(
-		func(event *agollo.ChangeEvent) {
-			ap.changed <- struct{}{}
-		})
+	if watch {
+		ap.client.OnUpdate(
+			func(event *agollo.ChangeEvent) {
+				ap.changed <- struct{}{}
+			})
+	}
 	return ap
 }
 

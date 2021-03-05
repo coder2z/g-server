@@ -14,6 +14,7 @@ func Register() (string, func() xcfg.DataSource) {
 	return DataSourceApollo, func() xcfg.DataSource {
 		var (
 			configAddr = xflag.String("xcfg")
+			watch      = xflag.Bool("watch")
 		)
 		if configAddr == "" {
 			return nil
@@ -39,6 +40,6 @@ func Register() (string, func() xcfg.DataSource) {
 		if urlObj.Query().Get("cacheDir") != "" {
 			apolloConf.CacheDir = urlObj.Query().Get("cacheDir")
 		}
-		return NewDataSource(&apolloConf, urlObj.Query().Get("namespaceName"), urlObj.Query().Get("key"))
+		return NewDataSource(&apolloConf, urlObj.Query().Get("namespaceName"), urlObj.Query().Get("key"), watch)
 	}
 }
