@@ -19,6 +19,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.1-0.20190118093823-f849b5445de4
 	github.com/json-iterator/go v1.1.10
 	github.com/mitchellh/mapstructure v1.4.0
+	github.com/modern-go/reflect2 v1.0.1
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/philchia/agollo/v4 v4.1.1
 	github.com/pkg/errors v0.9.1

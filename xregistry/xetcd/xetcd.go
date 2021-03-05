@@ -8,12 +8,10 @@ import (
 	"context"
 	"fmt"
 	"github.com/coder2m/component/pkg/xconsole"
-	"github.com/coder2m/component/pkg/xjson"
+	"github.com/coder2m/component/pkg/xstring"
 	"github.com/coder2m/component/xlog"
 	"github.com/coder2m/component/xregistry"
-	"github.com/google/uuid"
 	"go.etcd.io/etcd/clientv3"
-	"strings"
 	"sync"
 	"time"
 )
@@ -40,7 +38,7 @@ func NewRegistry(conf EtcdV3Cfg) (xregistry.Registry, error) {
 		conf:      conf,
 		options:   &xregistry.Options{},
 		closeCh:   make(chan struct{}),
-		uid:       strings.ReplaceAll(uuid.New().String(), "-", ""),
+		uid:       xstring.GenerateID(),
 		WaitGroup: new(sync.WaitGroup),
 	}
 	c, err := clientv3.New(conf)
@@ -110,7 +108,7 @@ func (r *etcdReg) register() error {
 			xlog.Warn("etcd register error", xlog.FieldErr(err), xlog.Any("step", step), xlog.Any("options", r.options))
 		} else {
 			one.Do(func() {
-				xconsole.Greenf("etcd register success to:", r.options)
+				xconsole.Greenf("etcd register success to:", xstring.Json(r.options))
 			})
 		}
 	}()
@@ -122,8 +120,7 @@ func (r *etcdReg) register() error {
 	}
 
 	step += 1
-	data, _ := xjson.Marshal(r.options)
-	_, err = r.client.Put(timeout, r.getKey(), string(data), clientv3.WithLease(ttl.ID))
+	_, err = r.client.Put(timeout, r.getKey(), xstring.Json(r.options), clientv3.WithLease(ttl.ID))
 	if err == nil {
 		r.leaseId = ttl.ID
 		r.isOk = true
@@ -156,6 +153,6 @@ func (r *etcdReg) unregister() {
 		xlog.Warn("unregister error", xlog.FieldErr(err), xlog.Any("uid", r.uid), xlog.Any("options", r.options))
 	}
 	_, _ = r.client.Revoke(context.Background(), r.leaseId) // 回收租约
-	xconsole.Redf("unregister success", r.options)
+	xconsole.Redf("unregister success", xstring.Json(r.options))
 	//_ = r.client.Close()
 }
