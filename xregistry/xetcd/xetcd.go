@@ -7,8 +7,8 @@ package xetcd
 import (
 	"context"
 	"fmt"
-	"github.com/coder2m/component/pkg/xconsole"
-	"github.com/coder2m/component/pkg/xstring"
+	"github.com/coder2m/g-saber/xconsole"
+	"github.com/coder2m/g-saber/xstring"
 	"github.com/coder2m/component/xlog"
 	"github.com/coder2m/component/xregistry"
 	"go.etcd.io/etcd/clientv3"

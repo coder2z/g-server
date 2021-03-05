@@ -2,7 +2,7 @@ package xcfg
 
 import (
 	"fmt"
-	"github.com/coder2m/component/pkg/xcast"
+	"github.com/coder2m/g-saber/xcast"
 	"io"
 	"io/ioutil"
 	"reflect"
@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/coder2m/g-saber/xtransform/xmap"
 	"github.com/mitchellh/mapstructure"
-	"github.com/coder2m/component/pkg/xmap"
 	"github.com/pkg/errors"
 )
 

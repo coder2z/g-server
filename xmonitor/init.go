@@ -8,7 +8,7 @@ package xmonitor
 import (
 	"fmt"
 	xapp "github.com/coder2m/component"
-	"github.com/coder2m/component/pkg/xconsole"
+	"github.com/coder2m/g-saber/xconsole"
 	cfg "github.com/coder2m/component/xcfg"
 	"github.com/coder2m/component/xgovern"
 	"github.com/prometheus/client_golang/prometheus/promhttp"

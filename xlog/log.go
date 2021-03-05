@@ -2,8 +2,8 @@ package xlog
 
 import (
 	"fmt"
-	"github.com/coder2m/component/pkg/xcolor"
-	"github.com/coder2m/component/pkg/xdefer"
+	"github.com/coder2m/g-saber/xcolor"
+	"github.com/coder2m/g-saber/xdefer"
 	"github.com/coder2m/component/xcfg"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -40,6 +40,8 @@ var (
 	Skip = zap.Skip()
 	// ByteString ...
 	ByteString = zap.ByteString
+	// Float64 ...
+	Float64 = zap.Float64
 )
 
 type (

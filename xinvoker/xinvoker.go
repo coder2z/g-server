@@ -7,7 +7,7 @@ package xinvoker
 
 import (
 	"errors"
-	"github.com/coder2m/component/pkg/xconsole"
+	"github.com/coder2m/g-saber/xconsole"
 	"github.com/coder2m/component/xcfg"
 	"reflect"
 )

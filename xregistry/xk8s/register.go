@@ -5,7 +5,7 @@
 package xk8s
 
 import (
-	"github.com/coder2m/component/pkg/xconsole"
+	"github.com/coder2m/g-saber/xconsole"
 	"github.com/coder2m/component/xlog"
 	"github.com/coder2m/component/xregistry"
 	"google.golang.org/grpc/resolver"

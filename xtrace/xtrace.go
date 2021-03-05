@@ -6,8 +6,8 @@ package xtrace
 
 import (
 	"context"
-	"github.com/coder2m/component/pkg/xconsole"
 	"github.com/coder2m/component/xtrace/jaeger"
+	"github.com/coder2m/g-saber/xconsole"
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 	"github.com/opentracing/opentracing-go/log"

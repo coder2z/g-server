@@ -63,7 +63,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/BurntSushi/toml"
-	"github.com/coder2m/component/pkg/xflag"
+	"github.com/coder2m/g-saber/xflag"
 	"github.com/coder2m/component/xcfg"
 	"github.com/coder2m/component/xcfg/datasource/manager"
 	"github.com/coder2m/component/xinvoker"

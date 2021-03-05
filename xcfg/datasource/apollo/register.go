@@ -1,7 +1,7 @@
 package apollo
 
 import (
-	"github.com/coder2m/component/pkg/xflag"
+	"github.com/coder2m/g-saber/xflag"
 	"github.com/coder2m/component/xcfg"
 	"github.com/philchia/agollo/v4"
 	"net/url"
