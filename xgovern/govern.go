@@ -153,7 +153,11 @@ func GovernConfig() *Config {
 }
 
 func GovernReload(opts ...Option) {
-	once = sync.Once{}
 	xconsole.Green("govern serve reload")
+	_ = Shutdown()
+	once = sync.Once{}
+	governConfig = nil
+	server = nil
+	handle = nil
 	Run(opts...)
 }
