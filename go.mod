@@ -24,7 +24,6 @@ require (
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
 	go.etcd.io/bbolt v1.3.4 // indirect
 	go.etcd.io/etcd v3.3.25+incompatible
-	go.uber.org/zap v1.16.0
 	google.golang.org/genproto v0.0.0-20210303154014-9728d6b83eeb
 	google.golang.org/grpc v1.36.0
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
