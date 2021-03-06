@@ -4,128 +4,132 @@ import (
 	"go.uber.org/zap"
 )
 
-func GetDefaultLogger() *Logger {
-	if DefaultLogger == nil {
-		cfg := defaultConfig()
-		cfg.ConfigKey = "xlog"
-		DefaultLogger = cfg.Build()
+func logger() *Logger {
+	if defaultLogger == nil {
+		cfg := StdConfig()
+		defaultLogger = cfg.Build()
 	}
-	return DefaultLogger
+	return defaultLogger
 }
 
-var DefaultLogger *Logger
+func SetDefaultLogger(o *options) {
+	defaultLogger = o.Build()
+	return
+}
+
+var defaultLogger *Logger
 
 // Auto ...
 func Auto(err error) Func {
 	if err != nil {
-		return GetDefaultLogger().With(zap.Any("err", err.Error())).Error
+		return logger().With(zap.Any("err", err.Error())).Error
 	}
-	return GetDefaultLogger().Info
+	return logger().Info
 }
 
 // Info ...
 func Info(msg string, fields ...Field) {
-	GetDefaultLogger().Info(msg, fields...)
+	logger().Info(msg, fields...)
 }
 
 // Debug ...
 func Debug(msg string, fields ...Field) {
-	GetDefaultLogger().Debug(msg, fields...)
+	logger().Debug(msg, fields...)
 }
 
 // Warn ...
 func Warn(msg string, fields ...Field) {
-	GetDefaultLogger().Warn(msg, fields...)
+	logger().Warn(msg, fields...)
 }
 
 // Error ...
 func Error(msg string, fields ...Field) {
-	GetDefaultLogger().Error(msg, fields...)
+	logger().Error(msg, fields...)
 }
 
 // Panic ...
 func Panic(msg string, fields ...Field) {
-	GetDefaultLogger().Panic(msg, fields...)
+	logger().Panic(msg, fields...)
 }
 
 // DPanic ...
 func DPanic(msg string, fields ...Field) {
-	GetDefaultLogger().DPanic(msg, fields...)
+	logger().DPanic(msg, fields...)
 }
 
 // Fatal ...
 func Fatal(msg string, fields ...Field) {
-	GetDefaultLogger().Fatal(msg, fields...)
+	logger().Fatal(msg, fields...)
 }
 
 // Debugw ...
 func Debugw(msg string, keysAndValues ...interface{}) {
-	GetDefaultLogger().Debugw(msg, keysAndValues...)
+	logger().Debugw(msg, keysAndValues...)
 }
 
 // Infow ...
 func Infow(msg string, keysAndValues ...interface{}) {
-	GetDefaultLogger().Infow(msg, keysAndValues...)
+	logger().Infow(msg, keysAndValues...)
 }
 
 // Warnw ...
 func Warnw(msg string, keysAndValues ...interface{}) {
-	GetDefaultLogger().Warnw(msg, keysAndValues...)
+	logger().Warnw(msg, keysAndValues...)
 }
 
 // Errorw ...
 func Errorw(msg string, keysAndValues ...interface{}) {
-	GetDefaultLogger().Errorw(msg, keysAndValues...)
+	logger().Errorw(msg, keysAndValues...)
 }
 
 // Panicw ...
 func Panicw(msg string, keysAndValues ...interface{}) {
-	GetDefaultLogger().Panicw(msg, keysAndValues...)
+	logger().Panicw(msg, keysAndValues...)
 }
 
 // DPanicw ...
 func DPanicw(msg string, keysAndValues ...interface{}) {
-	GetDefaultLogger().DPanicw(msg, keysAndValues...)
+	logger().DPanicw(msg, keysAndValues...)
 }
 
 // Fatalw ...
 func Fatalw(msg string, keysAndValues ...interface{}) {
-	GetDefaultLogger().Fatalw(msg, keysAndValues...)
+	logger().Fatalw(msg, keysAndValues...)
 }
 
 // Debugf ...
 func Debugf(msg string, args ...interface{}) {
-	GetDefaultLogger().Debugf(msg, args...)
+	logger().Debugf(msg, args...)
 }
 
 // Infof ...
 func Infof(msg string, args ...interface{}) {
-	GetDefaultLogger().Infof(msg, args...)
+	logger().Infof(msg, args...)
 }
 
 // Warnf ...
 func Warnf(msg string, args ...interface{}) {
-	GetDefaultLogger().Warnf(msg, args...)
+	logger().Warnf(msg, args...)
 }
 
 // Errorf ...
 func Errorf(msg string, args ...interface{}) {
-	GetDefaultLogger().Errorf(msg, args...)
+	logger().Errorf(msg, args...)
 }
 
 // Panicf ...
 func Panicf(msg string, args ...interface{}) {
-	GetDefaultLogger().Panicf(msg, args...)
+	logger().Panicf(msg, args...)
 }
 
 // DPanicf ...
 func DPanicf(msg string, args ...interface{}) {
-	GetDefaultLogger().DPanicf(msg, args...)
+	logger().DPanicf(msg, args...)
 }
 
 // Fatalf ...
 func Fatalf(msg string, args ...interface{}) {
-	GetDefaultLogger().Fatalf(msg, args...)
+	logger().Fatalf(msg, args...)
 }
 
 // Log ...
@@ -135,5 +139,5 @@ func (fn Func) Log(msg string, fields ...Field) {
 
 // With ...
 func With(fields ...Field) *Logger {
-	return GetDefaultLogger().With(fields...)
+	return logger().With(fields...)
 }

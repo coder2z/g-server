@@ -1,7 +1,7 @@
 package xlog
 
 import (
-	"github.com/coder2m/component/xlog/rotate"
+	"github.com/coder2m/g-saber/xlog/rotate"
 	"io"
 )
 

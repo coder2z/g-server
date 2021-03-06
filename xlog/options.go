@@ -5,9 +5,11 @@
 package xlog
 
 import (
+	"errors"
 	"fmt"
-	cfg "github.com/coder2m/component/xcfg"
+	cfg "github.com/coder2m/g-saber/xcfg"
 	"github.com/coder2m/g-saber/xcolor"
+	"github.com/coder2m/g-saber/xconsole"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"time"
@@ -51,15 +53,22 @@ func (o *options) Filename() string {
 func RawConfig(key string) *options {
 	var config = defaultConfig()
 	if err := cfg.UnmarshalKey(key, &config); err != nil {
-		panic(err)
+		if errors.Is(err, cfg.ErrInvalidKey) {
+			xconsole.Blue("xlog use default config")
+		} else {
+			panic(err)
+		}
 	}
 	config.ConfigKey = key
 	return config
 }
 
 // StdConfig xlog
-func StdConfig(name string) *options {
-	return RawConfig("xlog." + name)
+func StdConfig(name ...string) *options {
+	if len(name) == 0 {
+		return RawConfig("xlog")
+	}
+	return RawConfig("xlog." + name[0])
 }
 
 // DefaultConfig ...

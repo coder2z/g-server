@@ -1,6 +1,7 @@
 package xcfg
 
 import (
+	"errors"
 	"fmt"
 	"github.com/coder2m/g-saber/xcast"
 	"io"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/coder2m/g-saber/xtransform/xmap"
 	"github.com/mitchellh/mapstructure"
-	"github.com/pkg/errors"
 )
 
 // Configuration provides configuration for application.
@@ -353,7 +353,7 @@ func (c *Configuration) UnmarshalKey(key string, rawVal interface{}, opts ...Get
 
 	value := c.Get(key)
 	if value == nil {
-		return errors.Wrap(ErrInvalidKey, key)
+		return ErrInvalidKey
 	}
 
 	return decoder.Decode(value)

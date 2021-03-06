@@ -2,9 +2,9 @@ package xlog
 
 import (
 	"fmt"
+	"github.com/coder2m/g-saber/xcfg"
 	"github.com/coder2m/g-saber/xcolor"
 	"github.com/coder2m/g-saber/xdefer"
-	"github.com/coder2m/component/xcfg"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
@@ -28,8 +28,6 @@ var (
 	Uint = zap.Uint
 	// Duration ...
 	Duration = zap.Duration
-	// Durationp ...
-	Durationp = zap.Durationp
 	// Object ...
 	Object = zap.Object
 	// Namespace ...
@@ -37,7 +35,7 @@ var (
 	// Reflect ...
 	Reflect = zap.Reflect
 	// Skip ...
-	Skip = zap.Skip()
+	Skip = zap.Skip
 	// ByteString ...
 	ByteString = zap.ByteString
 	// Float64 ...
@@ -147,7 +145,7 @@ func (logger *Logger) Debugf(template string, args ...interface{}) {
 }
 
 func normalizeMessage(msg string) string {
-	return fmt.Sprintf("%-32s", msg)
+	return fmt.Sprintf("%-16s", msg)
 }
 
 // Info ...
