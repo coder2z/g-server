@@ -10,12 +10,13 @@ import (
 	"errors"
 	"fmt"
 	xapp "github.com/coder2m/component"
+	"github.com/coder2m/component/xcfg"
+	"github.com/coder2m/component/xcode"
+	"github.com/coder2m/component/xlog"
 	"github.com/coder2m/g-saber/xconsole"
 	"github.com/coder2m/g-saber/xdefer"
 	"github.com/coder2m/g-saber/xjson"
 	"github.com/coder2m/g-saber/xnet"
-	"github.com/coder2m/component/xcfg"
-	"github.com/coder2m/component/xlog"
 	"net/http"
 	"net/http/pprof"
 	"os"
@@ -63,6 +64,9 @@ func init() {
 	HandleFunc("/debug/pprof/profile", pprof.Profile)
 	HandleFunc("/debug/pprof/symbol", pprof.Symbol)
 	HandleFunc("/debug/pprof/trace", pprof.Trace)
+
+	HandleFunc("/debug/code/business", xcode.XCodeBusinessCodeHttp)
+	HandleFunc("/debug/code/system", xcode.XCodeSystemCodeHttp)
 
 	HandleFunc("/debug/env", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
@@ -119,7 +123,7 @@ func Run(opts ...Option) {
 			Handler: handle,
 		}
 
-		xconsole.Greenf("govern serve init:", fmt.Sprintf("%v/debug/list", c.Address()))
+		xconsole.Greenf("govern serve init", fmt.Sprintf("%v/debug/list", c.Address()))
 
 		xdefer.Register(func() error {
 			return Shutdown()

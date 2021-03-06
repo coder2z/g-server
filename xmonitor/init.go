@@ -29,5 +29,5 @@ func Run() {
 		promhttp.Handler().ServeHTTP(w, r)
 	})
 
-	xconsole.Greenf("prometheus monitor init:", fmt.Sprintf("%v/metrics", xgovern.GovernConfig().Address()))
+	xconsole.Greenf("prometheus monitor init", fmt.Sprintf("%v/metrics", xgovern.GovernConfig().Address()))
 }
