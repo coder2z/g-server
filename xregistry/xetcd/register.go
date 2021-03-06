@@ -6,9 +6,9 @@ package xetcd
 
 import (
 	"fmt"
-	"github.com/coder2m/g-saber/xconsole"
-	"github.com/coder2m/g-saber/xlog"
-	"github.com/coder2m/component/xregistry"
+	"github.com/coder2z/g-saber/xconsole"
+	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/component/xregistry"
 	"go.etcd.io/etcd/clientv3"
 	"google.golang.org/grpc/resolver"
 	"time"

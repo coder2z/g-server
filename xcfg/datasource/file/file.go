@@ -1,7 +1,7 @@
 package file
 
 import (
-	"github.com/coder2m/g-saber/xfile"
+	"github.com/coder2z/g-saber/xfile"
 	"io/ioutil"
 	"path/filepath"
 )

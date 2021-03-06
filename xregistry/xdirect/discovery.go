@@ -6,7 +6,7 @@ package xdirect
 
 import (
 	"fmt"
-	"github.com/coder2m/component/xregistry"
+	"github.com/coder2z/component/xregistry"
 	"strings"
 )
 

@@ -7,7 +7,7 @@ package xemail
 
 import (
 	"fmt"
-	"github.com/coder2m/component/xinvoker"
+	"github.com/coder2z/component/xinvoker"
 	"sync"
 )
 

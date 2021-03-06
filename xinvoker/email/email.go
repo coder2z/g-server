@@ -5,7 +5,7 @@
 package xemail
 
 import (
-	"github.com/coder2m/component/xcfg"
+	"github.com/coder2z/component/xcfg"
 	"gopkg.in/gomail.v2"
 )
 

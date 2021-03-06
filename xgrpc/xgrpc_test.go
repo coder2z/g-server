@@ -1,8 +1,8 @@
 package xgrpc
 
 import (
-	clientinterceptors "github.com/coder2m/component/xgrpc/client"
-	serverinterceptors "github.com/coder2m/component/xgrpc/server"
+	clientinterceptors "github.com/coder2z/component/xgrpc/client"
+	serverinterceptors "github.com/coder2z/component/xgrpc/server"
 	"google.golang.org/grpc"
 	"net"
 	"testing"

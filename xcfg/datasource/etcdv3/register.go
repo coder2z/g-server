@@ -1,8 +1,8 @@
 package etcdv3
 
 import (
-	"github.com/coder2m/g-saber/xflag"
-	"github.com/coder2m/component/xcfg"
+	"github.com/coder2z/g-saber/xflag"
+	"github.com/coder2z/component/xcfg"
 	"net/url"
 	"time"
 

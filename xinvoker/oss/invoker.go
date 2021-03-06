@@ -7,8 +7,8 @@ package xoss
 
 import (
 	"fmt"
-	"github.com/coder2m/component/xinvoker"
-	"github.com/coder2m/component/xinvoker/oss/standard"
+	"github.com/coder2z/component/xinvoker"
+	"github.com/coder2z/component/xinvoker/oss/standard"
 	"sync"
 )
 

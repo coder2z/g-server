@@ -3,7 +3,7 @@ package xcfg
 import (
 	"errors"
 	"fmt"
-	"github.com/coder2m/g-saber/xcast"
+	"github.com/coder2z/g-saber/xcast"
 	"io"
 	"io/ioutil"
 	"reflect"
@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/coder2m/g-saber/xtransform/xmap"
+	"github.com/coder2z/g-saber/xtransform/xmap"
 	"github.com/mitchellh/mapstructure"
 )
 

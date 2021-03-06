@@ -1,8 +1,8 @@
 package xetcd
 
 import (
-	"github.com/coder2m/g-saber/xtime"
-	"github.com/coder2m/component/xregistry"
+	"github.com/coder2z/g-saber/xtime"
+	"github.com/coder2z/component/xregistry"
 	"google.golang.org/grpc"
 	"testing"
 )

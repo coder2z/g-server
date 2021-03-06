@@ -5,11 +5,11 @@
 package jaeger
 
 import (
-	xapp "github.com/coder2m/component"
-	"github.com/coder2m/component/xcfg"
-	"github.com/coder2m/g-saber/xlog"
-	"github.com/coder2m/g-saber/xconsole"
-	"github.com/coder2m/g-saber/xdefer"
+	xapp "github.com/coder2z/component"
+	"github.com/coder2z/component/xcfg"
+	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/g-saber/xconsole"
+	"github.com/coder2z/g-saber/xdefer"
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	jCfg "github.com/uber/jaeger-client-go/config"

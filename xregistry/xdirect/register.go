@@ -5,9 +5,9 @@
 package xdirect
 
 import (
-	"github.com/coder2m/g-saber/xconsole"
-	"github.com/coder2m/g-saber/xlog"
-	"github.com/coder2m/component/xregistry"
+	"github.com/coder2z/g-saber/xconsole"
+	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/component/xregistry"
 	"google.golang.org/grpc/resolver"
 	"time"
 )
