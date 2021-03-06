@@ -12,6 +12,11 @@ func logger() *Logger {
 	return defaultLogger
 }
 
+func DefaultLogger() *Logger {
+	return logger()
+}
+
+
 func SetDefaultLogger(o *options) {
 	defaultLogger = o.Build()
 	return
