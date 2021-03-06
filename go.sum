@@ -81,8 +81,8 @@ github.com/cockroachdb/apd v1.1.0 h1:3LFP3629v+1aKXU5Q37mxmRxX/pIu1nijXydLShEq5I
 github.com/cockroachdb/apd v1.1.0/go.mod h1:8Sl8LxpKi29FqWXR16WEFZRNSz3SoPzUzeMeY4+DwBQ=
 github.com/cockroachdb/datadriven v0.0.0-20190809214429-80d97fb3cbaa/go.mod h1:zn76sxSg3SzpJ0PPJaLDCu+Bu0Lg3sKTORVIj19EIF8=
 github.com/codahale/hdrhistogram v0.0.0-20161010025455-3a0bb77429bd/go.mod h1:sE/e/2PUdi/liOCUjSTXgM1o87ZssimdTWN964YiIeI=
-github.com/coder2z/g-saber v0.1.4 h1:JtlWX9S5RL0WydgMpeV0EhVIRzupKujxy7P46Dffyrw=
-github.com/coder2z/g-saber v0.1.4/go.mod h1:DAEL83ZjaPMidQIxUATvyjJeS2UxNO1dJ60URxmR62Y=
+github.com/coder2z/g-saber v1.0.1 h1:KeEGyvpaziQceI8eUPQ1hB0uGphl1DZiIzHTumUcIfo=
+github.com/coder2z/g-saber v1.0.1/go.mod h1:bdjvBpmiDkifYK8Cl56ZSZtkw0LJD2NSp17rgEDkShA=
 github.com/coreos/bbolt v1.3.2 h1:wZwiHHUieZCquLkDL0B8UhzreNWsPHooDAG3q34zk0s=
 github.com/coreos/bbolt v1.3.2/go.mod h1:iRUV2dpdMOn7Bo10OQBFzIJO9kkE559Wcmn+qkEiiKk=
 github.com/coreos/etcd v3.3.13+incompatible/go.mod h1:uF7uidLiAD3TWHmW31ZFd/JWoc32PjwdhPthX9715RE=
