@@ -8,7 +8,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/coder2m/g-saber/xjson"
-	"github.com/coder2m/component/xlog"
+	"github.com/coder2m/g-saber/xlog"
 	"github.com/coder2m/component/xregistry"
 	"go.etcd.io/etcd/clientv3"
 )

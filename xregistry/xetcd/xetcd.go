@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"github.com/coder2m/g-saber/xconsole"
 	"github.com/coder2m/g-saber/xstring"
-	"github.com/coder2m/component/xlog"
+	"github.com/coder2m/g-saber/xlog"
 	"github.com/coder2m/component/xregistry"
 	"go.etcd.io/etcd/clientv3"
 	"sync"

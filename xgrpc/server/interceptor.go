@@ -9,7 +9,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/coder2m/component/xcode"
-	"github.com/coder2m/component/xlog"
+	"github.com/coder2m/g-saber/xlog"
 	"github.com/coder2m/component/xmonitor"
 	"github.com/coder2m/component/xtrace"
 	"github.com/coder2m/g-saber/xcast"

@@ -12,7 +12,7 @@ import (
 	xapp "github.com/coder2m/component"
 	"github.com/coder2m/component/xcfg"
 	"github.com/coder2m/component/xcode"
-	"github.com/coder2m/component/xlog"
+	"github.com/coder2m/g-saber/xlog"
 	"github.com/coder2m/g-saber/xconsole"
 	"github.com/coder2m/g-saber/xdefer"
 	"github.com/coder2m/g-saber/xjson"
