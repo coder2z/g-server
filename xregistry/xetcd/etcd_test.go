@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	xbalancer "github.com/coder2z/component/xgrpc/balancer"
-	"github.com/coder2z/component/xgrpc/balancer/least_connection"
+	"github.com/coder2z/component/xgrpc/balancer/p2c"
 	"github.com/coder2z/component/xregistry"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-saber/xtime"
@@ -56,18 +56,6 @@ func TestEtcd(t *testing.T) {
 	for {
 
 	}
-
-	etcdR.Close() //注销注册
-
-	err = RegisterBuilder(conf) //服务发现
-
-	if err != nil {
-		t.Failed()
-		return
-	}
-
-	conn, err := grpc.Dial("etcd://namespaces1/servicename1")
-	t.Log(conn)
 }
 
 func TestEtcd2(t *testing.T) {
@@ -107,7 +95,7 @@ func TestEtcdDiscovery(t *testing.T) {
 	}
 	_ = RegisterBuilder(conf) //服务发现
 	conn, err := grpc.Dial("etcd://namespaces/servicename", grpc.WithInsecure(),
-		grpc.WithDefaultServiceConfig(fmt.Sprintf(`{"LoadBalancingPolicy": "%s"}`, least_connection.LeastConnection)))
+		grpc.WithDefaultServiceConfig(fmt.Sprintf(`{"LoadBalancingPolicy": "%s"}`, p2c.P2C)))
 	if err != nil {
 		t.Logf("grpc dial: %s", err)
 		return

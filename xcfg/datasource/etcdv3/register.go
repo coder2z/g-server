@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/coreos/etcd/clientv3"
+	"go.etcd.io/etcd/clientv3"
 )
 
 // DataSourceEtcd defines etcd scheme

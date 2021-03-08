@@ -5,8 +5,8 @@ import (
 	"github.com/coder2z/component/xcfg"
 	"time"
 
-	"github.com/coreos/etcd/clientv3"
-	"github.com/coreos/etcd/mvcc/mvccpb"
+	"go.etcd.io/etcd/clientv3"
+	"go.etcd.io/etcd/mvcc/mvccpb"
 	"github.com/pkg/errors"
 )
 

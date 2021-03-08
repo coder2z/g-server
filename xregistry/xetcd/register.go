@@ -9,7 +9,7 @@ import (
 	"github.com/coder2z/component/xregistry"
 	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xlog"
-	"github.com/coreos/etcd/clientv3"
+	"go.etcd.io/etcd/clientv3"
 	"google.golang.org/grpc/resolver"
 	"time"
 )
