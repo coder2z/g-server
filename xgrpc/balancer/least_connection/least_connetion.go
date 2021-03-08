@@ -6,7 +6,6 @@
 package least_connection
 
 import (
-	"github.com/coder2z/g-saber/xlog"
 	"google.golang.org/grpc/balancer"
 	"google.golang.org/grpc/balancer/base"
 	"math/rand"
@@ -29,7 +28,6 @@ func init() {
 type leastConnectionPickerBuilder struct{}
 
 func (*leastConnectionPickerBuilder) Build(buildInfo base.PickerBuildInfo) balancer.V2Picker {
-	xlog.Infof("leastConnectionPicker: newPicker called with buildInfo: %v", buildInfo)
 	if len(buildInfo.ReadySCs) == 0 {
 		return base.NewErrPickerV2(balancer.ErrNoSubConnAvailable)
 	}

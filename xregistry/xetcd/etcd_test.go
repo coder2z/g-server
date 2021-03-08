@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/coder2z/component/xgrpc"
 	xbalancer "github.com/coder2z/component/xgrpc/balancer"
-	"github.com/coder2z/component/xgrpc/balancer/consistent_hash"
+	"github.com/coder2z/component/xgrpc/balancer/least_connection"
 	clientinterceptors "github.com/coder2z/component/xgrpc/client"
 	serverinterceptors "github.com/coder2z/component/xgrpc/server"
 	"github.com/coder2z/component/xregistry"
@@ -132,7 +132,7 @@ func TestEtcdDiscovery(t *testing.T) {
 			clientinterceptors.PrometheusUnaryClientInterceptor("servername"),
 			clientinterceptors.XTraceUnaryClientInterceptor(),
 		),
-		grpc.WithDefaultServiceConfig(fmt.Sprintf(`{"LoadBalancingPolicy": "%s"}`, consistent_hash.ConsistentHash)),
+		grpc.WithDefaultServiceConfig(fmt.Sprintf(`{"LoadBalancingPolicy": "%s"}`, least_connection.LeastConnection)),
 		grpc.WithInsecure(),
 	}
 	_ = RegisterBuilder(conf) //服务发现

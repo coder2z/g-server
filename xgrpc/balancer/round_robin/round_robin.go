@@ -7,7 +7,6 @@ package round_robin
 
 import (
 	"github.com/coder2z/component/xgrpc/balancer"
-	"github.com/coder2z/g-saber/xlog"
 	"google.golang.org/grpc/balancer"
 	"google.golang.org/grpc/balancer/base"
 	"math/rand"
@@ -28,7 +27,6 @@ func init() {
 type roundRobinPickerBuilder struct{}
 
 func (*roundRobinPickerBuilder) Build(buildInfo base.PickerBuildInfo) balancer.V2Picker {
-	xlog.Infof("round robin Picker: newPicker called with buildInfo: %v", buildInfo)
 	if len(buildInfo.ReadySCs) == 0 {
 		return base.NewErrPickerV2(balancer.ErrNoSubConnAvailable)
 	}

@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"github.com/coder2z/component/xgrpc"
 	"github.com/coder2z/component/xgrpc/balancer"
-	"github.com/coder2z/g-saber/xlog"
 	"google.golang.org/grpc/balancer"
 	"google.golang.org/grpc/balancer/base"
 )
@@ -32,7 +31,6 @@ type consistentHashPickerBuilder struct {
 }
 
 func (b *consistentHashPickerBuilder) Build(buildInfo base.PickerBuildInfo) balancer.V2Picker {
-	xlog.Infof("consistentHashPicker: newPicker called with buildInfo: %v", buildInfo)
 	if len(buildInfo.ReadySCs) == 0 {
 		return base.NewErrPickerV2(balancer.ErrNoSubConnAvailable)
 	}
@@ -65,7 +63,7 @@ func (p *consistentHashPicker) Pick(info balancer.PickInfo) (balancer.PickResult
 	targetAddr, ok := p.hash.Get(
 		defaultConsistentHashKey +
 			info.FullMethodName +
-			`\` +
+			`/` +
 			xgrpc.ExtractFromCtx(info.Ctx, "ip"),
 	)
 	if ok {
