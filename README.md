@@ -1,52 +1,46 @@
 # Component
 
+Self-use microservice framework
+
+![](https://img.shields.io/badge/windowns10-Development-d0d1d4)
+![](https://img.shields.io/badge/golang-1.16-blue)
+[![](https://img.shields.io/badge/godoc-reference-3C57C4)](https://pkg.go.dev/github.com/coder2z/component)
+![](https://img.shields.io/badge/version-1.0.5-r)
+
+## :rocket:Installation
+
+`
+go get -u github.com/coder2z/component
+`
+
+## :bell:Features
+
+Encapsulate many tool functions and methods, and continue to update. Most of the methods are open source and other open
+source projects.
+
 ```
-    xcfg              这里主要是借鉴douyu框架得config解析
-    xgoven            系统监控api
-    xinvoker        
-        -email        email
-        -gorm         gorm
-        -mongo        mongo
-        -oss          云对象存储
-        -redis        redis
-    xlog              日志
-    xmoniter          普罗米修斯
-    xregistry         服务注册发现
-    xtrace            链路追踪
-    xgrpc             grpc 拦截器
-    pkg
-        -xcast        spf13/cast不足的函数封装
-        -xcolor       颜色输出
-        -xdefer       统一defer函数
-        -xerrgroup    errgroup
-        -xfile        文件操作封装
-        -xflag        flag封装
-        -xgp          协程池子
-        -xmap         map操作封装
-        -xnet         本机网络操作封装
-        -xreminder    定时任务
-        -xsignals     信号     
-        -xtransform   数组转换封装   
-        -xvalidator   验证
+xapp            = > runtime app info
+xcfg            = > config
+xcode           = > err coder encapsulation
+xgovern         = > system monitoring
+xgrpc           = > grpc encapsulation
+xinvoker        = > invoker
+xmoniter        = > prometheus
+xregistry       = > service registration discovery
+xtrace          = > trace
+xversion        = > frame version
 ```
 
-方便开发，自用
-
-很多东西都是来自开源的项目。
-
-
-## Example
-
-配置文件
+## :anchor:Usage
 
 ```toml
 [db]
-[db.dev]
-password = "root"
-dbName = "ndisk"
+    [db.dev]
+        password = "root"
+        dbName = "ndisk"
 
 [redis]
-[redis.dev]
+    [redis.dev]
 ```
 
 使用
@@ -122,3 +116,19 @@ run
 ```bash
  go run main.go run -c=test.toml
 ```
+
+## :tada:Contribute code
+
+Open source projects are inseparable from everyone’s support. If you have a good idea, encountered some bugs and fixed
+them, and corrected the errors in the document, please submit a Pull Request~
+
+1. Fork this project to your own repo
+2. Clone the project in the past, that is, the project in your warehouse, to your local
+3. Modify the code
+4. Push to your own library after commit
+5. Initiate a PR (pull request) request and submit it to the `provide` branch
+6. Waiting to merge
+
+## :closed_book:License
+
+Distributed under MIT License, please see license file within the code for more details.
