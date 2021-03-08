@@ -33,6 +33,8 @@ xversion        = > frame version
 
 ## :anchor:Usage
 
+### config file
+
 ```toml
 [db]
     [db.dev]
@@ -43,7 +45,7 @@ xversion        = > frame version
     [redis.dev]
 ```
 
-使用
+### main.go usage
 
 ```go
 /**
@@ -111,7 +113,7 @@ func RunApp() {
 
 ```
 
-run
+### run
 
 ```bash
  go run main.go run -c=test.toml
