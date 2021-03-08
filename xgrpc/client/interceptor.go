@@ -155,15 +155,24 @@ func XLoggerUnaryClientInterceptor(name string) grpc.UnaryClientInterceptor {
 
 func XAidUnaryClientInterceptor() grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
-		md, ok := metadata.FromOutgoingContext(ctx)
-		clientAidMD := metadata.Pairs("aid", fmt.Sprintf("%v_%v", xapp.Name(), xapp.HostName()))
+		md, ok := metadata.FromIncomingContext(ctx)
+		clientAidMD := metadata.Pairs(
+			"info", fmt.Sprintf("%s/%s/%s",
+				xapp.Name(),
+				xapp.HostName(),
+				xapp.AppId(),
+			),
+			"ip", xapp.BuildHost(),
+			"app_id", xapp.AppId(),
+			"app_name", xapp.Name(),
+			"host_name", xapp.HostName(),
+		)
 		if ok {
 			md = metadata.Join(md, clientAidMD)
 		} else {
 			md = clientAidMD
 		}
 		ctx = metadata.NewOutgoingContext(ctx, md)
-
 		return invoker(ctx, method, req, reply, cc, opts...)
 	}
 }

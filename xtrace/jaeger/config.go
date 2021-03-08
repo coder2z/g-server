@@ -51,7 +51,7 @@ func DefaultConfig() *Config {
 			TraceContextHeaderName:   headerName,
 		},
 		Tags: []opentracing.Tag{
-			{Key: "hostname", Value: xapp.HostName()},
+			{Key: "host_name", Value: xapp.HostName()},
 			{Key: "app_id", Value: xapp.AppId()},
 			{Key: "app_name", Value: xapp.Name()},
 		},

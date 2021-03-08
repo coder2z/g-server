@@ -7,6 +7,7 @@ package consistent_hash
 
 import (
 	"fmt"
+	"github.com/coder2z/component/xgrpc"
 	"github.com/coder2z/component/xgrpc/balancer"
 	"github.com/coder2z/g-saber/xlog"
 	"google.golang.org/grpc/balancer"
@@ -61,7 +62,12 @@ type consistentHashPicker struct {
 
 func (p *consistentHashPicker) Pick(info balancer.PickInfo) (balancer.PickResult, error) {
 	var ret balancer.PickResult
-	targetAddr, ok := p.hash.Get(defaultConsistentHashKey)
+	targetAddr, ok := p.hash.Get(
+		defaultConsistentHashKey +
+			info.FullMethodName +
+			`\` +
+			xgrpc.ExtractFromCtx(info.Ctx, "ip"),
+	)
 	if ok {
 		ret.SubConn = p.subConns[targetAddr]
 	}
@@ -69,5 +75,5 @@ func (p *consistentHashPicker) Pick(info balancer.PickInfo) (balancer.PickResult
 }
 
 func wrapAddr(addr string, idx int) string {
-	return fmt.Sprintf("%s-%d", addr, idx)
+	return fmt.Sprintf("%s/%d", addr, idx)
 }

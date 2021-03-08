@@ -1,7 +1,10 @@
 package xgrpc
 
 import (
+	"context"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
+	"strings"
 )
 
 func WithStreamServerInterceptors(interceptors ...grpc.StreamServerInterceptor) grpc.ServerOption {
@@ -18,4 +21,11 @@ func WithStreamClientInterceptors(interceptors ...grpc.StreamClientInterceptor) 
 
 func WithUnaryClientInterceptors(interceptors ...grpc.UnaryClientInterceptor) grpc.DialOption {
 	return grpc.WithChainUnaryInterceptor(interceptors...)
+}
+
+func ExtractFromCtx(ctx context.Context, key string) string {
+	if md, ok := metadata.FromOutgoingContext(ctx); ok {
+		return strings.Join(md.Get(key), ",")
+	}
+	return ""
 }

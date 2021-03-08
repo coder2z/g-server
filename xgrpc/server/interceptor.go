@@ -9,26 +9,18 @@ import (
 	"context"
 	"fmt"
 	"github.com/coder2z/component/xcode"
-	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/component/xgrpc"
 	"github.com/coder2z/component/xmonitor"
 	"github.com/coder2z/component/xtrace"
 	"github.com/coder2z/g-saber/xcast"
+	"github.com/coder2z/g-saber/xlog"
 	"github.com/opentracing/opentracing-go/ext"
 	"github.com/opentracing/opentracing-go/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/metadata"
 	"runtime/debug"
-	"strings"
 	"time"
 )
-
-func extractAID(ctx context.Context) string {
-	if md, ok := metadata.FromIncomingContext(ctx); ok {
-		return strings.Join(md.Get("aid"), ",")
-	}
-	return "unknown"
-}
 
 func handleCrash(handler func(interface{})) {
 	if r := recover(); r != nil {
@@ -69,10 +61,10 @@ func PrometheusUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		startTime := time.Now()
 		resp, err := handler(ctx, req)
 		code := xcode.ExtractCodes(err)
-		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, extractAID(ctx)).Observe(time.Since(startTime).Seconds())
-		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, extractAID(ctx), xcast.ToString(code.GetCode())).Inc()
+		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, xgrpc.ExtractFromCtx(ctx, "info")).Observe(time.Since(startTime).Seconds())
+		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, xgrpc.ExtractFromCtx(ctx, "info"), xcast.ToString(code.GetCode())).Inc()
 		if code != xcode.OK {
-			xmonitor.ServerErrorCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, extractAID(ctx), xcast.ToString(code.GetCode())).Inc()
+			xmonitor.ServerErrorCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, xgrpc.ExtractFromCtx(ctx, "info"), xcast.ToString(code.GetCode())).Inc()
 		}
 		return resp, err
 	}
@@ -83,10 +75,10 @@ func PrometheusStreamServerInterceptor() grpc.StreamServerInterceptor {
 		startTime := time.Now()
 		err := handler(srv, ss)
 		code := xcode.ExtractCodes(err)
-		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCStream, info.FullMethod, extractAID(ss.Context())).Observe(time.Since(startTime).Seconds())
-		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCStream, info.FullMethod, extractAID(ss.Context()), xcast.ToString(code.GetCode())).Inc()
+		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCStream, info.FullMethod, xgrpc.ExtractFromCtx(ss.Context(), "info")).Observe(time.Since(startTime).Seconds())
+		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCStream, info.FullMethod, xgrpc.ExtractFromCtx(ss.Context(), "info"), xcast.ToString(code.GetCode())).Inc()
 		if code != xcode.OK {
-			xmonitor.ServerErrorCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, extractAID(ss.Context()), xcast.ToString(code.GetCode())).Inc()
+			xmonitor.ServerErrorCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, xgrpc.ExtractFromCtx(ss.Context(), "info"), xcast.ToString(code.GetCode())).Inc()
 		}
 		return err
 	}

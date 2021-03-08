@@ -3,8 +3,11 @@ package xetcd
 import (
 	"context"
 	"fmt"
+	"github.com/coder2z/component/xgrpc"
 	xbalancer "github.com/coder2z/component/xgrpc/balancer"
-	"github.com/coder2z/component/xgrpc/balancer/p2c"
+	"github.com/coder2z/component/xgrpc/balancer/consistent_hash"
+	clientinterceptors "github.com/coder2z/component/xgrpc/client"
+	serverinterceptors "github.com/coder2z/component/xgrpc/server"
 	"github.com/coder2z/component/xregistry"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-saber/xtime"
@@ -48,7 +51,19 @@ func TestEtcd(t *testing.T) {
 		xregistry.RegisterInterval(xtime.Duration("15s")), //15s 注册一次
 		xregistry.Metadata(metadata.Pairs(xbalancer.WeightKey, "2")),
 	)
-	serve := grpc.NewServer()
+	options := []grpc.ServerOption{
+		xgrpc.WithUnaryServerInterceptors(
+			serverinterceptors.CrashUnaryServerInterceptor(),
+			serverinterceptors.PrometheusUnaryServerInterceptor(),
+			serverinterceptors.XTimeoutUnaryServerInterceptor(5*time.Second),
+			serverinterceptors.TraceUnaryServerInterceptor(),
+		),
+		xgrpc.WithStreamServerInterceptors(
+			serverinterceptors.CrashStreamServerInterceptor(),
+			serverinterceptors.PrometheusStreamServerInterceptor(),
+		),
+	}
+	serve := grpc.NewServer(options...)
 	listener, err := net.Listen("tcp", ":8888")
 	proto.RegisterDemoServiceServer(serve, server{add: ":8888"})
 	_ = serve.Serve(listener)
@@ -70,6 +85,20 @@ func TestEtcd2(t *testing.T) {
 		return
 	}
 
+	options := []grpc.ServerOption{
+		xgrpc.WithUnaryServerInterceptors(
+			serverinterceptors.CrashUnaryServerInterceptor(),
+			serverinterceptors.PrometheusUnaryServerInterceptor(),
+			serverinterceptors.XTimeoutUnaryServerInterceptor(5*time.Second),
+			serverinterceptors.TraceUnaryServerInterceptor(),
+		),
+		xgrpc.WithStreamServerInterceptors(
+			serverinterceptors.CrashStreamServerInterceptor(),
+			serverinterceptors.PrometheusStreamServerInterceptor(),
+		),
+	}
+	serve := grpc.NewServer(options...)
+
 	etcdR.Register(
 		xregistry.ServiceName("servicename"),
 		xregistry.ServiceNamespaces("namespaces"),
@@ -79,7 +108,6 @@ func TestEtcd2(t *testing.T) {
 		xregistry.Metadata(metadata.Pairs(xbalancer.WeightKey, "2")),
 	)
 
-	serve := grpc.NewServer()
 	listener, err := net.Listen("tcp", ":7777")
 	proto.RegisterDemoServiceServer(serve, server{add: ":7777"})
 	_ = serve.Serve(listener)
@@ -93,9 +121,22 @@ func TestEtcdDiscovery(t *testing.T) {
 	conf := EtcdV3Cfg{
 		Endpoints: []string{"49.232.136.163:2379"},
 	}
+	dialOptions := []grpc.DialOption{
+		xgrpc.WithStreamClientInterceptors(
+			clientinterceptors.PrometheusStreamClientInterceptor("servername"),
+		),
+		xgrpc.WithUnaryClientInterceptors(
+			clientinterceptors.XAidUnaryClientInterceptor(),
+			clientinterceptors.XTimeoutUnaryClientInterceptor(time.Minute, time.Second),
+			clientinterceptors.XLoggerUnaryClientInterceptor("servername"),
+			clientinterceptors.PrometheusUnaryClientInterceptor("servername"),
+			clientinterceptors.XTraceUnaryClientInterceptor(),
+		),
+		grpc.WithDefaultServiceConfig(fmt.Sprintf(`{"LoadBalancingPolicy": "%s"}`, consistent_hash.ConsistentHash)),
+		grpc.WithInsecure(),
+	}
 	_ = RegisterBuilder(conf) //服务发现
-	conn, err := grpc.Dial("etcd://namespaces/servicename", grpc.WithInsecure(),
-		grpc.WithDefaultServiceConfig(fmt.Sprintf(`{"LoadBalancingPolicy": "%s"}`, p2c.P2C)))
+	conn, err := grpc.Dial("etcd://namespaces/servicename", dialOptions...)
 	if err != nil {
 		t.Logf("grpc dial: %s", err)
 		return
@@ -109,11 +150,11 @@ func TestEtcdDiscovery(t *testing.T) {
 				Name: "123",
 			})
 		if err != nil {
-			xlog.Error("error",xlog.FieldErr(err))
+			xlog.Error("error", xlog.FieldErr(err))
 			time.Sleep(time.Second)
 			continue
 		}
-		xlog.Info("success",xlog.String("msg",resp.GetMessage()))
+		xlog.Info("success", xlog.String("msg", resp.GetMessage()))
 		time.Sleep(time.Second)
 	}
 }
