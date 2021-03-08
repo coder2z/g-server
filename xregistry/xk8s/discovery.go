@@ -8,6 +8,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/coder2z/component/xregistry"
+	"github.com/coder2z/g-saber/xconsole"
+	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/g-saber/xstring"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -73,31 +76,30 @@ func (d *k8sDiscovery) watch(ch chan<- []xregistry.Instance, service, port strin
 			case <-d.closeCh:
 				return
 			case <-watcher.ResultChan():
-			}
-
-			endpoints, err := d.clients.CoreV1().Endpoints(d.namespace).
-				List(context.Background(), metaV1.ListOptions{FieldSelector: fmt.Sprintf("%s=%s", "metadata.name", service)})
-			if err != nil {
-				continue
-			}
-
-			var i []xregistry.Instance
-			for _, endpoint := range endpoints.Items {
-				for _, subset := range endpoint.Subsets {
-					realPort := port
-					for _, p := range subset.Ports {
-						if p.Name == port {
-							realPort = fmt.Sprint(p.Port)
-							break
+				endpoints, err := d.clients.CoreV1().Endpoints(d.namespace).
+					List(context.Background(), metaV1.ListOptions{FieldSelector: fmt.Sprintf("%s=%s", "metadata.name", service)})
+				if err != nil {
+					continue
+				}
+				var i []xregistry.Instance
+				for _, endpoint := range endpoints.Items {
+					for _, subset := range endpoint.Subsets {
+						realPort := port
+						for _, p := range subset.Ports {
+							if p.Name == port {
+								realPort = fmt.Sprint(p.Port)
+								break
+							}
 						}
-					}
-					for _, addr := range subset.Addresses {
-						ins := xregistry.Instance{Address: fmt.Sprintf("%s:%s", addr.IP, realPort)}
-						i = append(i, ins)
+						for _, addr := range subset.Addresses {
+							ins := xregistry.Instance{Address: fmt.Sprintf("%s:%s", addr.IP, realPort)}
+							i = append(i, ins)
+						}
+						xlog.Info("service discovery k8s", xlog.FieldValue(xstring.Json(i)))
 					}
 				}
+				ch <- i
 			}
-			ch <- i
 		}
 	}()
 	return nil
@@ -105,6 +107,7 @@ func (d *k8sDiscovery) watch(ch chan<- []xregistry.Instance, service, port strin
 
 func (d *k8sDiscovery) Close() {
 	d.closeOnce.Do(func() {
+		xconsole.Red("service registration shutdown")
 		close(d.closeCh)
 	})
 }

@@ -6,7 +6,11 @@ package xdirect
 
 import (
 	"fmt"
+	xbalancer "github.com/coder2z/component/xgrpc/balancer"
 	"github.com/coder2z/component/xregistry"
+	"github.com/coder2z/g-saber/xlog"
+	"google.golang.org/grpc/metadata"
+	"net/url"
 	"strings"
 )
 
@@ -16,7 +20,7 @@ func newDiscovery() xregistry.Discovery {
 	return &directDiscovery{}
 }
 
-// target 格式： "127.0.0.1:8000,127.0.0.1:8001"
+// target 格式： "127.0.0.1:8000?w=1,127.0.0.1:8001?w=2"
 func (d *directDiscovery) Discover(target string) (<-chan []xregistry.Instance, error) {
 	endpoints := strings.Split(target, ",")
 	if len(endpoints) == 0 {
@@ -24,7 +28,11 @@ func (d *directDiscovery) Discover(target string) (<-chan []xregistry.Instance, 
 	}
 	var i []xregistry.Instance
 	for _, addr := range endpoints {
-		ins := xregistry.Instance{Address: addr}
+		urlObj, err := url.Parse(addr)
+		if err != nil {
+			xlog.Panic("endpoints format error", xlog.FieldErr(err))
+		}
+		ins := xregistry.Instance{Address: urlObj.Host, Metadata: metadata.Pairs(xbalancer.WeightKey, urlObj.Query().Get("w"))}
 		i = append(i, ins)
 	}
 

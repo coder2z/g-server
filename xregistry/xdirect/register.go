@@ -23,7 +23,7 @@ func RegisterBuilder() error {
 	return nil
 }
 
-// grpc.Dial("direct://namespaces/127.0.0.1:8000,127.0.0.1:8001")
+// grpc.Dial("direct://namespaces/127.0.0.1:8000?w=1,127.0.0.1:8001?w=1")
 type directBuilder struct {
 	discovery xregistry.Discovery
 }

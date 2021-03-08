@@ -6,16 +6,19 @@ package xregistry
 
 import (
 	"fmt"
+	xbalancer "github.com/coder2z/component/xgrpc/balancer"
+	"google.golang.org/grpc/attributes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/resolver"
 	"time"
 )
 
 // Registry Options
 type Options struct {
-	ServiceName string            `json:"servicename"`
-	Namespaces  string            `json:"namespaces"`
-	Address     string            `json:"address"`
-	Metadata    map[string]string `json:"metadata"`
+	ServiceName string      `json:"servicename"`
+	Namespaces  string      `json:"namespaces"`
+	Address     string      `json:"address"`
+	Metadata    metadata.MD `json:"metadata"`
 	// 服务有效时长
 	RegisterTTL      time.Duration `json:"-"` // time to live, 服务失活一段时间后自动从注册中心删除
 	RegisterInterval time.Duration `json:"-"` // 注册间隔时长，也可不要 默认为RegisterTTL/3
@@ -46,7 +49,7 @@ func Address(address string) Option {
 	}
 }
 
-func Metadata(m map[string]string) Option {
+func Metadata(m metadata.MD) Option {
 	return func(o *Options) {
 		o.Metadata = m
 	}
@@ -65,9 +68,9 @@ func RegisterInterval(interval time.Duration) Option {
 }
 
 type Instance struct {
-	ServiceName string            `json:"servicename"`
-	Address     string            `json:"address"`
-	Metadata    map[string]string `json:"metadata"`
+	ServiceName string      `json:"servicename"`
+	Address     string      `json:"address"`
+	Metadata    metadata.MD `json:"metadata"`
 }
 
 // 服务发现接口
@@ -79,7 +82,10 @@ type Discovery interface {
 func UpdateAddress(i []Instance, conn resolver.ClientConn) {
 	var address []resolver.Address
 	for _, ins := range i {
-		address = append(address, resolver.Address{Addr: ins.Address})
+		address = append(address, resolver.Address{
+			Addr:       ins.Address,
+			Attributes: attributes.New().WithValues(xbalancer.WeightKey, ins.Metadata.Get(xbalancer.WeightKey)),
+		})
 	}
 	conn.UpdateState(resolver.State{
 		Addresses: address,
@@ -87,7 +93,7 @@ func UpdateAddress(i []Instance, conn resolver.ClientConn) {
 }
 
 func KeyFormat(target resolver.Target) string {
-	return fmt.Sprintf("%v.%v", target.Authority, target.Endpoint)
+	return fmt.Sprintf("%v/%v", target.Authority, target.Endpoint)
 }
 
 type NoopResolver struct{}

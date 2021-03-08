@@ -9,7 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/afex/hystrix-go/hystrix"
-	xapp "github.com/coder2z/component"
+	"github.com/coder2z/component/xapp"
 	"github.com/coder2z/component/xcode"
 	"github.com/coder2z/component/xmonitor"
 	"github.com/coder2z/component/xtrace"

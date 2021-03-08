@@ -5,11 +5,11 @@
 package jaeger
 
 import (
-	xapp "github.com/coder2z/component"
+	"github.com/coder2z/component/xapp"
 	"github.com/coder2z/component/xcfg"
-	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xdefer"
+	"github.com/coder2z/g-saber/xlog"
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	jCfg "github.com/uber/jaeger-client-go/config"
@@ -52,6 +52,8 @@ func DefaultConfig() *Config {
 		},
 		Tags: []opentracing.Tag{
 			{Key: "hostname", Value: xapp.HostName()},
+			{Key: "app_id", Value: xapp.AppId()},
+			{Key: "app_name", Value: xapp.Name()},
 		},
 		PanicOnError: true,
 	}

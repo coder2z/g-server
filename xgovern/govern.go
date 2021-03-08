@@ -9,13 +9,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	xapp "github.com/coder2z/component"
+	"github.com/coder2z/component/xapp"
 	"github.com/coder2z/component/xcfg"
 	"github.com/coder2z/component/xcode"
-	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/component/xmonitor"
 	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xdefer"
 	"github.com/coder2z/g-saber/xjson"
+	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-saber/xnet"
 	"net/http"
 	"net/http/pprof"
@@ -30,6 +31,7 @@ type healthStats struct {
 	Time     string `json:"time"`
 	Err      string `json:"err"`
 	Status   string `json:"status"`
+	AppId    string `json:"app_id"`
 }
 
 type h map[string]func(w http.ResponseWriter, r *http.Request)
@@ -68,6 +70,8 @@ func init() {
 	HandleFunc("/debug/code/business", xcode.XCodeBusinessCodeHttp)
 	HandleFunc("/debug/code/system", xcode.XCodeSystemCodeHttp)
 
+	HandleFunc("/metrics", xmonitor.MonitorPrometheusHttp)
+
 	HandleFunc("/debug/env", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
 		_ = xjson.NewEncoder(w).Encode(os.Environ())
@@ -93,8 +97,10 @@ func init() {
 		serverStats := healthStats{
 			IP:       ip,
 			Hostname: xapp.HostName(),
+			AppId:    xapp.AppId(),
 			Time:     time.Now().Format("2006-01-02 15:04:05"),
 			Status:   "SUCCESS",
+			Err:      "",
 		}
 		w.WriteHeader(200)
 		_ = xjson.NewEncoder(w).Encode(serverStats)
@@ -124,6 +130,7 @@ func Run(opts ...Option) {
 		}
 
 		xconsole.Greenf("govern serve init", fmt.Sprintf("%v/debug/list", c.Address()))
+		xconsole.Greenf("prometheus serve init", fmt.Sprintf("%v/metrics", c.Address()))
 
 		xdefer.Register(func() error {
 			return Shutdown()

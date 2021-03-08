@@ -7,10 +7,11 @@ package xetcd
 import (
 	"context"
 	"fmt"
+	"github.com/coder2z/component/xregistry"
 	"github.com/coder2z/g-saber/xjson"
 	"github.com/coder2z/g-saber/xlog"
-	"github.com/coder2z/component/xregistry"
-	"go.etcd.io/etcd/clientv3"
+	"github.com/coder2z/g-saber/xstring"
+	"github.com/coreos/etcd/clientv3"
 )
 
 type etcdDiscovery struct {
@@ -35,12 +36,12 @@ func (d *etcdDiscovery) Discover(target string) (<-chan []xregistry.Instance, er
 }
 
 func (d *etcdDiscovery) watch(ch chan<- []xregistry.Instance, serviceName string) {
-	prefix := fmt.Sprintf("/%s/%s/", etcdPrefix, serviceName)
+	prefix := fmt.Sprintf("%s/%s/", etcdPrefix, serviceName)
 
 	update := func() []xregistry.Instance {
 		resp, err := d.client.Get(context.Background(), prefix, clientv3.WithPrefix())
 		if err != nil {
-			xlog.Warn("etcd discovery watch", xlog.FieldErr(err), xlog.Any("servicename", serviceName))
+			xlog.Warn("etcd discovery watch", xlog.FieldErr(err), xlog.Any("service name", serviceName))
 			return nil
 		}
 		var i []xregistry.Instance
@@ -49,9 +50,10 @@ func (d *etcdDiscovery) watch(ch chan<- []xregistry.Instance, serviceName string
 			if err = xjson.Unmarshal(kv.Value, &ins); err == nil {
 				i = append(i, ins)
 			} else {
-				xlog.Warn("etcd discovery watch unmarshal servicename", xlog.FieldErr(err), xlog.Any("servicename", serviceName))
+				xlog.Warn("etcd discovery watch unmarshal service name", xlog.FieldErr(err), xlog.Any("service name", serviceName))
 			}
 		}
+		xlog.Info("service discovery etcd", xlog.FieldValue(xstring.Json(i)))
 		return i
 	}
 	if i := update(); len(i) > 0 {

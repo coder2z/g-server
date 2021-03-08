@@ -7,11 +7,12 @@ package xetcd
 import (
 	"context"
 	"fmt"
-	"github.com/coder2z/g-saber/xconsole"
-	"github.com/coder2z/g-saber/xstring"
-	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/component/xapp"
 	"github.com/coder2z/component/xregistry"
-	"go.etcd.io/etcd/clientv3"
+	"github.com/coder2z/g-saber/xconsole"
+	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/g-saber/xstring"
+	"github.com/coreos/etcd/clientv3"
 	"sync"
 	"time"
 )
@@ -38,7 +39,7 @@ func NewRegistry(conf EtcdV3Cfg) (xregistry.Registry, error) {
 		conf:      conf,
 		options:   &xregistry.Options{},
 		closeCh:   make(chan struct{}),
-		uid:       xstring.GenerateID(),
+		uid:       xapp.AppId(),
 		WaitGroup: new(sync.WaitGroup),
 	}
 	c, err := clientv3.New(conf)
@@ -143,7 +144,7 @@ func (r *etcdReg) Close() {
 }
 
 func (r *etcdReg) getKey() string {
-	key := fmt.Sprintf("/%s/%s/%s", etcdPrefix, fmt.Sprintf("%v.%v", r.options.Namespaces, r.options.ServiceName), r.uid)
+	key := fmt.Sprintf("%s/%s/%s", etcdPrefix, fmt.Sprintf("%v/%v", r.options.Namespaces, r.options.ServiceName), r.uid)
 	return key
 }
 

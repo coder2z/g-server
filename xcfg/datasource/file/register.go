@@ -1,8 +1,8 @@
 package file
 
 import (
-	"github.com/coder2z/g-saber/xflag"
 	"github.com/coder2z/component/xcfg"
+	"github.com/coder2z/g-saber/xflag"
 )
 
 // DataSourceFile defines file scheme

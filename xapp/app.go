@@ -6,10 +6,11 @@
 package xapp
 
 import (
-	"fmt"
 	"github.com/coder2z/component/xcfg"
+	"github.com/coder2z/component/xversion"
 	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xnet"
+	"github.com/coder2z/g-saber/xstring"
 	"os"
 	"runtime"
 	"sync"
@@ -21,6 +22,18 @@ const (
 	dAppVersion = "v0.1.0"
 )
 
+func init() {
+	xconsole.Blue(`   _____ ____  _____  ______ _____  ___  ______`)
+	xconsole.Blue(`  / ____/ __ \|  __ \|  ____|  __ \|__ \|___  /`)
+	xconsole.Blue(` | |   | |  | | |  | | |__  | |__) |  ) |  / /`)
+	xconsole.Blue(` | |   | |  | | |  | |  __| |  _  /  / /  / / `)
+	xconsole.Blue(` | |___| |__| | |__| | |____| | \ \ / /_ / /__ `)
+	xconsole.Blue(`  \_____\____/|_____/|______|_|  \_|____/_____|`)
+	xconsole.Blue(`									--version = ` + xversion.Version)
+	startTime = time.Now().Format("2006-01-02 15:04:05")
+	goVersion = runtime.Version()
+}
+
 var (
 	startTime       string
 	goVersion       string
@@ -30,6 +43,7 @@ var (
 	buildHost       string
 	debug           = true
 	one             = sync.Once{}
+	appId           = xstring.GenerateID()
 )
 
 // Name gets application name.
@@ -86,28 +100,25 @@ func HostName() string {
 
 //StartTime get start time
 func StartTime() string {
-	if startTime == "" {
-		startTime = time.Now().Format("2006-01-02 15:04:05")
-	}
 	return startTime
 }
 
 //GoVersion get go version
 func GoVersion() string {
-	if goVersion == "" {
-		goVersion = runtime.Version()
-	}
 	return goVersion
 }
 
+func AppId() string {
+	return appId
+}
+
 func PrintVersion() {
-	xconsole.Blue(fmt.Sprintf("%-40v", "——————————————————"))
 	xconsole.Greenf("app name:", Name())
+	xconsole.Greenf("app id:", AppId())
 	xconsole.Greenf("host name:", HostName())
 	xconsole.Greenf("app debug:", Debug())
 	xconsole.Greenf("app version:", AppVersion())
 	xconsole.Greenf("build host:", BuildHost())
 	xconsole.Greenf("start time:", StartTime())
 	xconsole.Greenf("go version:", GoVersion())
-	xconsole.Blue(fmt.Sprintf("%-40v", "——————————————————"))
 }

@@ -6,17 +6,14 @@
 package xmonitor
 
 import (
-	"fmt"
-	xapp "github.com/coder2z/component"
-	"github.com/coder2z/g-saber/xconsole"
+	"github.com/coder2z/component/xapp"
 	cfg "github.com/coder2z/component/xcfg"
-	"github.com/coder2z/component/xgovern"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 	"time"
 )
 
-func Run() {
+func init() {
 	BuildInfoGauge.WithLabelValues(
 		xapp.Name(),
 		cfg.GetString("app.mode"),
@@ -24,10 +21,8 @@ func Run() {
 		xapp.GoVersion(),
 		xapp.StartTime(),
 	).Set(float64(time.Now().UnixNano() / 1e6))
+}
 
-	xgovern.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
-		promhttp.Handler().ServeHTTP(w, r)
-	})
-
-	xconsole.Greenf("prometheus monitor init", fmt.Sprintf("%v/metrics", xgovern.GovernConfig().Address()))
+func MonitorPrometheusHttp(w http.ResponseWriter, r *http.Request) {
+	promhttp.Handler().ServeHTTP(w, r)
 }

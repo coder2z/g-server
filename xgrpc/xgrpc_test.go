@@ -1,6 +1,8 @@
 package xgrpc
 
 import (
+	"fmt"
+	"github.com/coder2z/component/xgrpc/balancer/least_connection"
 	clientinterceptors "github.com/coder2z/component/xgrpc/client"
 	serverinterceptors "github.com/coder2z/component/xgrpc/server"
 	"google.golang.org/grpc"
@@ -45,6 +47,8 @@ func TestXGrpcClint(t *testing.T) {
 			clientinterceptors.XAidUnaryClientInterceptor(),
 
 		),
+		grpc.WithDefaultServiceConfig(fmt.Sprintf(`{"LoadBalancingPolicy": "%s"}`, least_connection.LeastConnection)),
+		grpc.WithBlock(),
 	}
 	_, _ = grpc.Dial(":8888", dialOptions...)
 }
