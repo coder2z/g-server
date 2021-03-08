@@ -168,7 +168,6 @@ func (c *subConn) healthy() bool {
 }
 
 func (c *subConn) load() int64 {
-	// plus one to avoid multiply zero
 	lag := int64(math.Sqrt(float64(atomic.LoadUint64(&c.lag) + 1)))
 	load := lag * (atomic.LoadInt64(&c.inflight) + 1)
 	if load == 0 {

@@ -34,7 +34,7 @@ func (s server) SayHello(c context.Context, request *proto.HelloRequest) (*proto
 func TestEtcd(t *testing.T) {
 
 	conf := EtcdV3Cfg{
-		Endpoints: []string{"49.232.136.163:2379"},
+		Endpoints: []string{"127.0.0.1:2379"},
 	}
 
 	etcdR, err := NewRegistry(conf) //注册
@@ -67,16 +67,12 @@ func TestEtcd(t *testing.T) {
 	listener, err := net.Listen("tcp", ":8888")
 	proto.RegisterDemoServiceServer(serve, server{add: ":8888"})
 	_ = serve.Serve(listener)
-
-	for {
-
-	}
 }
 
 func TestEtcd2(t *testing.T) {
 
 	conf := EtcdV3Cfg{
-		Endpoints: []string{"49.232.136.163:2379"},
+		Endpoints: []string{"127.0.0.1:2379"},
 	}
 
 	etcdR, err := NewRegistry(conf) //注册
@@ -111,15 +107,11 @@ func TestEtcd2(t *testing.T) {
 	listener, err := net.Listen("tcp", ":7777")
 	proto.RegisterDemoServiceServer(serve, server{add: ":7777"})
 	_ = serve.Serve(listener)
-
-	for {
-
-	}
 }
 
 func TestEtcdDiscovery(t *testing.T) {
 	conf := EtcdV3Cfg{
-		Endpoints: []string{"49.232.136.163:2379"},
+		Endpoints: []string{"127.0.0.1:2379"},
 	}
 	dialOptions := []grpc.DialOption{
 		xgrpc.WithStreamClientInterceptors(
@@ -127,6 +119,14 @@ func TestEtcdDiscovery(t *testing.T) {
 		),
 		xgrpc.WithUnaryClientInterceptors(
 			clientinterceptors.XAidUnaryClientInterceptor(),
+			clientinterceptors.HystrixUnaryClientIntercept(1000,
+				30,
+				20,
+				30,
+				20,
+				func(ctx context.Context, err error) error {
+					return err
+				}),
 			clientinterceptors.XTimeoutUnaryClientInterceptor(time.Minute, time.Second),
 			clientinterceptors.XLoggerUnaryClientInterceptor("servername"),
 			clientinterceptors.PrometheusUnaryClientInterceptor("servername"),
