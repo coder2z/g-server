@@ -48,11 +48,6 @@ xversion        = > frame version
 ### main.go usage
 
 ```go
-/**
- * @Author: yangon
- * @Description
- * @Date: 2020/12/23 15:13
- **/
 package main
 
 import (
@@ -109,8 +104,6 @@ func RunApp() {
 	d, _ := db.DB()
 	fmt.Println(d.Ping(), rc.Ping(context.Background()))
 }
-
-
 ```
 
 ### run
