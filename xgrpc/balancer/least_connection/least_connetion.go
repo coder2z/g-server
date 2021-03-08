@@ -8,6 +8,7 @@ package least_connection
 import (
 	"google.golang.org/grpc/balancer"
 	"google.golang.org/grpc/balancer/base"
+	"google.golang.org/grpc/resolver"
 	"math/rand"
 	"sync"
 	"sync/atomic"
@@ -33,8 +34,8 @@ func (*leastConnectionPickerBuilder) Build(buildInfo base.PickerBuildInfo) balan
 	}
 
 	var nodes []*node
-	for subConn, _ := range buildInfo.ReadySCs {
-		nodes = append(nodes, &node{subConn, 1})
+	for subCon, subConnInfo := range buildInfo.ReadySCs {
+		nodes = append(nodes, &node{subConnInfo.Address, subCon, 0})
 	}
 	return &leastConnectionPicker{
 		nodes: nodes,
@@ -43,7 +44,8 @@ func (*leastConnectionPickerBuilder) Build(buildInfo base.PickerBuildInfo) balan
 }
 
 type node struct {
-	balancer.SubConn
+	addr     resolver.Address
+	conn     balancer.SubConn
 	inflight int64
 }
 
@@ -77,7 +79,7 @@ func (p *leastConnectionPicker) Pick(info balancer.PickInfo) (balancer.PickResul
 	}
 	atomic.AddInt64(&node.inflight, 1)
 
-	ret.SubConn = node
+	ret.SubConn = node.conn
 	ret.Done = func(info balancer.DoneInfo) {
 		atomic.AddInt64(&node.inflight, -1)
 	}
