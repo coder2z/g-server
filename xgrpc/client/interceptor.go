@@ -179,20 +179,21 @@ func XAidUnaryClientInterceptor() grpc.UnaryClientInterceptor {
 
 func HystrixUnaryClientIntercept(timeout, maxConcurrentRequests, requestVolumeThreshold, errorPercentThreshold, sleepWindow int,
 	fallback func(context.Context, error) error) grpc.UnaryClientInterceptor {
+	//		Timeout：				1000	// 超时时间设置  单位毫秒
+	//		MaxConcurrentRequests:  1,		// 最大请求数
+	//		RequestVolumeThreshold: 2,		// 默认20，如果错误超过该次数，才开始计算错误百分比
+	//		ErrorPercentThreshold:  50, 	// 错误百分比，默认50，即50%
+	//		SleepWindow:            5000, 	// 过多长时间，熔断器再次检测是否开启。单位毫秒
+	config := hystrix.CommandConfig{
+		Timeout:                timeout,
+		MaxConcurrentRequests:  maxConcurrentRequests,
+		RequestVolumeThreshold: requestVolumeThreshold,
+		ErrorPercentThreshold:  errorPercentThreshold,
+		SleepWindow:            sleepWindow,
+	}
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		name := "GUC" + method
-		//		Timeout：				1000	// 超时时间设置  单位毫秒
-		//		MaxConcurrentRequests:  1,		// 最大请求数
-		//		RequestVolumeThreshold: 2,		// 默认20，如果错误超过该次数，才开始计算错误百分比
-		//		ErrorPercentThreshold:  50, 	// 错误百分比，默认50，即50%
-		//		SleepWindow:            5000, 	// 过多长时间，熔断器再次检测是否开启。单位毫秒
-		hystrix.ConfigureCommand(name, hystrix.CommandConfig{
-			Timeout:                timeout,
-			MaxConcurrentRequests:  maxConcurrentRequests,
-			RequestVolumeThreshold: requestVolumeThreshold,
-			ErrorPercentThreshold:  errorPercentThreshold,
-			SleepWindow:            sleepWindow,
-		})
+		hystrix.ConfigureCommand(name, config)
 		return hystrix.DoC(ctx, name, func(ctx context.Context) error {
 			return invoker(ctx, method, req, reply, cc, opts...)
 		}, fallback)
@@ -201,20 +202,21 @@ func HystrixUnaryClientIntercept(timeout, maxConcurrentRequests, requestVolumeTh
 
 func HystrixStreamClientInterceptor(timeout, maxConcurrentRequests, requestVolumeThreshold, errorPercentThreshold, sleepWindow int,
 	fallback func(context.Context, error) error) grpc.StreamClientInterceptor {
+	//		Timeout：				1000	// 超时时间设置  单位毫秒
+	//		MaxConcurrentRequests:  1,		// 最大请求数
+	//		RequestVolumeThreshold: 2,		// 默认20，如果错误超过该次数，才开始计算错误百分比
+	//		ErrorPercentThreshold:  50, 	// 错误百分比，默认50，即50%
+	//		SleepWindow:            5000, 	// 过多长时间，熔断器再次检测是否开启。单位毫秒
+	config := hystrix.CommandConfig{
+		Timeout:                timeout,
+		MaxConcurrentRequests:  maxConcurrentRequests,
+		RequestVolumeThreshold: requestVolumeThreshold,
+		ErrorPercentThreshold:  errorPercentThreshold,
+		SleepWindow:            sleepWindow,
+	}
 	return func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (cs grpc.ClientStream, err error) {
 		name := "GSC" + method
-		//		Timeout：				1000	// 超时时间设置  单位毫秒
-		//		MaxConcurrentRequests:  1,		// 最大请求数
-		//		RequestVolumeThreshold: 2,		// 默认20，如果错误超过该次数，才开始计算错误百分比
-		//		ErrorPercentThreshold:  50, 	// 错误百分比，默认50，即50%
-		//		SleepWindow:            5000, 	// 过多长时间，熔断器再次检测是否开启。单位毫秒
-		hystrix.ConfigureCommand(name, hystrix.CommandConfig{
-			Timeout:                timeout,
-			MaxConcurrentRequests:  maxConcurrentRequests,
-			RequestVolumeThreshold: requestVolumeThreshold,
-			ErrorPercentThreshold:  errorPercentThreshold,
-			SleepWindow:            sleepWindow,
-		})
+		hystrix.ConfigureCommand(name, config)
 		err = hystrix.DoC(ctx, name, func(ctx context.Context) error {
 			cs, err = streamer(ctx, desc, cc, method, opts...)
 			return err
