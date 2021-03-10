@@ -32,17 +32,17 @@ type options struct {
 
 func newDatabaseOptions() *options {
 	return &options{
-		TablePrefix:        defaultTablePrefix,
-		Host:               "127.0.0.1",
-		Username:           "root",
-		Password:           "",
-		DBName:             "",
-		Type:               "mysql",
-		Port:               "3306",
-		Debug:              true,
-		MaxConnMaxIdleTime: time.Duration(10) * time.Second,
-		MaxOpenConnections: 100,
-		MaxIdleConn:        100,
+		TablePrefix:           defaultTablePrefix,
+		Host:                  "127.0.0.1",
+		Username:              "root",
+		Password:              "",
+		DBName:                "",
+		Type:                  "mysql",
+		Port:                  "3306",
+		Debug:                 true,
+		MaxConnMaxIdleTime:    time.Duration(10) * time.Second,
+		MaxOpenConnections:    100,
+		MaxIdleConn:           100,
 		MaxConnectionLifeTime: time.Duration(10) * time.Second,
 	}
 }

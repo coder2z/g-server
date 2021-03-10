@@ -7,11 +7,11 @@ package xoss
 
 import (
 	"errors"
-	"github.com/coder2z/component/xinvoker/oss/alioss"
-	"github.com/coder2z/component/xinvoker/oss/file"
-	"github.com/coder2z/component/xinvoker/oss/standard"
 	"github.com/coder2z/g-saber/xcfg"
 	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/g-server/xinvoker/oss/alioss"
+	"github.com/coder2z/g-server/xinvoker/oss/file"
+	"github.com/coder2z/g-server/xinvoker/oss/standard"
 )
 
 func (i *ossInvoker) loadConfig() map[string]*options {

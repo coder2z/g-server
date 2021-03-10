@@ -6,8 +6,8 @@
 package xemail
 
 import (
-	"github.com/coder2z/component/xinvoker"
 	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/g-server/xinvoker"
 	"sync"
 )
 

@@ -2,11 +2,11 @@ package manager
 
 import (
 	"errors"
-	"github.com/coder2z/component/datasource/apollo"
-	"github.com/coder2z/component/datasource/etcdv3"
-	"github.com/coder2z/component/datasource/file"
 	"github.com/coder2z/g-saber/xcfg"
 	"github.com/coder2z/g-saber/xconsole"
+	"github.com/coder2z/g-server/datasource/apollo"
+	"github.com/coder2z/g-server/datasource/etcdv3"
+	"github.com/coder2z/g-server/datasource/file"
 	"net/url"
 )
 

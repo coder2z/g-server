@@ -6,7 +6,7 @@
 package random
 
 import (
-	"github.com/coder2z/component/xgrpc/balancer"
+	"github.com/coder2z/g-server/xgrpc/balancer"
 	"google.golang.org/grpc/balancer"
 	"google.golang.org/grpc/balancer/base"
 	"math/rand"

@@ -6,9 +6,9 @@ package xdirect
 
 import (
 	"fmt"
-	xbalancer "github.com/coder2z/component/xgrpc/balancer"
-	"github.com/coder2z/component/xregistry"
 	"github.com/coder2z/g-saber/xlog"
+	xbalancer "github.com/coder2z/g-server/xgrpc/balancer"
+	"github.com/coder2z/g-server/xregistry"
 	"google.golang.org/grpc/metadata"
 	"net/url"
 	"strings"

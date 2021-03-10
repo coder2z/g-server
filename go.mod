@@ -1,4 +1,4 @@
-module github.com/coder2z/component
+module github.com/coder2z/g-server
 
 go 1.15
 

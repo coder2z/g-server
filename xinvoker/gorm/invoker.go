@@ -6,8 +6,8 @@
 package xgorm
 
 import (
-	"github.com/coder2z/component/xinvoker"
 	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/g-server/xinvoker"
 	"gorm.io/gorm"
 	"sync"
 )

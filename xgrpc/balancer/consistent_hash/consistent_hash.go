@@ -7,8 +7,8 @@ package consistent_hash
 
 import (
 	"fmt"
-	"github.com/coder2z/component/xgrpc"
-	"github.com/coder2z/component/xgrpc/balancer"
+	"github.com/coder2z/g-server/xgrpc"
+	"github.com/coder2z/g-server/xgrpc/balancer"
 	"google.golang.org/grpc/balancer"
 	"google.golang.org/grpc/balancer/base"
 )

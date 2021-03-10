@@ -9,7 +9,7 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/dysmsapi"
 	"github.com/coder2z/g-saber/xcfg"
-	xlog "github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/g-saber/xlog"
 )
 
 type (

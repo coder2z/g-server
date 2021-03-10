@@ -7,10 +7,10 @@ package xetcd
 import (
 	"context"
 	"fmt"
-	"github.com/coder2z/component/xregistry"
 	"github.com/coder2z/g-saber/xjson"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-saber/xstring"
+	"github.com/coder2z/g-server/xregistry"
 	"go.etcd.io/etcd/clientv3"
 )
 

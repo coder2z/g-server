@@ -7,7 +7,7 @@ package file
 
 import (
 	"errors"
-	"github.com/coder2z/component/xinvoker/oss/standard"
+	"github.com/coder2z/g-server/xinvoker/oss/standard"
 	"io"
 	"io/ioutil"
 	"os"

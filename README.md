@@ -1,16 +1,16 @@
-# Component
+# g-server
 
 Self-use microservice framework
 
 ![](https://img.shields.io/badge/windowns10-Development-d0d1d4)
 ![](https://img.shields.io/badge/golang-1.16-blue)
-[![](https://img.shields.io/badge/godoc-reference-3C57C4)](https://pkg.go.dev/github.com/coder2z/component)
+[![](https://img.shields.io/badge/godoc-reference-3C57C4)](https://pkg.go.dev/github.com/coder2z/g-server)
 ![](https://img.shields.io/badge/version-1.0.5-r)
 
 ## :rocket:Installation
 
 `
-go get -u github.com/coder2z/component
+go get -u github.com/coder2z/g-server
 `
 
 ## :bell:Features
@@ -57,9 +57,9 @@ import (
 	"github.com/coder2z/g-saber/xflag"
 	"github.com/coder2z/g-saber/xcfg"
 	"github.com/coder2z/g-saber/xcfg/datasource/manager"
-	"github.com/coder2z/component/xinvoker"
-	xgorm "github.com/coder2z/component/xinvoker/gorm"
-	xredis "github.com/coder2z/component/xinvoker/redis"
+	"github.com/coder2z/g-server/xinvoker"
+	xgorm "github.com/coder2z/g-server/xinvoker/gorm"
+	xredis "github.com/coder2z/g-server/xinvoker/redis"
 )
 
 func main() {

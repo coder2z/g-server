@@ -2,9 +2,9 @@ package xgrpc
 
 import (
 	"fmt"
-	"github.com/coder2z/component/xgrpc/balancer/least_connection"
-	clientinterceptors "github.com/coder2z/component/xgrpc/client"
-	serverinterceptors "github.com/coder2z/component/xgrpc/server"
+	"github.com/coder2z/g-server/xgrpc/balancer/least_connection"
+	clientinterceptors "github.com/coder2z/g-server/xgrpc/client"
+	serverinterceptors "github.com/coder2z/g-server/xgrpc/server"
 	"google.golang.org/grpc"
 	"net"
 	"testing"

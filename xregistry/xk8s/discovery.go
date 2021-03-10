@@ -7,7 +7,7 @@ package xk8s
 import (
 	"context"
 	"fmt"
-	"github.com/coder2z/component/xregistry"
+	"github.com/coder2z/g-server/xregistry"
 	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-saber/xstring"

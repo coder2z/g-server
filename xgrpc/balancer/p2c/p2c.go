@@ -1,8 +1,8 @@
 package p2c
 
 import (
-	xbalancer "github.com/coder2z/component/xgrpc/balancer"
 	"github.com/coder2z/g-saber/xtime"
+	xbalancer "github.com/coder2z/g-server/xgrpc/balancer"
 	"google.golang.org/grpc/balancer"
 	"google.golang.org/grpc/balancer/base"
 	"google.golang.org/grpc/codes"

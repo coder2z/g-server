@@ -6,7 +6,7 @@ package xregistry
 
 import (
 	"fmt"
-	xbalancer "github.com/coder2z/component/xgrpc/balancer"
+	xbalancer "github.com/coder2z/g-server/xgrpc/balancer"
 	"google.golang.org/grpc/attributes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/resolver"

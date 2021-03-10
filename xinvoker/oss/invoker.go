@@ -6,9 +6,9 @@
 package xoss
 
 import (
-	"github.com/coder2z/component/xinvoker"
-	"github.com/coder2z/component/xinvoker/oss/standard"
 	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/g-server/xinvoker"
+	"github.com/coder2z/g-server/xinvoker/oss/standard"
 	"sync"
 )
 
