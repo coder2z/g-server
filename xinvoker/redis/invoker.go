@@ -6,9 +6,9 @@
 package xredis
 
 import (
-	"fmt"
-	"github.com/go-redis/redis/v8"
 	"github.com/coder2z/component/xinvoker"
+	"github.com/coder2z/g-saber/xlog"
+	"github.com/go-redis/redis/v8"
 	"sync"
 )
 
@@ -23,7 +23,8 @@ func Invoker(key string) *redis.Client {
 	if val, ok := redisI.instances.Load(key); ok {
 		return val.(*redis.Client)
 	}
-	panic(fmt.Sprintf("no redis(%s) invoker found", key))
+	xlog.Panicf("no redis(%s) invoker found", key)
+	return nil
 }
 
 type redisInvoker struct {

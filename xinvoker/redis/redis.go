@@ -2,8 +2,9 @@ package xredis
 
 import (
 	"context"
-	"github.com/go-redis/redis/v8"
 	"github.com/coder2z/g-saber/xcfg"
+	"github.com/coder2z/g-saber/xlog"
+	"github.com/go-redis/redis/v8"
 )
 
 func (i *redisInvoker) newRedisClient(o *options) (c *redis.Client) {
@@ -27,7 +28,7 @@ func (i *redisInvoker) newRedisClient(o *options) (c *redis.Client) {
 		IdleCheckFrequency: o.IdleCheckFrequency,
 	})
 	if err := rdb.Ping(context.Background()).Err(); err != nil {
-		panic(err)
+		xlog.Panic("NewRedisClient", xlog.FieldErr(err))
 	}
 	return rdb
 }

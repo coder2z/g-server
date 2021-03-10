@@ -7,6 +7,7 @@ package xmongo
 
 import (
 	"github.com/coder2z/g-saber/xcfg"
+	"github.com/coder2z/g-saber/xlog"
 	"github.com/globalsign/mgo"
 )
 
@@ -78,7 +79,7 @@ func (i *mongoInvoker) new(o *options) MongoImp {
 	}
 	resp, err := mgo.DialWithInfo(dialInfo)
 	if err != nil {
-		panic(err)
+		xlog.Panic("new mongo", xlog.FieldErr(err))
 	}
 	mgo.SetDebug(o.Debug)
 	// Optional. Switch the session to a monotonic behavior.

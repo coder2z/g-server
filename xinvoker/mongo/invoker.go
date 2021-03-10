@@ -6,8 +6,8 @@
 package xmongo
 
 import (
-	"fmt"
 	"github.com/coder2z/component/xinvoker"
+	"github.com/coder2z/g-saber/xlog"
 	"sync"
 )
 
@@ -22,7 +22,8 @@ func Invoker(key string) MongoImp {
 	if val, ok := mongoI.instances.Load(key); ok {
 		return val.(MongoImp)
 	}
-	panic(fmt.Sprintf("no xlog(%s) invoker found", key))
+	xlog.Panicf("no mongo(%s) invoker found", key)
+	return nil
 }
 
 type mongoInvoker struct {

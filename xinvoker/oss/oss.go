@@ -7,10 +7,11 @@ package xoss
 
 import (
 	"errors"
-	"github.com/coder2z/g-saber/xcfg"
 	"github.com/coder2z/component/xinvoker/oss/alioss"
 	"github.com/coder2z/component/xinvoker/oss/file"
 	"github.com/coder2z/component/xinvoker/oss/standard"
+	"github.com/coder2z/g-saber/xcfg"
+	"github.com/coder2z/g-saber/xlog"
 )
 
 func (i *ossInvoker) loadConfig() map[string]*options {
@@ -35,7 +36,7 @@ func (i *ossInvoker) new(o *options) (client standard.Oss) {
 		err = errors.New("oss mode not exist")
 	}
 	if err != nil {
-		panic(err)
+		xlog.Panic("new oss", xlog.FieldErr(err))
 	}
 	return
 }

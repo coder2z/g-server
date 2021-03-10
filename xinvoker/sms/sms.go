@@ -9,6 +9,7 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/dysmsapi"
 	"github.com/coder2z/g-saber/xcfg"
+	xlog "github.com/coder2z/g-saber/xlog"
 )
 
 type (
@@ -24,7 +25,7 @@ type (
 func (i *smsInvoker) newSMSClient(o *options) *Client {
 	c, err := dysmsapi.NewClientWithAccessKey(o.Area, o.AccessKeyId, o.AccessSecret)
 	if err != nil {
-		panic(err)
+		xlog.Panic("NewSMSClient", xlog.FieldErr(err))
 	}
 	return &Client{SMS: c, signName: o.SignName, templateCode: o.TemplateCode}
 }
@@ -49,7 +50,7 @@ func (ali *Client) Send(req *SmsRequest) (*SmsResponse, error) {
 	if req.SignName == "" {
 		req.SignName = ali.signName
 	}
-	req.InitWithApiInfo("Dysmsapi", "2017-05-25", "SendSms", "dysms", "openAPI")
+	req.InitWithApiInfo("coder2z_sms_api", "2017-05-25", "SendSms", "coder2z_sms", "openAPI")
 	rep, err := ali.SMS.SendSms(req)
 	if err != nil {
 		return nil, err

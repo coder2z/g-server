@@ -6,8 +6,8 @@
 package xemail
 
 import (
-	"fmt"
 	"github.com/coder2z/component/xinvoker"
+	"github.com/coder2z/g-saber/xlog"
 	"sync"
 )
 
@@ -22,7 +22,8 @@ func Invoker(key string) *Email {
 	if val, ok := email.instances.Load(key); ok {
 		return val.(*Email)
 	}
-	panic(fmt.Sprintf("no email(%s) invoker found", key))
+	xlog.Panicf("no email(%s) invoker found", key)
+	return nil
 }
 
 type emailInvoker struct {

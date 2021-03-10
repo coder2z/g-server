@@ -2,6 +2,7 @@ package xgorm
 
 import (
 	"github.com/coder2z/g-saber/xcfg"
+	"github.com/coder2z/g-saber/xlog"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
@@ -15,14 +16,14 @@ func (i *dbInvoker) newDatabaseClient(o *options) (db *gorm.DB) {
 		},
 	})
 	if err != nil {
-		panic(err)
+		xlog.Panic("NewDatabaseClient OpenDB", xlog.FieldErr(err))
 	}
 	if o.Debug {
 		db = db.Debug()
 	}
 	d, err := db.DB()
 	if err != nil {
-		panic(err)
+		xlog.Panic("NewDatabaseClient db.DB()", xlog.FieldErr(err))
 	}
 	d.SetMaxOpenConns(o.MaxOpenConnections)
 	d.SetMaxIdleConns(o.MaxIdleConn)

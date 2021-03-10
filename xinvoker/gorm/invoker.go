@@ -6,8 +6,8 @@
 package xgorm
 
 import (
-	"fmt"
 	"github.com/coder2z/component/xinvoker"
+	"github.com/coder2z/g-saber/xlog"
 	"gorm.io/gorm"
 	"sync"
 )
@@ -23,7 +23,8 @@ func Invoker(key string) *gorm.DB {
 	if val, ok := db.instances.Load(key); ok {
 		return val.(*gorm.DB)
 	}
-	panic(fmt.Sprintf("no db(%s) invoker found", key))
+	xlog.Panicf("no db(%s) invoker found", key)
+	return nil
 }
 
 type dbInvoker struct {

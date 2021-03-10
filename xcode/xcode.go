@@ -6,6 +6,7 @@ package xcode
 
 import (
 	"github.com/coder2z/g-saber/xjson"
+	"github.com/coder2z/g-saber/xlog"
 	"net/http"
 	"sync"
 
@@ -86,7 +87,7 @@ func BusinessCode(code uint32) (spb *spbStatus) {
 
 func SystemCodeAdd(code uint32, message string) *spbStatus {
 	if code > CodeBreakUp {
-		panic("customize code must less than 9999")
+		xlog.Panic("customize code must less than 9999")
 	}
 
 	return add(SystemType, aid*10000+code, message)
@@ -94,7 +95,7 @@ func SystemCodeAdd(code uint32, message string) *spbStatus {
 
 func BusinessCodeAdd(code uint32, message string) *spbStatus {
 	if code < CodeBreakUp {
-		panic("customize code must less than 9999")
+		xlog.Panic("customize code must less than 9999")
 	}
 	return add(BusinessType, code, message)
 }

@@ -6,9 +6,9 @@
 package xoss
 
 import (
-	"fmt"
 	"github.com/coder2z/component/xinvoker"
 	"github.com/coder2z/component/xinvoker/oss/standard"
+	"github.com/coder2z/g-saber/xlog"
 	"sync"
 )
 
@@ -23,7 +23,8 @@ func Invoker(key string) standard.Oss {
 	if val, ok := ossI.instances.Load(key); ok {
 		return val.(standard.Oss)
 	}
-	panic(fmt.Sprintf("no oss(%s) invoker found", key))
+	xlog.Panicf("no oss(%s) invoker found", key)
+	return nil
 }
 
 type ossInvoker struct {

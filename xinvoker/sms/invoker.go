@@ -6,8 +6,8 @@
 package xsms
 
 import (
-	"fmt"
 	"github.com/coder2z/component/xinvoker"
+	"github.com/coder2z/g-saber/xlog"
 	"sync"
 )
 
@@ -22,7 +22,8 @@ func Invoker(key string) *Client {
 	if val, ok := smsI.instances.Load(key); ok {
 		return val.(*Client)
 	}
-	panic(fmt.Sprintf("no redis(%s) invoker found", key))
+	xlog.Panicf("no sms(%s) invoker found", key)
+	return nil
 }
 
 type smsInvoker struct {

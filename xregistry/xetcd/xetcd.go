@@ -55,13 +55,13 @@ func (r *etcdReg) Register(ops ...xregistry.Option) {
 		o(r.options)
 	}
 	if r.options.ServiceName == "" {
-		panic("service name required")
+		xlog.Panic("service name required")
 	}
 	if r.options.Namespaces == "" {
-		panic("service namespaces required")
+		xlog.Panic("service namespaces required")
 	}
 	if r.options.Address == "" {
-		panic("service address required")
+		xlog.Panic("service address required")
 	}
 	if r.options.RegisterTTL == 0 {
 		r.options.RegisterTTL = time.Second * 30

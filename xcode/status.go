@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/coder2z/g-saber/xjson"
+	"github.com/coder2z/g-saber/xlog"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
@@ -47,7 +48,7 @@ func (s *spbStatus) IsOk() bool {
 // GetMessage ...
 func (s *spbStatus) GetMessage(exts ...interface{}) string {
 	if len(exts)%2 != 0 {
-		panic("parameter must be odd")
+		xlog.Panic("parameter must be odd")
 	}
 
 	var buf bytes.Buffer
@@ -107,11 +108,11 @@ func (s *spbStatus) Proto() *spb.Status {
 
 // MustWithDetails ...
 func (s *spbStatus) MustWithDetails(details ...interface{}) *spbStatus {
-	status, err := s.WithDetails(details...)
+	withDetails, err := s.WithDetails(details...)
 	if err != nil {
-		panic(err)
+		xlog.Panic("MustWithDetails", xlog.FieldErr(err))
 	}
-	return status
+	return withDetails
 }
 
 // WithDetails returns a new status with the provided details messages appended to the status.
