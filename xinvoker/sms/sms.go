@@ -8,7 +8,7 @@ package xsms
 import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/dysmsapi"
-	"github.com/coder2z/component/xcfg"
+	"github.com/coder2z/g-saber/xcfg"
 )
 
 type (

@@ -1,7 +1,7 @@
 package xgorm
 
 import (
-	"github.com/coder2z/component/xcfg"
+	"github.com/coder2z/g-saber/xcfg"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )

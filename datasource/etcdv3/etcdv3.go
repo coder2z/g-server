@@ -2,12 +2,12 @@ package etcdv3
 
 import (
 	"context"
-	"github.com/coder2z/component/xcfg"
+	"github.com/coder2z/g-saber/xcfg"
 	"time"
 
+	"github.com/pkg/errors"
 	"go.etcd.io/etcd/clientv3"
 	"go.etcd.io/etcd/mvcc/mvccpb"
-	"github.com/pkg/errors"
 )
 
 type etcdDataSource struct {

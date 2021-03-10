@@ -3,7 +3,7 @@ package xredis
 import (
 	"context"
 	"github.com/go-redis/redis/v8"
-	"github.com/coder2z/component/xcfg"
+	"github.com/coder2z/g-saber/xcfg"
 )
 
 func (i *redisInvoker) newRedisClient(o *options) (c *redis.Client) {

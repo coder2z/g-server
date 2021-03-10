@@ -8,7 +8,7 @@ package xinvoker
 import (
 	"errors"
 	"github.com/coder2z/g-saber/xconsole"
-	"github.com/coder2z/component/xcfg"
+	"github.com/coder2z/g-saber/xcfg"
 	"reflect"
 )
 

@@ -7,7 +7,7 @@ package xoss
 
 import (
 	"errors"
-	"github.com/coder2z/component/xcfg"
+	"github.com/coder2z/g-saber/xcfg"
 	"github.com/coder2z/component/xinvoker/oss/alioss"
 	"github.com/coder2z/component/xinvoker/oss/file"
 	"github.com/coder2z/component/xinvoker/oss/standard"

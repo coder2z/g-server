@@ -7,7 +7,7 @@ package xmonitor
 
 import (
 	"github.com/coder2z/component/xapp"
-	cfg "github.com/coder2z/component/xcfg"
+	cfg "github.com/coder2z/g-saber/xcfg"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 	"time"

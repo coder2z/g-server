@@ -10,7 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/coder2z/component/xapp"
-	"github.com/coder2z/component/xcfg"
+	"github.com/coder2z/g-saber/xcfg"
 	"github.com/coder2z/component/xcode"
 	"github.com/coder2z/component/xmonitor"
 	"github.com/coder2z/g-saber/xconsole"
