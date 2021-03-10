@@ -10,7 +10,13 @@ import (
 // DataSourceApollo defines apollo scheme
 const DataSourceApollo = "apollo"
 
-func Register() (string, func() xcfg.DataSource) {
+type apollo struct{}
+
+func New() *apollo {
+	return new(apollo)
+}
+
+func (e apollo) Register() (string, func() xcfg.DataSource) {
 	return DataSourceApollo, func() xcfg.DataSource {
 		var (
 			configAddr = xflag.String("xcfg")

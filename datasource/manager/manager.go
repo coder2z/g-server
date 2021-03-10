@@ -23,16 +23,25 @@ var (
 // DataSourceCreatorFunc represents a dataSource creator function
 type DataSourceCreatorFunc func() xcfg.DataSource
 
+type DataSource interface {
+	Register() (string, func() xcfg.DataSource)
+}
+
 func init() {
 	registry = make(map[string]DataSourceCreatorFunc)
-	Register(file.Register())
-	Register(etcdv3.Register())
-	Register(apollo.Register())
+	Register(
+		file.New(),
+		etcdv3.New(),
+		apollo.New(),
+	)
 }
 
 // Register registers a dataSource creator function to the registry
-func Register(scheme string, creator DataSourceCreatorFunc) {
-	registry[scheme] = creator
+func Register(data ...DataSource) {
+	for _, datum := range data {
+		name, f := datum.Register()
+		registry[name] = f
+	}
 }
 
 //NewDataSource ..

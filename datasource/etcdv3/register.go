@@ -12,7 +12,13 @@ import (
 // DataSourceEtcd defines etcd scheme
 const DataSourceEtcd = "etcd"
 
-func Register() (string, func() xcfg.DataSource) {
+type etcd struct{}
+
+func New() *etcd {
+	return new(etcd)
+}
+
+func (e etcd) Register() (string, func() xcfg.DataSource) {
 	return DataSourceEtcd, func() xcfg.DataSource {
 		var (
 			configAddr = xflag.String("xcfg")
