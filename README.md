@@ -20,7 +20,7 @@ source projects.
 
 ```
 xapp            = > runtime app info
-xcfg            = > config
+datasource      = > xcfg data 
 xcode           = > err coder encapsulation
 xgovern         = > system monitoring
 xgrpc           = > grpc encapsulation
