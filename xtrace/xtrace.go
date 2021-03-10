@@ -14,11 +14,9 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-func Init(cfgKey string) {
+func JaegerBuild(cfgKey string) {
 	cfg := jaeger.RawConfig(cfgKey)
-	SetGlobalTracer(
-		cfg.Build(),
-	)
+	SetGlobalTracer(cfg.Build())
 	xconsole.Greenf("trace init:", cfg.Reporter.LocalAgentHostPort)
 }
 
