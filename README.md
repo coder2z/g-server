@@ -74,7 +74,7 @@ func main() {
 				},
 			},
 			Flags: func(c *xflag.Command) {
-				c.Flags().StringP("config", "c", "", "配置文件")
+				c.Flags().StringP("xcfg", "c", "", "配置文件")
 				_ = c.MarkFlagRequired("config")
 			},
 		},
