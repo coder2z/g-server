@@ -44,7 +44,10 @@ func init() {
 
 	appMode = os.Getenv(`SERVER_APP_MODE`)
 	appId = os.Getenv(`SERVER_APP_ID`)
-	debug = os.Getenv(`SERVER_APP_DEBUG`)
+	envDebug := os.Getenv(`SERVER_APP_DEBUG`)
+	if envDebug != "" {
+		debug = envDebug
+	}
 }
 
 var (
