@@ -14,7 +14,7 @@ import (
 	"github.com/coder2z/g-saber/xdefer"
 	"github.com/coder2z/g-saber/xjson"
 	"github.com/coder2z/g-saber/xlog"
-	"github.com/coder2z/g-saber/xnet"
+	"github.com/coder2z/g-saber/xtime"
 	"github.com/coder2z/g-server/xapp"
 	"github.com/coder2z/g-server/xcode"
 	"github.com/coder2z/g-server/xmonitor"
@@ -26,12 +26,17 @@ import (
 )
 
 type healthStats struct {
-	IP       string `json:"ip"`
-	Hostname string `json:"hostname"`
-	Time     string `json:"time"`
-	Err      string `json:"err"`
-	Status   string `json:"status"`
-	AppId    string `json:"app_id"`
+	IP         string `json:"ip,omitempty"`
+	Hostname   string `json:"hostname,omitempty"`
+	AppName    string `json:"app_name,omitempty"`
+	AppId      string `json:"app_id,omitempty"`
+	AppMode    string `json:"app_mode,omitempty"`
+	AppDebug   bool   `json:"app_debug"`
+	AppVersion string `json:"app_version,omitempty"`
+	GoVersion  string `json:"go_version,omitempty"`
+	Time       string `json:"time,omitempty"`
+	Err        string `json:"err,omitempty"`
+	Status     string `json:"status,omitempty"`
 }
 
 type h map[string]func(w http.ResponseWriter, r *http.Request)
@@ -93,14 +98,18 @@ func init() {
 	})
 
 	HandleFunc("/debug/health", func(w http.ResponseWriter, r *http.Request) {
-		ip, _ := xnet.GetLocalIP()
 		serverStats := healthStats{
-			IP:       ip,
-			Hostname: xapp.HostName(),
-			AppId:    xapp.AppId(),
-			Time:     time.Now().Format("2006-01-02 15:04:05"),
-			Status:   "SUCCESS",
-			Err:      "",
+			IP:         xapp.HostIP(),
+			Hostname:   xapp.HostName(),
+			AppName:    xapp.Name(),
+			AppId:      xapp.AppId(),
+			AppMode:    xapp.AppMode(),
+			AppDebug:   xapp.Debug(),
+			AppVersion: xapp.AppVersion(),
+			GoVersion:  xapp.GoVersion(),
+			Time:       xtime.Now().Format("2006-01-02 15:04:05"),
+			Err:        "",
+			Status:     "SUCCESS",
 		}
 		w.WriteHeader(200)
 		_ = xjson.NewEncoder(w).Encode(serverStats)
