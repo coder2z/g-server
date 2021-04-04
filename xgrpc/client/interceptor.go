@@ -162,7 +162,7 @@ func XAidUnaryClientInterceptor() grpc.UnaryClientInterceptor {
 				xapp.HostName(),
 				xapp.AppId(),
 			),
-			"ip", xapp.BuildHost(),
+			"ip", xapp.HostIP(),
 			"app_id", xapp.AppId(),
 			"app_name", xapp.Name(),
 			"host_name", xapp.HostName(),

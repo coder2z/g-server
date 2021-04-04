@@ -6,7 +6,6 @@
 package xmonitor
 
 import (
-	cfg "github.com/coder2z/g-saber/xcfg"
 	"github.com/coder2z/g-server/xapp"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
@@ -16,7 +15,7 @@ import (
 func init() {
 	BuildInfoGauge.WithLabelValues(
 		xapp.Name(),
-		cfg.GetString("app.mode"),
+		xapp.AppMode(),
 		xapp.AppVersion(),
 		xapp.GoVersion(),
 		xapp.StartTime(),

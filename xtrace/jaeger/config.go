@@ -52,6 +52,7 @@ func DefaultConfig() *Config {
 		},
 		Tags: []opentracing.Tag{
 			{Key: "host_name", Value: xapp.HostName()},
+			{Key: "host_ip", Value: xapp.HostIP()},
 			{Key: "app_id", Value: xapp.AppId()},
 			{Key: "app_name", Value: xapp.Name()},
 		},

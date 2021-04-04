@@ -6,20 +6,17 @@
 package xapp
 
 import (
-	"github.com/coder2z/g-saber/xcfg"
 	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xnet"
-	"github.com/coder2z/g-saber/xstring"
+	"github.com/coder2z/g-saber/xtime"
 	"github.com/coder2z/g-server/xversion"
 	"os"
 	"runtime"
-	"sync"
-	"time"
 )
 
 const (
-	dAppName    = "MyApp"
-	dAppVersion = "v0.1.0"
+	dAppName = "unknown app name"
+	dHostIp  = "0.0.0.0"
 )
 
 func init() {
@@ -30,71 +27,70 @@ func init() {
 	xconsole.Blue(` | |___| |__| | |__| | |____| | \ \ / /_ / /__ `)
 	xconsole.Blue(`  \_____\____/|_____/|______|_|  \_|____/_____|`)
 	xconsole.Blue(`									--version = ` + xversion.Version)
-	startTime = time.Now().Format("2006-01-02 15:04:05")
+	startTime = xtime.Now().Format("2006-01-02 15:04:05")
 	goVersion = runtime.Version()
+
+	name, err := os.Hostname()
+	if err != nil {
+		name = dAppName
+	}
+	hostName = name
+
+	ip, err := xnet.GetLocalIP()
+	if err != nil {
+		ip = dHostIp
+	}
+	hostIp = ip
+
+	appMode = os.Getenv(`SERVER_APP_MODE`)
+	appId = os.Getenv(`SERVER_APP_ID`)
+	debug = os.Getenv(`SERVER_APP_DEBUG`)
 }
 
 var (
-	startTime       string
-	goVersion       string
+	startTime string
+	goVersion string
+	hostName  string
+	hostIp    string
+
+	// build -X
 	appName         string
-	hostName        string
 	buildAppVersion string
 	buildHost       string
-	debug           = true
-	one             = sync.Once{}
-	appId           = xstring.GenerateID()
+
+	// env
+	appMode string
+	appId   string
+	debug   = "true"
 )
 
 // Name gets application name.
 func Name() string {
-	if appName == "" {
-		if appName = xcfg.GetString("app.name"); appName == "" {
-			appName = dAppName
-		}
-	}
 	return appName
-}
-
-// Debug gets application debug.
-func Debug() bool {
-	one.Do(func() {
-		if data := xcfg.GetString("app.debug"); data == "false" {
-			debug = false
-		}
-	})
-	return debug
 }
 
 //AppVersion get buildAppVersion
 func AppVersion() string {
-	if buildAppVersion == "" {
-		if buildAppVersion = xcfg.GetString("app.version"); buildAppVersion == "" {
-			buildAppVersion = dAppVersion
-		}
-	}
 	return buildAppVersion
+}
+
+//AppMode get AppMode
+func AppMode() string {
+	return appMode
+}
+
+//HostIP get HostIP
+func HostIP() string {
+	return hostIp
 }
 
 //BuildHost get buildHost
 func BuildHost() string {
-	if buildHost == "" {
-		var err error
-		if buildHost, err = xnet.GetLocalIP(); err != nil {
-			hostName = "0.0.0.0"
-		}
-	}
 	return buildHost
 }
 
 // HostName get host name
 func HostName() string {
-	if hostName == "" {
-		var err error
-		if hostName, err = os.Hostname(); err != nil {
-			hostName = "unknown"
-		}
-	}
 	return hostName
 }
 
@@ -112,11 +108,17 @@ func AppId() string {
 	return appId
 }
 
+func Debug() bool {
+	return debug == "true"
+}
+
 func PrintVersion() {
 	xconsole.Greenf("app name:", Name())
 	xconsole.Greenf("app id:", AppId())
+	xconsole.Greenf("app mode:", AppMode())
 	xconsole.Greenf("host name:", HostName())
-	xconsole.Greenf("app debug:", Debug())
+	xconsole.Greenf("host ip:", HostIP())
+	xconsole.Greenf("debug:", Debug())
 	xconsole.Greenf("app version:", AppVersion())
 	xconsole.Greenf("build host:", BuildHost())
 	xconsole.Greenf("start time:", StartTime())
