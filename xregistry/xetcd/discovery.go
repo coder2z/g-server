@@ -38,7 +38,7 @@ func (d *etcdDiscovery) Discover(target string) (<-chan []xregistry.Instance, er
 func (d *etcdDiscovery) watch(ch chan<- []xregistry.Instance, serviceName string) {
 	prefix := fmt.Sprintf("%s/%s/", etcdPrefix, serviceName)
 
-	update := func() []xregistry.Instance {
+	update := func(serviceName string) []xregistry.Instance {
 		resp, err := d.client.Get(context.Background(), prefix, clientv3.WithPrefix())
 		if err != nil {
 			xlog.Warn("etcd discovery watch", xlog.FieldErr(err), xlog.Any("service name", serviceName))
@@ -53,16 +53,16 @@ func (d *etcdDiscovery) watch(ch chan<- []xregistry.Instance, serviceName string
 				xlog.Warn("etcd discovery watch unmarshal service name", xlog.FieldErr(err), xlog.Any("service name", serviceName))
 			}
 		}
-		xlog.Info("service discovery etcd", xlog.FieldValue(xstring.Json(i)))
+		xlog.Info("etcd service discovery", xlog.Any("service name", serviceName), xlog.FieldValue(xstring.Json(i)))
 		return i
 	}
-	if i := update(); len(i) > 0 {
+	if i := update(serviceName); len(i) > 0 {
 		ch <- i
 	}
 
 	eventCh := d.client.Watch(context.Background(), prefix, clientv3.WithPrefix())
 	for range eventCh {
-		ch <- update()
+		ch <- update(serviceName)
 	}
 	return
 }
