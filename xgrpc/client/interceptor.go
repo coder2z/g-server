@@ -7,10 +7,10 @@ package clientinterceptors
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/afex/hystrix-go/hystrix"
 	"github.com/coder2z/g-saber/xcast"
 	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/g-saber/xstring"
 	"github.com/coder2z/g-server/xapp"
 	"github.com/coder2z/g-server/xcode"
 	"github.com/coder2z/g-server/xmonitor"
@@ -153,15 +153,24 @@ func XLoggerUnaryClientInterceptor(name string) grpc.UnaryClientInterceptor {
 	}
 }
 
+type XAid struct {
+	AppName  string `json:"app_name"`
+	HostName string `json:"host_name"`
+	AppId    string `json:"app_id"`
+	HostIP   string `json:"host_ip"`
+}
+
 func XAidUnaryClientInterceptor() grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		md, ok := metadata.FromOutgoingContext(ctx)
+		var info = XAid{
+			AppName:  xapp.Name(),
+			HostName: xapp.HostName(),
+			AppId:    xapp.AppId(),
+			HostIP:   xapp.HostIP(),
+		}
 		clientAidMD := metadata.Pairs(
-			"info", fmt.Sprintf("%s/%s/%s",
-				xapp.Name(),
-				xapp.HostName(),
-				xapp.AppId(),
-			),
+			"info", xstring.Json(info),
 			"ip", xapp.HostIP(),
 			"app_id", xapp.AppId(),
 			"app_name", xapp.Name(),

@@ -24,7 +24,7 @@ func WithUnaryClientInterceptors(interceptors ...grpc.UnaryClientInterceptor) gr
 }
 
 func ExtractFromCtx(ctx context.Context, key string) string {
-	if md, ok := metadata.FromOutgoingContext(ctx); ok {
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
 		return strings.Join(md.Get(key), ",")
 	}
 	return ""
