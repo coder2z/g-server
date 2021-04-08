@@ -105,6 +105,34 @@ func TraceUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 	}
 }
 
+
+type contextedServerStream struct {
+	grpc.ServerStream
+	ctx context.Context
+}
+
+// Context ...
+func (css contextedServerStream) Context() context.Context {
+	return css.ctx
+}
+
+func TraceStreamServerInterceptor(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
+	span, ctx := xtrace.StartSpanFromContext(
+		ss.Context(),
+		info.FullMethod,
+		xtrace.FromIncomingContext(ss.Context()),
+		xtrace.TagComponent("gRPC"),
+		xtrace.TagSpanKind("server.stream"),
+		xtrace.CustomTag("isServerStream", info.IsServerStream),
+	)
+	defer span.Finish()
+
+	return handler(srv, contextedServerStream{
+		ServerStream: ss,
+		ctx:          ctx,
+	})
+}
+
 func XTimeoutUnaryServerInterceptor(timeout time.Duration) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo,
 		handler grpc.UnaryHandler) (resp interface{}, err error) {

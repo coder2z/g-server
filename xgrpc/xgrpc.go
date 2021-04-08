@@ -27,5 +27,5 @@ func ExtractFromCtx(ctx context.Context, key string) string {
 	if md, ok := metadata.FromIncomingContext(ctx); ok {
 		return strings.Join(md.Get(key), ",")
 	}
-	return ""
+	return "unknown"
 }
