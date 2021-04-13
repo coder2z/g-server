@@ -72,10 +72,25 @@ func (i *mongoInvoker) loadConfig() map[string]*options {
 
 func (i *mongoInvoker) new(o *options) MongoImp {
 	dialInfo := &mgo.DialInfo{
-		Addrs:    []string{o.URL},
-		Source:   o.Source,
-		Username: o.User,
-		Password: o.Password,
+		Addrs:          o.Addrs,
+		Timeout:        o.Timeout,
+		Database:       o.Database,
+		ReplicaSetName: o.ReplicaSetName,
+		Source:         o.Source,
+		Service:        o.Service,
+		ServiceHost:    o.ServiceHost,
+		Mechanism:      o.Mechanism,
+		Username:       o.Username,
+		Password:       o.Password,
+		PoolLimit:      o.PoolLimit,
+		PoolTimeout:    o.PoolTimeout,
+		ReadTimeout:    o.ReadTimeout,
+		WriteTimeout:   o.WriteTimeout,
+		AppName:        o.AppName,
+		FailFast:       o.FailFast,
+		Direct:         o.Direct,
+		MinPoolSize:    o.MinPoolSize,
+		MaxIdleTimeMS:  o.MaxIdleTimeMS,
 	}
 	resp, err := mgo.DialWithInfo(dialInfo)
 	if err != nil {
