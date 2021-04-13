@@ -47,28 +47,28 @@ xversion        = > frame version
 
 ### main.go usage
 
+```env
+set SERVER_APP_MODE     dev
+set SERVER_APP_ID       79@sh$x3@
+set SERVER_APP_DEBUG    false
+```
+
 ```go
 package main
 
 import (
-	"context"
-	"fmt"
-	"github.com/BurntSushi/toml"
+	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xflag"
-	"github.com/coder2z/g-saber/xcfg"
-	"github.com/coder2z/g-saber/xcfg/datasource/manager"
-	"github.com/coder2z/g-server/xinvoker"
-	xgorm "github.com/coder2z/g-server/xinvoker/gorm"
-	xredis "github.com/coder2z/g-server/xinvoker/redis"
+	"github.com/coder2z/g-server/xapp"
 )
 
 func main() {
-	xflag.Register(
-		xflag.CommandNode{
-			Name: "run",
+	xflag.NewRootCommand(
+		&xflag.CommandNode{
+			Name: "main",
 			Command: &xflag.Command{
-				Use:   "run ",
-				Short: "run your app",
+				Use:                "main",
+				DisableSuggestions: false,
 				Run: func(cmd *xflag.Command, args []string) {
 					RunApp()
 				},
@@ -79,37 +79,20 @@ func main() {
 			},
 		},
 	)
-
 	_ = xflag.Parse()
-
 }
 
 func RunApp() {
-	data, err := manager.NewDataSource(xflag.NString("run", "config"))
-	if err != nil {
-		panic(err)
-	}
-	err = xcfg.LoadFromDataSource(data, toml.Unmarshal)
-	if err != nil {
-		panic(err)
-	}
-
-	xinvoker.Register(
-		xgorm.Register("db"),
-		xredis.Register("redis"))
-	_ = xinvoker.Init()
-
-	db := xgorm.Invoker("dev")
-	rc := xredis.Invoker("dev")
-	d, _ := db.DB()
-	fmt.Println(d.Ping(), rc.Ping(context.Background()))
+	xapp.PrintVersion()
+	xconsole.Green("running")
 }
 ```
 
 ### run
 
 ```bash
- go run main.go run -c=test.toml
+go build -o mainApp -ldflags "-X github.com/coder2z/g-server/xapp.appName=app_name -X github.com/coder2z/g-server/xapp.buildAppVersion=v1.0 -X github.com/coder2z/g-server/xapp.buildHost=`hostname`" main.go
+./mainApp -c=test.toml
 ```
 
 ## :tada:Contribute code
