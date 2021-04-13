@@ -1,7 +1,3 @@
-/**
-* @Author: myxy99 <myxy99@foxmail.com>
-* @Date: 2021/1/2 13:42
- */
 package xtrace
 
 import (

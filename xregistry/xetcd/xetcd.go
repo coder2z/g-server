@@ -1,7 +1,3 @@
-/**
-* @Author: myxy99 <myxy99@foxmail.com>
-* @Date: 2021/1/1 22:21
- */
 package xetcd
 
 import (

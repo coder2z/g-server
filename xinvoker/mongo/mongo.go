@@ -1,8 +1,3 @@
-/**
- * @Author: yangon
- * @Description
- * @Date: 2020/12/23 17:09
- **/
 package xmongo
 
 import (

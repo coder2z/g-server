@@ -1,7 +1,3 @@
-/**
-* @Author: myxy99 <myxy99@foxmail.com>
-* @Date: 2020/11/4 11:18
- */
 package xoss
 
 type options struct {

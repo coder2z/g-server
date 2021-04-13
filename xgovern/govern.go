@@ -1,8 +1,3 @@
-/**
- * @Author: yangon
- * @Description
- * @Date: 2020/12/25 17:33
- **/
 package xgovern
 
 import (

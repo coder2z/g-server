@@ -1,8 +1,3 @@
-/**
- * @Author: yangon
- * @Description
- * @Date: 2021/3/8 14:57
- **/
 package least_connection
 
 import (

@@ -1,8 +1,3 @@
-/**
- * @Author: yangon
- * @Description
- * @Date: 2021/3/8 15:00
- **/
 package round_robin
 
 import (

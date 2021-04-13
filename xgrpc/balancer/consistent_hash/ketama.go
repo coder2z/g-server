@@ -1,8 +1,3 @@
-/**
- * @Author: yangon
- * @Description
- * @Date: 2021/3/8 14:41
- **/
 package consistent_hash
 
 import (

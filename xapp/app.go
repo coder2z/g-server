@@ -1,8 +1,3 @@
-/**
- * @Author: yangon
- * @Description
- * @Date: 2020/12/25 18:20
- **/
 package xapp
 
 import (

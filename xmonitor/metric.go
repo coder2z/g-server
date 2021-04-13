@@ -1,8 +1,3 @@
-/**
- * @Author: yangon
- * @Description
- * @Date: 2020/12/25 16:48
- **/
 package xmonitor
 
 var (

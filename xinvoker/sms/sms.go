@@ -1,8 +1,3 @@
-/**
- * @Author: yangon
- * @Description
- * @Date: 2021/1/6 18:05
- **/
 package xsms
 
 import (

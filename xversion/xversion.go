@@ -1,8 +1,3 @@
-/**
- * @Author: yangon
- * @Description
- * @Date: 2021/3/8 10:50
- **/
 package xversion
 
 import "runtime/debug"

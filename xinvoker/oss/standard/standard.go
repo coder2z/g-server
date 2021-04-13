@@ -1,8 +1,3 @@
-/**
- * @Author: yangon
- * @Description
- * @Date: 2020/12/23 16:25
- **/
 package standard
 
 import (

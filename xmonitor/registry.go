@@ -1,8 +1,3 @@
-/**
- * @Author: yangon
- * @Description
- * @Date: 2020/12/25 16:34
- **/
 package xmonitor
 
 import "github.com/prometheus/client_golang/prometheus"
