@@ -26,7 +26,12 @@ func (d *directDiscovery) Discover(target string) (<-chan []xregistry.Instance, 
 	for _, addr := range endpoints {
 		urlObj, err := url.Parse(addr)
 		if err != nil {
-			xlog.Panic("endpoints format error", xlog.FieldErr(err))
+			xlog.Panic("Application Starting",
+				xlog.FieldComponentName("XRegistry"),
+				xlog.FieldMethod("XRegistry.XDirect.Discover"),
+				xlog.FieldDescription("endpoints format error"),
+				xlog.FieldErr(err),
+			)
 		}
 		ins := xregistry.Instance{Address: urlObj.Host, Metadata: metadata.Pairs(xbalancer.WeightKey, urlObj.Query().Get("w"))}
 		i = append(i, ins)

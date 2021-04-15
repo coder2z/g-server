@@ -34,7 +34,12 @@ func (b *directBuilder) Build(target resolver.Target, cc resolver.ClientConn, op
 	case i := <-ch:
 		xregistry.UpdateAddress(i, cc)
 	case <-time.After(time.Minute):
-		xlog.Warn("not resolve succuss in one minute", xlog.Any("target", target))
+		xlog.Warn("Application Starting",
+			xlog.FieldComponentName("XRegistry"),
+			xlog.FieldMethod("XRegistry.XDirect.Build"),
+			xlog.FieldDescription("Server discover not resolve success in one minute"),
+			xlog.Any("target", target),
+		)
 	}
 	return &xregistry.NoopResolver{}, nil
 }

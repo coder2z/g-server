@@ -2,7 +2,6 @@ package jaeger
 
 import (
 	"github.com/coder2z/g-saber/xcfg"
-	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xdefer"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-server/xapp"
@@ -59,7 +58,12 @@ func DefaultConfig() *Config {
 func RawConfig(key string) *Config {
 	var config = DefaultConfig()
 	if err := xcfg.UnmarshalKey(key, config); err != nil {
-		xlog.Panic("unmarshal key", xlog.Any("err", err))
+		xlog.Panic("Application Starting",
+			xlog.FieldComponentName("XTrace"),
+			xlog.FieldMethod("XTrace.Jaeger.RawConfig"),
+			xlog.FieldDescription("UnmarshalKey Error"),
+			xlog.FieldErr(err),
+		)
 	}
 	return config
 }
@@ -92,13 +96,27 @@ func (config *Config) Build() opentracing.Tracer {
 	tracer, closer, err := configuration.NewTracer(config.Options...)
 	if err != nil {
 		if config.PanicOnError {
-			xlog.Panic("new jaeger", xlog.String("mod", "jaeger"), xlog.FieldErr(err))
+			xlog.Panic("Application Starting",
+				xlog.FieldComponentName("XTrace"),
+				xlog.FieldMethod("XTrace.Jaeger.Build"),
+				xlog.FieldDescription("Build Jaeger Error"),
+				xlog.FieldErr(err),
+			)
 		} else {
-			xlog.Error("new jaeger", xlog.String("mod", "jaeger"), xlog.FieldErr(err))
+			xlog.Error("Application Starting",
+				xlog.FieldComponentName("XTrace"),
+				xlog.FieldMethod("XTrace.Jaeger.Build"),
+				xlog.FieldDescription("Build Jaeger Error"),
+				xlog.FieldErr(err),
+			)
 		}
 	}
 	xdefer.Register(func() error {
-		xconsole.Red("trace server shutdown")
+		xlog.Info("Application Stopping",
+			xlog.FieldComponentName("XTrace"),
+			xlog.FieldMethod("Jaeger.Build.Register"),
+			xlog.FieldDescription("XTrace jaeger server shutdown"),
+		)
 		return closer.Close()
 	})
 	return tracer

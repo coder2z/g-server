@@ -133,7 +133,11 @@ func (r *etcdReg) keepAliveOnce() error {
 
 func (r *etcdReg) Close() {
 	r.closeOnce.Do(func() {
-		xconsole.Red("service registration shutdown")
+		xlog.Info("Application Stopping",
+			xlog.FieldComponentName("XRegistry"),
+			xlog.FieldMethod("XRegistry.XEtcd.Close"),
+			xlog.FieldDescription("Service stopping,Registration cancellation"),
+		)
 		close(r.closeCh)
 	})
 	r.Wait()

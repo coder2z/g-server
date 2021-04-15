@@ -28,7 +28,12 @@ func (i *redisInvoker) newRedisClient(o *options) (c *redis.Client) {
 		IdleCheckFrequency: o.IdleCheckFrequency,
 	})
 	if err := rdb.Ping(context.Background()).Err(); err != nil {
-		xlog.Panic("NewRedisClient", xlog.FieldErr(err))
+		xlog.Panic("Application Starting",
+			xlog.FieldComponentName("XInvoker"),
+			xlog.FieldMethod("XInvoker.XRedis.NewRedisClient"),
+			xlog.FieldDescription("New RedisClient error"),
+			xlog.FieldErr(err),
+		)
 	}
 	return rdb
 }

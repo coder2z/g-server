@@ -1,6 +1,7 @@
 package xsms
 
 import (
+	"fmt"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-server/xinvoker"
 	"sync"
@@ -17,7 +18,11 @@ func Invoker(key string) *Client {
 	if val, ok := smsI.instances.Load(key); ok {
 		return val.(*Client)
 	}
-	xlog.Panicf("no sms(%s) invoker found", key)
+	xlog.Panic("Application Starting",
+		xlog.FieldComponentName("XInvoker"),
+		xlog.FieldMethod("XInvoker.XSms"),
+		xlog.FieldDescription(fmt.Sprintf("no sms(%s) invoker found", key)),
+	)
 	return nil
 }
 

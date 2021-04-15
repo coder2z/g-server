@@ -20,7 +20,12 @@ type (
 func (i *smsInvoker) newSMSClient(o *options) *Client {
 	c, err := dysmsapi.NewClientWithAccessKey(o.Area, o.AccessKeyId, o.AccessSecret)
 	if err != nil {
-		xlog.Panic("NewSMSClient", xlog.FieldErr(err))
+		xlog.Panic("Application Starting",
+			xlog.FieldComponentName("XInvoker"),
+			xlog.FieldMethod("XInvoker.XSms.NewSMSClient"),
+			xlog.FieldDescription("New SMSClient error"),
+			xlog.FieldErr(err),
+		)
 	}
 	return &Client{SMS: c, signName: o.SignName, templateCode: o.TemplateCode}
 }

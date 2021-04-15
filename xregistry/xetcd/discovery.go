@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/coder2z/g-saber/xjson"
 	"github.com/coder2z/g-saber/xlog"
-	"github.com/coder2z/g-saber/xstring"
 	"github.com/coder2z/g-server/xregistry"
 	"go.etcd.io/etcd/clientv3"
 )
@@ -37,7 +36,13 @@ func (d *etcdDiscovery) watch(ch chan<- []xregistry.Instance, serviceName string
 	update := func(serviceName string) []xregistry.Instance {
 		resp, err := d.client.Get(context.Background(), prefix, clientv3.WithPrefix())
 		if err != nil {
-			xlog.Warn("etcd discovery watch", xlog.FieldErr(err), xlog.Any("service name", serviceName))
+			xlog.Warn("Application Running",
+				xlog.FieldComponentName("XRegistry"),
+				xlog.FieldMethod("XRegistry.XEtcd.watch"),
+				xlog.FieldDescription(fmt.Sprintf("Etcd discovery server watch get %s error", prefix)),
+				xlog.Any("service name", serviceName),
+				xlog.FieldErr(err),
+			)
 			return nil
 		}
 		var i []xregistry.Instance
@@ -46,10 +51,22 @@ func (d *etcdDiscovery) watch(ch chan<- []xregistry.Instance, serviceName string
 			if err = xjson.Unmarshal(kv.Value, &ins); err == nil {
 				i = append(i, ins)
 			} else {
-				xlog.Warn("etcd discovery watch unmarshal service name", xlog.FieldErr(err), xlog.Any("service name", serviceName))
+				xlog.Warn("Application Running",
+					xlog.FieldComponentName("XRegistry"),
+					xlog.FieldMethod("XRegistry.XEtcd.watch"),
+					xlog.FieldDescription("Etcd discovery service watch unmarshal error"),
+					xlog.Any("service name", serviceName),
+					xlog.FieldErr(err),
+				)
 			}
 		}
-		xlog.Info("etcd service discovery", xlog.Any("service name", serviceName), xlog.FieldValue(xstring.Json(i)))
+		xlog.Info("Application Running",
+			xlog.FieldComponentName("XRegistry"),
+			xlog.FieldMethod("XRegistry.XEtcd.watch"),
+			xlog.FieldDescription("Etcd discovery service : update server list success"),
+			xlog.Any("service name", serviceName),
+			xlog.FieldValueAny(i),
+		)
 		return i
 	}
 	if i := update(serviceName); len(i) > 0 {

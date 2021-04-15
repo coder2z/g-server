@@ -2,7 +2,8 @@ package xtrace
 
 import (
 	"context"
-	"github.com/coder2z/g-saber/xconsole"
+	"fmt"
+	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-server/xtrace/jaeger"
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
@@ -13,7 +14,11 @@ import (
 func JaegerBuild(cfgKey string) {
 	cfg := jaeger.RawConfig(cfgKey)
 	SetGlobalTracer(cfg.Build())
-	xconsole.Greenf("trace init:", cfg.Reporter.LocalAgentHostPort)
+	xlog.Info("Application Starting",
+		xlog.FieldComponentName("XTrace"),
+		xlog.FieldMethod("XTrace.JaegerBuild"),
+		xlog.FieldDescription(fmt.Sprintf("XTrace serve registered :%v", cfg.Reporter.LocalAgentHostPort)),
+	)
 }
 
 // SetGlobalTracer ...

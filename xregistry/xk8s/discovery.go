@@ -3,10 +3,9 @@ package xk8s
 import (
 	"context"
 	"fmt"
-	"github.com/coder2z/g-server/xregistry"
-	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-saber/xstring"
+	"github.com/coder2z/g-server/xregistry"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -103,7 +102,11 @@ func (d *k8sDiscovery) watch(ch chan<- []xregistry.Instance, service, port strin
 
 func (d *k8sDiscovery) Close() {
 	d.closeOnce.Do(func() {
-		xconsole.Red("service registration shutdown")
+		xlog.Info("Application Stopping",
+			xlog.FieldComponentName("XRegistry"),
+			xlog.FieldMethod("XRegistry.XK8S.Close"),
+			xlog.FieldDescription("Service stopping,Registration cancellation"),
+		)
 		close(d.closeCh)
 	})
 }

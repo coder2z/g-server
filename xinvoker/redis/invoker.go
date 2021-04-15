@@ -1,6 +1,7 @@
 package xredis
 
 import (
+	"fmt"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-server/xinvoker"
 	"github.com/go-redis/redis/v8"
@@ -18,7 +19,11 @@ func Invoker(key string) *redis.Client {
 	if val, ok := redisI.instances.Load(key); ok {
 		return val.(*redis.Client)
 	}
-	xlog.Panicf("no redis(%s) invoker found", key)
+	xlog.Panic("Application Starting",
+		xlog.FieldComponentName("XInvoker"),
+		xlog.FieldMethod("XInvoker.XRedis"),
+		xlog.FieldDescription(fmt.Sprintf("no redis(%s) invoker found", key)),
+	)
 	return nil
 }
 

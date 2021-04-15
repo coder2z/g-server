@@ -31,7 +31,12 @@ func (i *ossInvoker) new(o *options) (client standard.Oss) {
 		err = errors.New("oss mode not exist")
 	}
 	if err != nil {
-		xlog.Panic("new oss", xlog.FieldErr(err))
+		xlog.Panic("Application Starting",
+			xlog.FieldComponentName("XInvoker"),
+			xlog.FieldMethod("XInvoker.XOss.New"),
+			xlog.FieldDescription("New oss error"),
+			xlog.FieldErr(err),
+		)
 	}
 	return
 }

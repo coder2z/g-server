@@ -1,6 +1,7 @@
 package xoss
 
 import (
+	"fmt"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-server/xinvoker"
 	"github.com/coder2z/g-server/xinvoker/oss/standard"
@@ -18,7 +19,11 @@ func Invoker(key string) standard.Oss {
 	if val, ok := ossI.instances.Load(key); ok {
 		return val.(standard.Oss)
 	}
-	xlog.Panicf("no oss(%s) invoker found", key)
+	xlog.Panic("Application Starting",
+		xlog.FieldComponentName("XInvoker"),
+		xlog.FieldMethod("XInvoker.XOss"),
+		xlog.FieldDescription(fmt.Sprintf("no oss(%s) invoker found", key)),
+	)
 	return nil
 }
 

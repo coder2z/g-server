@@ -48,7 +48,12 @@ func (b *k8sBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts 
 	case i := <-ch:
 		xregistry.UpdateAddress(i, cc)
 	case <-time.After(time.Minute):
-		xlog.Info("not resolve succuss in one minute", xlog.Any("target", target))
+		xlog.Warn("Application Starting",
+			xlog.FieldComponentName("XRegistry"),
+			xlog.FieldMethod("XRegistry.XK8S.Build"),
+			xlog.FieldDescription("Server discover not resolve success in one minute"),
+			xlog.Any("target", target),
+		)
 	}
 
 	go func() {

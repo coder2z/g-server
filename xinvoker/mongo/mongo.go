@@ -89,7 +89,12 @@ func (i *mongoInvoker) new(o *options) MongoImp {
 	}
 	resp, err := mgo.DialWithInfo(dialInfo)
 	if err != nil {
-		xlog.Panic("new mongo", xlog.FieldErr(err))
+		xlog.Panic("Application Starting",
+			xlog.FieldComponentName("XInvoker"),
+			xlog.FieldMethod("XInvoker.XMongo.new"),
+			xlog.FieldDescription("new mongo error"),
+			xlog.FieldErr(err),
+		)
 	}
 	mgo.SetDebug(o.Debug)
 	// Optional. Switch the session to a monotonic behavior.

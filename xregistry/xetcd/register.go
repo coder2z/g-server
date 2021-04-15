@@ -2,7 +2,6 @@ package xetcd
 
 import (
 	"fmt"
-	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-server/xregistry"
 	"go.etcd.io/etcd/clientv3"
@@ -28,8 +27,12 @@ func RegisterBuilder(conf EtcdV3Cfg) error {
 		discovery: d,
 	}
 	resolver.Register(b)
-	xconsole.Greenf("Service registration discovery init:", fmt.Sprintf("etcd:%v", conf.Endpoints))
-	xlog.Info("service registration discovery init", xlog.FieldAddr(fmt.Sprintf("%v", conf.Endpoints)))
+	xlog.Info("Application Starting",
+		xlog.FieldComponentName("XRegistry"),
+		xlog.FieldMethod("XRegistry.XEtcd.RegisterBuilder"),
+		xlog.FieldDescription("Service registration discovery initialization"),
+		xlog.FieldAddr(fmt.Sprintf("%v", conf.Endpoints)),
+	)
 	return nil
 }
 
@@ -43,7 +46,12 @@ func (b *etcdBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts
 	case x := <-ch:
 		xregistry.UpdateAddress(x, cc)
 	case <-time.After(time.Minute):
-		xlog.Warn("not resolve success in one minute", xlog.Any("target", target))
+		xlog.Warn("Application Starting",
+			xlog.FieldComponentName("XRegistry"),
+			xlog.FieldMethod("XRegistry.XEtcd.Build"),
+			xlog.FieldDescription("Server discover not resolve success in one minute"),
+			xlog.Any("target", target),
+		)
 	}
 	go func() {
 		for i := range ch {
