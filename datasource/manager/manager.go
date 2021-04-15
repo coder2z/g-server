@@ -2,8 +2,9 @@ package manager
 
 import (
 	"errors"
+	"fmt"
 	"github.com/coder2z/g-saber/xcfg"
-	"github.com/coder2z/g-saber/xconsole"
+	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-server/datasource/apollo"
 	"github.com/coder2z/g-server/datasource/etcdv3"
 	"github.com/coder2z/g-server/datasource/file"
@@ -57,7 +58,12 @@ func NewDataSource(configAddr string) (xcfg.DataSource, error) {
 	if !exist {
 		return nil, ErrInvalidDataSource
 	}
-	xconsole.Greenf("Get xcfg from:", configAddr)
+	//"Get xcfg from:", configAddr
+	xlog.Info("Application Starting",
+		xlog.FieldComponentName("manager"),
+		xlog.FieldMethod("manager.NewDataSource"),
+		xlog.FieldDescription(fmt.Sprintf("Get xcfg from:%s", configAddr)),
+	)
 	source := creatorFunc()
 	if source == nil {
 		return nil, ErrInvalidDataSource

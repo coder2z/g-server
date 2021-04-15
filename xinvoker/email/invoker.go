@@ -1,6 +1,7 @@
 package xemail
 
 import (
+	"fmt"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-server/xinvoker"
 	"sync"
@@ -17,7 +18,11 @@ func Invoker(key string) *Email {
 	if val, ok := email.instances.Load(key); ok {
 		return val.(*Email)
 	}
-	xlog.Panicf("no email(%s) invoker found", key)
+	xlog.Panic("Application Starting",
+		xlog.FieldComponentName("XInvoker"),
+		xlog.FieldMethod("XInvoker.XEmail"),
+		xlog.FieldDescription(fmt.Sprintf("no email(%s) invoker found", key)),
+	)
 	return nil
 }
 

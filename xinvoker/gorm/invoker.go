@@ -1,6 +1,7 @@
 package xgorm
 
 import (
+	"fmt"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-server/xinvoker"
 	"gorm.io/gorm"
@@ -18,7 +19,12 @@ func Invoker(key string) *gorm.DB {
 	if val, ok := db.instances.Load(key); ok {
 		return val.(*gorm.DB)
 	}
-	xlog.Panicf("no db(%s) invoker found", key)
+	xlog.Panic("Application Starting",
+		xlog.FieldComponentName("XInvoker"),
+		xlog.FieldMethod("XInvoker.XGorm"),
+		xlog.FieldDescription(fmt.Sprintf("no db(%s) invoker found", key)),
+	)
+
 	return nil
 }
 

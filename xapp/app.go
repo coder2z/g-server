@@ -1,7 +1,9 @@
 package xapp
 
 import (
-	"github.com/coder2z/g-saber/xconsole"
+	"fmt"
+	"github.com/coder2z/g-saber/xcolor"
+	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-saber/xnet"
 	"github.com/coder2z/g-saber/xtime"
 	"github.com/coder2z/g-server/xversion"
@@ -12,16 +14,20 @@ import (
 const (
 	dAppName = "unknown app name"
 	dHostIp  = "0.0.0.0"
+
+	logo = ` 
+   ____             ______ ______________  __ ___________ 
+  / ___\   ______  /  ___// __ \_  __ \  \/ // __ \_  __ \
+ / /_/  > /_____/  \___ \\  ___/|  | \/\   /\  ___/|  | \/
+ \___  /          /____  >\___  >__|    \_/  \___  >__|   
+/_____/                \/     \/                 \/ 
+
+Hello, starting application ...
+`
 )
 
 func init() {
-	xconsole.Blue(`   _____ ____  _____  ______ _____  ___  ______`)
-	xconsole.Blue(`  / ____/ __ \|  __ \|  ____|  __ \|__ \|___  /`)
-	xconsole.Blue(` | |   | |  | | |  | | |__  | |__) |  ) |  / /`)
-	xconsole.Blue(` | |   | |  | | |  | |  __| |  _  /  / /  / / `)
-	xconsole.Blue(` | |___| |__| | |__| | |____| | \ \ / /_ / /__ `)
-	xconsole.Blue(`  \_____\____/|_____/|______|_|  \_|____/_____|`)
-	xconsole.Blue(`									--version = ` + xversion.Version)
+	fmt.Println(xcolor.Blue(logo))
 	startTime = xtime.Now().Format("2006-01-02 15:04:05")
 	goVersion = runtime.Version()
 
@@ -111,14 +117,15 @@ func Debug() bool {
 }
 
 func PrintVersion() {
-	xconsole.Greenf("app name:", Name())
-	xconsole.Greenf("app id:", AppId())
-	xconsole.Greenf("app mode:", AppMode())
-	xconsole.Greenf("host name:", HostName())
-	xconsole.Greenf("host ip:", HostIP())
-	xconsole.Greenf("debug:", Debug())
-	xconsole.Greenf("app version:", AppVersion())
-	xconsole.Greenf("build host:", BuildHost())
-	xconsole.Greenf("start time:", StartTime())
-	xconsole.Greenf("go version:", GoVersion())
+	xlog.Infow("ApplicationInfo", "AppName:", Name())
+	xlog.Infow("ApplicationInfo", "AppId:", AppId())
+	xlog.Infow("ApplicationInfo", "AppMode:", AppMode())
+	xlog.Infow("ApplicationInfo", "HostName:", HostName())
+	xlog.Infow("ApplicationInfo", "HostIp:", HostIP())
+	xlog.Infow("ApplicationInfo", "Debug:", Debug())
+	xlog.Infow("ApplicationInfo", "AppVersion:", AppVersion())
+	xlog.Infow("ApplicationInfo", "BuildHost:", BuildHost())
+	xlog.Infow("ApplicationInfo", "StartTime:", StartTime())
+	xlog.Infow("ApplicationInfo", "G-server Version:", xversion.Version)
+	xlog.Infow("ApplicationInfo", "GoVersion:", GoVersion())
 }

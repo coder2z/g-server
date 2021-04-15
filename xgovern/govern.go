@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/coder2z/g-saber/xcfg"
-	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xdefer"
 	"github.com/coder2z/g-saber/xjson"
 	"github.com/coder2z/g-saber/xlog"
@@ -133,15 +132,28 @@ func Run(opts ...Option) {
 			Handler: handle,
 		}
 
-		xconsole.Greenf("govern serve init", fmt.Sprintf("%v/debug/list", c.Address()))
-		xconsole.Greenf("prometheus serve init", fmt.Sprintf("%v/metrics", c.Address()))
+		xlog.Info("Application Starting",
+			xlog.FieldComponentName("XGovern"),
+			xlog.FieldMethod("XGovern.Run"),
+			xlog.FieldDescription(fmt.Sprintf("Govern serve running :%v/debug/list", c.Address())),
+		)
+
+		xlog.Info("Application Starting",
+			xlog.FieldComponentName("Prometheus"),
+			xlog.FieldMethod("XGovern.Run"),
+			xlog.FieldDescription(fmt.Sprintf("Prometheus serve running :%v/metrics", c.Address())),
+		)
 
 		xdefer.Register(func() error {
 			return Shutdown()
 		})
 
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			xlog.Error("govern serve", xlog.FieldErr(err), xlog.FieldAddr(c.Address()))
+			xlog.Error("Govern Serve ListenAndServe Error",
+				xlog.FieldComponentName("XGovern"),
+				xlog.FieldMethod("XGovern.Run.ListenAndServe"),
+				xlog.FieldErr(err),
+				xlog.FieldAddr(c.Address()))
 		}
 	})
 }
@@ -153,10 +165,17 @@ func Shutdown() error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
-		xlog.Error("shutdown govern server", xlog.FieldErr(err))
+		xlog.Error("Shutdown Govern Serve Error",
+			xlog.FieldComponentName("XGovern"),
+			xlog.FieldMethod("XGovern.Shutdown"),
+			xlog.FieldErr(err))
 		return err
 	}
-	xconsole.Red("govern server shutdown")
+	xlog.Info("Application Stopping",
+		xlog.FieldComponentName("XGovern"),
+		xlog.FieldMethod("XGovern.Shutdown"),
+		xlog.FieldDescription("XGovern server shutdown"),
+	)
 	return nil
 }
 
@@ -168,7 +187,11 @@ func GovernConfig() *Config {
 }
 
 func GovernReload(opts ...Option) {
-	xconsole.Green("govern serve reload")
+	xlog.Info("Serve Reload",
+		xlog.FieldComponentName("XGovern"),
+		xlog.FieldMethod("XGovern.GovernReload"),
+		xlog.FieldDescription("XGovern server reload"),
+	)
 	_ = Shutdown()
 	once = sync.Once{}
 	governConfig = nil

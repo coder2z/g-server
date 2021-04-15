@@ -97,12 +97,16 @@ func XTimeoutUnaryClientInterceptor(timeout time.Duration, slowThreshold time.Du
 		}
 
 		if slowThreshold > time.Duration(0) && du > slowThreshold {
-			xlog.Error("slow",
-				xlog.FieldErr(errors.New("grpc unary slow command")),
+			xlog.Error("GRPC Timeout Error",
+				xlog.FieldErr(errors.New("GRPC Unary Timeout command")),
 				xlog.FieldMethod(method),
+				xlog.FieldComponentName("GRPC"),
 				xlog.FieldName(cc.Target()),
 				xlog.FieldCost(du),
+				xlog.FieldType("Client"),
 				xlog.FieldAddr(remoteIP),
+				xlog.Any("req", req),
+				xlog.Any("reply", reply),
 			)
 		}
 		return err
@@ -119,7 +123,8 @@ func XLoggerUnaryClientInterceptor(name string) grpc.UnaryClientInterceptor {
 			// 只记录系统级别错误
 			if spbStatus.Code < xcast.ToInt32(xcode.CodeBreakUp) {
 				xlog.Error(
-					"access",
+					"GRPC Server Internal Error",
+					xlog.FieldType("client"),
 					xlog.FieldType("unary"),
 					xlog.FieldCode(spbStatus.Code),
 					xlog.FieldErrKind(spbStatus.Message),
@@ -132,7 +137,8 @@ func XLoggerUnaryClientInterceptor(name string) grpc.UnaryClientInterceptor {
 				err = spbStatus.SetMsg("server internal error") //吃掉内部错误
 			} else {
 				xlog.Warn(
-					"access",
+					"GRPC Business Error",
+					xlog.FieldType("client"),
 					xlog.FieldType("unary"),
 					xlog.FieldCode(spbStatus.Code),
 					xlog.FieldErrKind(spbStatus.Message),

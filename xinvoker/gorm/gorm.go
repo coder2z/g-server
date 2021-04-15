@@ -23,7 +23,12 @@ func (i *dbInvoker) newDatabaseClient(o *options) (db *gorm.DB) {
 	}
 	d, err := db.DB()
 	if err != nil {
-		xlog.Panic("NewDatabaseClient db.DB()", xlog.FieldErr(err))
+		xlog.Panic("Application Starting",
+			xlog.FieldComponentName("XInvoker"),
+			xlog.FieldMethod("XInvoker.XGorm.NewDatabaseClient"),
+			xlog.FieldDescription("NewDatabaseClient db.DB() Error"),
+			xlog.FieldErr(err),
+		)
 	}
 	d.SetMaxOpenConns(o.MaxOpenConnections)
 	d.SetMaxIdleConns(o.MaxIdleConn)
