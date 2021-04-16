@@ -2,8 +2,9 @@ package xinvoker
 
 import (
 	"errors"
+	"fmt"
 	"github.com/coder2z/g-saber/xcfg"
-	"github.com/coder2z/g-saber/xconsole"
+	"github.com/coder2z/g-saber/xlog"
 	"reflect"
 )
 
@@ -46,7 +47,11 @@ func Register(ivk ...Invoker) {
 func Init(opts ...Option) error {
 	for _, invoker := range invokers {
 		key := reflect.ValueOf(invoker).Elem().FieldByName("key").String()
-		xconsole.Bluef("invoker running start init:", key)
+		xlog.Info("Application Starting",
+			xlog.FieldComponentName("XInvoker"),
+			xlog.FieldMethod("XInvoker.Init"),
+			xlog.FieldDescription(fmt.Sprintf("Invoker start running initialization:%s", key)),
+		)
 		_ = invoker.Init(opts...)
 	}
 
@@ -57,7 +62,11 @@ func Init(opts ...Option) error {
 func Reload(opts ...Option) error {
 	for _, invoker := range invokers {
 		key := reflect.ValueOf(invoker).Elem().FieldByName("key").String()
-		xconsole.Redf("invoker running start Reload:", key)
+		xlog.Info("Application Reload",
+			xlog.FieldComponentName("XInvoker"),
+			xlog.FieldMethod("XInvoker.Reload"),
+			xlog.FieldDescription(fmt.Sprintf("Invoker start running Reload:%s", key)),
+		)
 		_ = invoker.Reload(opts...)
 	}
 
@@ -68,7 +77,11 @@ func Reload(opts ...Option) error {
 func Close(opts ...Option) error {
 	for i := len(invokers) - 1; i >= 0; i-- {
 		key := reflect.ValueOf(invokers[i]).Elem().FieldByName("key").String()
-		xconsole.Redf("invoker running start close:", key)
+		xlog.Info("Application Stopping",
+			xlog.FieldComponentName("XInvoker"),
+			xlog.FieldMethod("XInvoker.Close"),
+			xlog.FieldDescription(fmt.Sprintf("Invoker start running close:%s", key)),
+		)
 		_ = invokers[i].Close(opts...)
 	}
 

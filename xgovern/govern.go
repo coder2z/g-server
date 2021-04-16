@@ -187,7 +187,7 @@ func GovernConfig() *Config {
 }
 
 func GovernReload(opts ...Option) {
-	xlog.Info("Serve Reload",
+	xlog.Info("Application Reload",
 		xlog.FieldComponentName("XGovern"),
 		xlog.FieldMethod("XGovern.GovernReload"),
 		xlog.FieldDescription("XGovern server reload"),
