@@ -3,7 +3,6 @@ package xetcd
 import (
 	"context"
 	"fmt"
-	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-saber/xstring"
 	"github.com/coder2z/g-server/xapp"
@@ -51,13 +50,25 @@ func (r *etcdReg) Register(ops ...xregistry.Option) {
 		o(r.options)
 	}
 	if r.options.ServiceName == "" {
-		xlog.Panic("service name required")
+		xlog.Panic("Application Starting",
+			xlog.FieldComponentName("XRegistry"),
+			xlog.FieldMethod("XRegistry.XEtcd.Register"),
+			xlog.FieldDescription("Service name required"),
+		)
 	}
 	if r.options.Namespaces == "" {
-		xlog.Panic("service namespaces required")
+		xlog.Panic("Application Starting",
+			xlog.FieldComponentName("XRegistry"),
+			xlog.FieldMethod("XRegistry.XEtcd.Register"),
+			xlog.FieldDescription("Service namespaces required"),
+		)
 	}
 	if r.options.Address == "" {
-		xlog.Panic("service address required")
+		xlog.Panic("Application Starting",
+			xlog.FieldComponentName("XRegistry"),
+			xlog.FieldMethod("XRegistry.XEtcd.Register"),
+			xlog.FieldDescription("Service address required"),
+		)
 	}
 	if r.options.RegisterTTL == 0 {
 		r.options.RegisterTTL = time.Second * 30
@@ -66,7 +77,13 @@ func (r *etcdReg) Register(ops ...xregistry.Option) {
 		r.options.RegisterInterval = r.options.RegisterTTL / 3
 	}
 
-	xconsole.Greenf("Service registration to:", fmt.Sprintf("etcd:%v", r.conf.Endpoints))
+	xlog.Info("Application Starting",
+		xlog.FieldComponentName("XRegistry"),
+		xlog.FieldMethod("XRegistry.XEtcd.Register"),
+		xlog.FieldDescription(fmt.Sprintf("Service registration to Etcd Endpoints:%v", r.conf.Endpoints)),
+		xlog.Any("service name", r.options.ServiceName),
+		xlog.FieldValueAny(r.options),
+	)
 
 	go func() {
 		r.Add(1)
@@ -96,16 +113,28 @@ func (r *etcdReg) Register(ops ...xregistry.Option) {
 
 func (r *etcdReg) register() error {
 	var (
-		err  error
-		step int
-		one  = sync.Once{}
+		err error
+		one = sync.Once{}
 	)
 	defer func() {
 		if err != nil {
-			xlog.Warn("etcd register error", xlog.FieldErr(err), xlog.Any("step", step), xlog.Any("options", r.options))
+			xlog.Warn("Application Running",
+				xlog.FieldComponentName("XRegistry"),
+				xlog.FieldMethod("XRegistry.XEtcd.Register"),
+				xlog.FieldDescription("Etcd register error"),
+				xlog.Any("service name", r.options.ServiceName),
+				xlog.FieldErr(err),
+				xlog.FieldValueAny(r.options),
+			)
 		} else {
 			one.Do(func() {
-				xconsole.Greenf("etcd register success to:", xstring.Json(r.options))
+				xlog.Info("Application Running",
+					xlog.FieldComponentName("XRegistry"),
+					xlog.FieldMethod("XRegistry.XEtcd.Register"),
+					xlog.FieldDescription("Etcd register success"),
+					xlog.Any("service name", r.options.ServiceName),
+					xlog.FieldValueAny(r.options),
+				)
 			})
 		}
 	}()
@@ -115,8 +144,6 @@ func (r *etcdReg) register() error {
 	if err != nil {
 		return err
 	}
-
-	step += 1
 	_, err = r.client.Put(timeout, r.getKey(), xstring.Json(r.options), clientv3.WithLease(ttl.ID))
 	if err == nil {
 		r.leaseId = ttl.ID
@@ -133,11 +160,6 @@ func (r *etcdReg) keepAliveOnce() error {
 
 func (r *etcdReg) Close() {
 	r.closeOnce.Do(func() {
-		xlog.Info("Application Stopping",
-			xlog.FieldComponentName("XRegistry"),
-			xlog.FieldMethod("XRegistry.XEtcd.Close"),
-			xlog.FieldDescription("Service stopping,Registration cancellation"),
-		)
 		close(r.closeCh)
 	})
 	r.Wait()
@@ -151,9 +173,21 @@ func (r *etcdReg) getKey() string {
 func (r *etcdReg) unregister() {
 	key := r.getKey()
 	if _, err := r.client.Delete(context.Background(), key); err != nil {
-		xlog.Warn("unregister error", xlog.FieldErr(err), xlog.Any("uid", r.uid), xlog.Any("options", r.options))
+		xlog.Warn("Application Stopping",
+			xlog.FieldComponentName("XRegistry"),
+			xlog.FieldMethod("XRegistry.XEtcd.unregister"),
+			xlog.FieldDescription("Etcd register unregister error"),
+			xlog.Any("service name", r.options.ServiceName),
+			xlog.FieldErr(err),
+			xlog.FieldValueAny(r.options),
+			xlog.String("app id", r.uid),
+		)
 	}
 	_, _ = r.client.Revoke(context.Background(), r.leaseId) // 回收租约
-	xconsole.Redf("unregister success", xstring.Json(r.options))
+	xlog.Info("Application Stopping",
+		xlog.FieldComponentName("XRegistry"),
+		xlog.FieldMethod("XRegistry.XEtcd.Unregister"),
+		xlog.FieldDescription("Service stopping,Registration cancellation"),
+	)
 	//_ = r.client.Close()
 }

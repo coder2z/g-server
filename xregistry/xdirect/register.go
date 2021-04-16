@@ -1,21 +1,21 @@
 package xdirect
 
 import (
-	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-server/xregistry"
 	"google.golang.org/grpc/resolver"
 	"time"
 )
 
-func init() {
+func RegisterBuilder() error {
 	resolver.Register(&directBuilder{
 		discovery: newDiscovery(),
 	})
-	xconsole.Greenf("Service registration discovery init:", "direct")
-}
-
-func RegisterBuilder() error {
+	xlog.Info("Application Starting",
+		xlog.FieldComponentName("XRegistry"),
+		xlog.FieldMethod("XRegistry.XDiscovery.init"),
+		xlog.FieldDescription("Service use discovery registration discovery initialization"),
+	)
 	return nil
 }
 

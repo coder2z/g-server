@@ -1,7 +1,6 @@
 package xk8s
 
 import (
-	"github.com/coder2z/g-saber/xconsole"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-server/xregistry"
 	"google.golang.org/grpc/resolver"
@@ -23,7 +22,11 @@ func RegisterBuilder() error {
 		rs: map[string]xregistry.Discovery{},
 	}
 	resolver.Register(b)
-	xconsole.Greenf("Service registration discovery init:", "k8s")
+	xlog.Info("Application Starting",
+		xlog.FieldComponentName("XRegistry"),
+		xlog.FieldMethod("XRegistry.XK8S.RegisterBuilder"),
+		xlog.FieldDescription("Service use K8S registration discovery initialization"),
+	)
 	return nil
 }
 

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/coder2z/g-saber/xlog"
-	"github.com/coder2z/g-saber/xstring"
 	"github.com/coder2z/g-server/xregistry"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -90,7 +89,13 @@ func (d *k8sDiscovery) watch(ch chan<- []xregistry.Instance, service, port strin
 							ins := xregistry.Instance{Address: fmt.Sprintf("%s:%s", addr.IP, realPort)}
 							i = append(i, ins)
 						}
-						xlog.Info("service discovery k8s", xlog.FieldValue(xstring.Json(i)))
+						xlog.Info("Application Running",
+							xlog.FieldComponentName("XRegistry"),
+							xlog.FieldMethod("XRegistry.XK8S.watch"),
+							xlog.FieldDescription("K8S discovery service : update server list success"),
+							xlog.Any("service name", service),
+							xlog.FieldValueAny(i),
+						)
 					}
 				}
 				ch <- i

@@ -30,7 +30,7 @@ func RegisterBuilder(conf EtcdV3Cfg) error {
 	xlog.Info("Application Starting",
 		xlog.FieldComponentName("XRegistry"),
 		xlog.FieldMethod("XRegistry.XEtcd.RegisterBuilder"),
-		xlog.FieldDescription("Service registration discovery initialization"),
+		xlog.FieldDescription("Service use Etcd registration discovery initialization"),
 		xlog.FieldAddr(fmt.Sprintf("%v", conf.Endpoints)),
 	)
 	return nil
