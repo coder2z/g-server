@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/coder2z/g-saber/xcast"
 	"github.com/coder2z/g-saber/xlog"
+	"github.com/coder2z/g-server/xapp"
 	"github.com/coder2z/g-server/xcode"
 	"github.com/coder2z/g-server/xgrpc"
 	"github.com/coder2z/g-server/xmonitor"
@@ -57,10 +58,10 @@ func PrometheusUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		startTime := time.Now()
 		resp, err := handler(ctx, req)
 		code := xcode.ExtractCodes(err)
-		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, xgrpc.ExtractFromCtx(ctx, "info")).Observe(time.Since(startTime).Seconds())
-		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, xgrpc.ExtractFromCtx(ctx, "info"), xcast.ToString(code.GetCode())).Inc()
+		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCUnary, xapp.Name(), info.FullMethod, xgrpc.ExtractFromCtx(ctx, "info")).Observe(time.Since(startTime).Seconds())
+		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCUnary, xapp.Name(), info.FullMethod, xgrpc.ExtractFromCtx(ctx, "info"), xcast.ToString(code.GetCode())).Inc()
 		if code != xcode.OK {
-			xmonitor.ServerErrorCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, xgrpc.ExtractFromCtx(ctx, "info"), xcast.ToString(code.GetCode())).Inc()
+			xmonitor.ServerErrorCounter.WithLabelValues(xmonitor.TypeGRPCUnary, xapp.Name(), info.FullMethod, xgrpc.ExtractFromCtx(ctx, "info"), xcast.ToString(code.GetCode())).Inc()
 		}
 		return resp, err
 	}
@@ -71,10 +72,10 @@ func PrometheusStreamServerInterceptor() grpc.StreamServerInterceptor {
 		startTime := time.Now()
 		err := handler(srv, ss)
 		code := xcode.ExtractCodes(err)
-		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCStream, info.FullMethod, xgrpc.ExtractFromCtx(ss.Context(), "info")).Observe(time.Since(startTime).Seconds())
-		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCStream, info.FullMethod, xgrpc.ExtractFromCtx(ss.Context(), "info"), xcast.ToString(code.GetCode())).Inc()
+		xmonitor.ServerHandleHistogram.WithLabelValues(xmonitor.TypeGRPCStream, xapp.Name(), info.FullMethod, xgrpc.ExtractFromCtx(ss.Context(), "info")).Observe(time.Since(startTime).Seconds())
+		xmonitor.ServerHandleCounter.WithLabelValues(xmonitor.TypeGRPCStream, xapp.Name(), info.FullMethod, xgrpc.ExtractFromCtx(ss.Context(), "info"), xcast.ToString(code.GetCode())).Inc()
 		if code != xcode.OK {
-			xmonitor.ServerErrorCounter.WithLabelValues(xmonitor.TypeGRPCUnary, info.FullMethod, xgrpc.ExtractFromCtx(ss.Context(), "info"), xcast.ToString(code.GetCode())).Inc()
+			xmonitor.ServerErrorCounter.WithLabelValues(xmonitor.TypeGRPCUnary, xapp.Name(), info.FullMethod, xgrpc.ExtractFromCtx(ss.Context(), "info"), xcast.ToString(code.GetCode())).Inc()
 		}
 		return err
 	}
@@ -100,7 +101,6 @@ func TraceUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		return resp, err
 	}
 }
-
 
 type contextedServerStream struct {
 	grpc.ServerStream

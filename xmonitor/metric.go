@@ -33,13 +33,13 @@ var (
 
 var (
 	// ServerHandleCounter ...	指标: 服务类型，调用方法，客户端标识，返回的状态码
-	ServerHandleCounter = NewCounterVec("server_handle_total", []string{"type", "method", "peer", "code"})
+	ServerHandleCounter = NewCounterVec("server_handle_total", []string{"type", "name", "method", "peer", "code"})
 
-	// ServerHandleCounter ...	指标: 服务类型，调用方法，客户端标识，返回的状态码
-	ServerErrorCounter = NewCounterVec("server_error_total", []string{"type", "method", "peer", "code"})
+	// ServerErrorCounter ...	指标: 服务类型，调用方法，客户端标识，返回的状态码
+	ServerErrorCounter = NewCounterVec("server_error_total", []string{"type", "name", "method", "peer", "code"})
 
 	// ServerHandleHistogram ...
-	ServerHandleHistogram = NewHistogramVec("server_handle_seconds", []string{"type", "method", "peer"})
+	ServerHandleHistogram = NewHistogramVec("server_handle_seconds", []string{"type", "name", "method", "peer"})
 
 	// ClientHandleCounter ... 	指标: 客户端类型，客户端名称，调用方法，目标，返回的状态码
 	ClientHandleCounter = NewCounterVec("client_handle_total", []string{"type", "name", "method", "peer", "code"})
@@ -54,10 +54,11 @@ var (
 	JobHandleHistogram = NewHistogramVec("job_handle_seconds", []string{"type", "name"})
 
 	// LibHandleHistogram ...	 指标: 类型，指令，address
-	LibHandleHistogram = NewHistogramVec("lib_handle_seconds", []string{"type", "method", "address"})
+	LibHandleHistogram = NewHistogramVec("lib_handle_seconds", []string{"type", "name", "method", "address"})
 
 	//	LibHandleCounter ...
-	LibHandleCounter = NewCounterVec("lib_handle_total", []string{"type", "method", "address", "code"})
+	LibHandleCounter = NewCounterVec("lib_handle_total", []string{"type", "name", "method", "address", "code"})
+
 	//	LibHandleSummary
 	LibHandleSummary = NewSummaryVec("lib_handle_stats", []string{"name", "status"})
 
