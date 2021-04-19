@@ -69,5 +69,5 @@ var (
 	CacheHandleHistogram = NewHistogramVec("cache_handle_seconds", []string{"type", "name", "action"})
 
 	// BuildInfoGauge ...	版本信息指标
-	BuildInfoGauge = NewGaugeVec("build_info", []string{"name", "mode", "app_version", "go_version", "start_time"})
+	BuildInfoGauge = NewGaugeVec("build_info", []string{"name", "mode", "instance", "app_version", "go_version", "start_time"})
 )

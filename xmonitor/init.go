@@ -11,6 +11,7 @@ func init() {
 	BuildInfoGauge.WithLabelValues(
 		xapp.Name(),
 		xapp.AppMode(),
+		xapp.HostIP(),
 		xapp.AppVersion(),
 		xapp.GoVersion(),
 		xapp.StartTime(),
