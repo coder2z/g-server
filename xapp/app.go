@@ -5,6 +5,7 @@ import (
 	"github.com/coder2z/g-saber/xcolor"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-saber/xnet"
+	"github.com/coder2z/g-saber/xstring"
 	"github.com/coder2z/g-saber/xtime"
 	"github.com/coder2z/g-server/xversion"
 	"os"
@@ -44,7 +45,12 @@ func init() {
 	hostIp = ip
 
 	appMode = os.Getenv(`SERVER_APP_MODE`)
-	appId = os.Getenv(`SERVER_APP_ID`)
+	envAppId := os.Getenv(`SERVER_APP_ID`)
+	if envAppId != "" {
+		appId = envAppId
+	} else {
+		appId = xstring.GenerateID()
+	}
 	envDebug := os.Getenv(`SERVER_APP_DEBUG`)
 	if envDebug != "" {
 		debug = envDebug
