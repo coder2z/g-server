@@ -19,7 +19,8 @@ func RegisterBuilder() error {
 	return nil
 }
 
-// grpc.Dial("direct://namespaces/127.0.0.1:8000?w=1,127.0.0.1:8001?w=1")
+// 通过 ip:port 设置需要在前面加上//
+// grpc.Dial("direct://namespaces///127.0.0.1:8000?w=1,//127.0.0.1:8001?w=1")
 type directBuilder struct {
 	discovery xregistry.Discovery
 }

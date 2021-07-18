@@ -11,6 +11,7 @@ import (
 	serverinterceptors "github.com/coder2z/g-server/xgrpc/server"
 	"github.com/coder2z/g-server/xregistry"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/examples/helloworld/helloworld"
 	"google.golang.org/grpc/metadata"
 	"net"
 	"testing"
@@ -88,6 +89,8 @@ func TestEtcd2(t *testing.T) {
 		xregistry.RegisterInterval(xtime.Duration("15s")), //15s 注册一次
 		xregistry.Metadata(metadata.Pairs(xbalancer.WeightKey, "2")),
 	)
+
+	helloworld.RegisterGreeterServer(serve, (helloworld.GreeterServer)(nil))
 
 	listener, err := net.Listen("tcp", ":7777")
 	_ = serve.Serve(listener)
