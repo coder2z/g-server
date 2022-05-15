@@ -2,19 +2,20 @@ package xapp
 
 import (
 	"fmt"
+	"github.com/coder2z/g-saber/xcfg"
 	"github.com/coder2z/g-saber/xcolor"
 	"github.com/coder2z/g-saber/xlog"
 	"github.com/coder2z/g-saber/xnet"
-	"github.com/coder2z/g-saber/xstring"
 	"github.com/coder2z/g-saber/xtime"
 	"github.com/coder2z/g-server/xversion"
 	"os"
 	"runtime"
 )
 
-const (
-	dAppName = "unknown app name"
-	dHostIp  = "0.0.0.0"
+var (
+	DAppName  = "unknown app name"
+	DHostName = "unknown host name"
+	DHostIp   = "0.0.0.0"
 
 	logo = ` 
    ____             ______ ______________  __ ___________ 
@@ -27,99 +28,84 @@ Hello, starting application ...
 `
 )
 
-func init() {
-	fmt.Println(xcolor.Blue(logo))
-	startTime = xtime.Now().Format("2006-01-02 15:04:05")
-	goVersion = runtime.Version()
-
-	name, err := os.Hostname()
-	if err != nil {
-		name = dAppName
-	}
-	hostName = name
-
-	ip, err := xnet.GetLocalIP()
-	if err != nil {
-		ip = dHostIp
-	}
-	hostIp = ip
-
-	appMode = os.Getenv(`SERVER_APP_MODE`)
-	envAppId := os.Getenv(`SERVER_APP_ID`)
-	if envAppId != "" {
-		appId = envAppId
-	} else {
-		appId = xstring.GenerateID()
-	}
-	envDebug := os.Getenv(`SERVER_APP_DEBUG`)
-	if envDebug != "" {
-		debug = envDebug
-	}
+var info = appInfo{
+	startTime:       xtime.Now().Format("2006-01-02 15:04:05"),
+	goVersion:       runtime.Version(),
+	hostName:        DHostName,
+	hostIp:          DHostIp,
+	AppName:         DAppName,
+	BuildAppVersion: "v1.0.0",
+	AppMode:         "dev",
+	AppID:           "xxxxxx",
+	Debug:           true,
 }
 
-var (
+// RegisterAppInfoCfg 注册app信息来自配置文件
+func RegisterAppInfoCfg(key string) {
+	info.hostName, _ = os.Hostname()
+	info.hostIp, _ = xnet.GetLocalIP()
+	info = *xcfg.UnmarshalWithExpect(key, &info).(*appInfo)
+}
+
+func init() {
+	fmt.Println(xcolor.Blue(logo))
+}
+
+type appInfo struct {
 	startTime string
 	goVersion string
 	hostName  string
 	hostIp    string
 
 	// build -X
-	appName         string
-	buildAppVersion string
-	buildHost       string
-
-	// env
-	appMode string
-	appId   string
-	debug   = "true"
-)
+	AppName         string
+	BuildAppVersion string
+	AppMode         string
+	AppID           string
+	Debug           bool
+}
 
 // Name gets application name.
 func Name() string {
-	return appName
+	return info.AppName
 }
 
 //AppVersion get buildAppVersion
 func AppVersion() string {
-	return buildAppVersion
+	return info.BuildAppVersion
 }
 
 //AppMode get AppMode
 func AppMode() string {
-	return appMode
+	return info.AppMode
 }
 
 //HostIP get HostIP
 func HostIP() string {
-	return hostIp
-}
-
-//BuildHost get buildHost
-func BuildHost() string {
-	return buildHost
+	return info.hostIp
 }
 
 // HostName get host name
 func HostName() string {
-	return hostName
+	return info.hostName
 }
 
 //StartTime get start time
 func StartTime() string {
-	return startTime
+	return info.startTime
 }
 
 //GoVersion get go version
 func GoVersion() string {
-	return goVersion
+	return info.goVersion
 }
 
 func AppId() string {
-	return appId
+	return info.AppID
 }
 
 func Debug() bool {
-	return debug == "true"
+	return info.Debug
 }
 
 func PrintVersion() {
@@ -130,7 +116,6 @@ func PrintVersion() {
 	xlog.Infow("ApplicationInfo", "HostIp:", HostIP())
 	xlog.Infow("ApplicationInfo", "Debug:", Debug())
 	xlog.Infow("ApplicationInfo", "AppVersion:", AppVersion())
-	xlog.Infow("ApplicationInfo", "BuildHost:", BuildHost())
 	xlog.Infow("ApplicationInfo", "StartTime:", StartTime())
 	xlog.Infow("ApplicationInfo", "G-server Version:", xversion.Version)
 	xlog.Infow("ApplicationInfo", "GoVersion:", GoVersion())
